@@ -1,0 +1,68 @@
+---
+# tasks file for init-root
+
+
+##############
+# Machine name
+
+- name: Set machine name
+  become: yes
+  command: "hostname {{ machine_name }}"
+
+- name: Add entries to the hosts 
+  become: yes
+  command: "{{ item }}"
+  with_items:
+    - "echo {{ machine_name }} > /etc/hostname"
+    - "echo 127.0.0.1 {{ machine_name }} >> /etc/hosts"
+
+
+############
+# Sudoers
+
+- name: Make sure we have a 'wheel' group
+  group:
+    name: wheel
+    state: present
+
+- name: Allow 'wheel' group to have passwordless sudo
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%wheel'
+    line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'
+
+
+###################################
+####
+#### to make a new sudo user:
+####
+### - name: Add the user charles
+###   user:
+###     name: charles
+###     shell: /bin/bash
+###     groups: wheel
+###     append: yes
+###     state: present
+###     createhome: yes
+
+
+############
+# System
+
+- name: Set timezone
+  become: yes
+  command: timedatectl set-timezone America/Vancouver
+
+
+###################
+# Make temp dir
+
+- name: Make /temp dir
+  become: yes
+  file:
+    path: /temp
+    state: directory
+    mode: 0777
+

@@ -1,0 +1,12 @@
+---
+# tasks file for init-charles
+
+- name: Add the user charles
+  user:
+    name: charles
+    shell: /bin/bash
+    groups: wheel
+    append: yes
+    state: present
+    createhome: yes
+
