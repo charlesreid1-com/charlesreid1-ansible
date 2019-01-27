@@ -2,6 +2,7 @@
 # tasks file for init-charles
 
 - name: "Add the user {{ username }}"
+  become: yes
   user:
     name: "{{ username }}"
     shell: /bin/bash
