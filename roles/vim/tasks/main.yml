@@ -1,0 +1,21 @@
+---
+# tasks file for vim
+
+- name: Create ~/.vim directory
+  directory:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+  with_items:
+    - "{{ home_dir }}/.vim"
+    - "{{ home_dir }}/.vim/swap"
+    - "{{ home_dir }}/.vim/undo"
+    - "{{ home_dir }}/.vim/backups"
+    - "{{ home_dir }}/.vim/syntax"
+
+- name: Set vim as the editor
+  copy:
+    src: editorenv.sh
+    dest: /etc/profile.d/editorenv.sh
+    mode: 0755
+
