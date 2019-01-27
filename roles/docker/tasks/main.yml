@@ -1,0 +1,21 @@
+---
+# tasks file for docker
+
+- name: Install docker
+  become: yes
+  command: "bash <( curl https://get.docker.com/ )"
+
+- name: Install docker-compose
+  become: yes
+  command: "{{ item }}"
+  with_items:
+    - "curl -L \"https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose"
+    - "chmod +x /usr/local/bin/docker-compose"
+
+- name: Add principal user to docker
+  become: yes
+  user:
+    name: "{{ username }}"
+    groups: docker
+    append: yes
+
