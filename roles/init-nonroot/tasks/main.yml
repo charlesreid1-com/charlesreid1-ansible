@@ -1,9 +1,9 @@
 ---
 # tasks file for init-charles
 
-- name: Add the user charles
+- name: "Add the user {{ username }}"
   user:
-    name: charles
+    name: "{{ username }}"
     shell: /bin/bash
     groups: wheel
     append: yes
