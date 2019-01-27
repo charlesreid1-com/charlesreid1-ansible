@@ -1,0 +1,10 @@
+---
+# set environment variables
+# for goenv
+
+- name: Copy goenv profile to /etc/profile.d
+  copy:
+    src: goenv.sh
+    dest: /etc/profile.d/goenv.sh
+    mode: 0755
+

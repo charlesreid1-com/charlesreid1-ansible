@@ -1,0 +1,25 @@
+---
+# packages required for goenv
+# 
+# (inferred from the packages required
+# for pyenv...)
+
+- name: Install requirements
+  apt:
+    pkg: "{{ item }}"
+    state: present
+    update_cache: yes
+  become: true
+  become_user: root
+  with_items:
+    - make
+    - build-essential
+    - libssl-dev
+    - zlib1g-dev
+    - libbz2-dev
+    - libreadline-dev
+    - wget
+    - curl
+    - llvm
+    - git
+

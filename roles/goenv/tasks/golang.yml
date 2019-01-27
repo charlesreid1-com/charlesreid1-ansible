@@ -1,0 +1,23 @@
+---
+# install versions of golang
+
+- name: Install golang version
+  tags:
+    - versions
+  command: "{{ goenv_root }}/bin/goenv install -s {{ item }}"
+  args:
+    creates: "{{ goenv_root }}/versions/{{ item }}"
+  with_items:
+    - "{{ goenv_versions }}"
+    - "{{ goenv_global_version }}"
+
+- name: Set global golang version
+  tags:
+    - global
+  lineinfile:
+    path: "{{ goenv_root }}/version"
+    regexp: "^{{ goenv_global_version }}"
+    line: "{{ goenv_global_version }}"
+    create: yes
+  when: goenv_global_version is defined
+

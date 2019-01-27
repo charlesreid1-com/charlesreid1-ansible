@@ -1,0 +1,7 @@
+---
+# defaults file for goenv
+
+goenv_root: ~/.goenv
+goenv_versions:
+  - 1.10.7
+goenv_global_version: 1.10.7

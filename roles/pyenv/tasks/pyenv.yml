@@ -1,0 +1,15 @@
+---
+# install pyenv
+
+- name: Install pyenv
+  git:
+    repo: https://github.com/pyenv/pyenv.git
+    dest: "{{ pyenv_root }}"
+
+- name: Install pyenv plugins
+  git:
+    repo: "https://github.com/pyenv/{{ item }}.git"
+    dest: "{{ pyenv_root }}/plugins/{{ item }}"
+  with_items:
+    - pyenv-virtualenv
+

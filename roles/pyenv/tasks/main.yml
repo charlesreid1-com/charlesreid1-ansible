@@ -1,0 +1,18 @@
+---
+# tasks file for pyenv
+
+# Install any system packages required by pyenv
+- include: packages.yml
+  tags:
+  - pyenv
+
+# Install pyenv itself
+- include: pyenv.yml
+  tags:
+  - pyenv
+
+# Install versions of python
+- include: python.yml
+  tags:
+  - pyenv
+

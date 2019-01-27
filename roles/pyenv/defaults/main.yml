@@ -1,0 +1,7 @@
+---
+# defaults file for pyenv
+
+pyenv_root: ~/.pyenv
+pyenv_versions:
+  - miniconda3-4.3.30
+pyenv_global_version: miniconda3-4.3.30
