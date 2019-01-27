@@ -1,0 +1,5 @@
+---
+# defaults file for sshkeys
+
+username: charles
+ssh_key_email: charlesreid1@gmail.com
