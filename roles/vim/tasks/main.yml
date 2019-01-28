@@ -1,6 +1,15 @@
 ---
 # tasks file for vim
 
+
+- name: Set vim as the system-wide editor
+  become: yes
+  copy:
+    src: editorenv.sh
+    dest: /etc/profile.d/editorenv.sh
+    mode: 0755
+
+
 - name: Create ~/.vim directory
   directory:
     path: "{{ item }}"
@@ -13,10 +22,14 @@
     - "/home/{{ username }}/.vim/backups"
     - "/home/{{ username }}/.vim/syntax"
 
-- name: Set vim as the editor
-  become: yes
+
+- name: Install vimrc
   copy:
-    src: editorenv.sh
-    dest: /etc/profile.d/editorenv.sh
-    mode: 0755
+    src: "{{ item }}"
+    dest: "/home/{{ username }}/{{ item }}"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+  with_items:
+    - ".vimrc"
+
 

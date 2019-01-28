@@ -2,4 +2,8 @@
 # defaults file for sshkeys
 
 username: charles
+
+# When generating an SSH key,
+# link it with this email.
 ssh_key_email: charlesreid1@gmail.com
+
