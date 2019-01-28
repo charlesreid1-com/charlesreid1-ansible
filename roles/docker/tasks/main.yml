@@ -1,9 +1,25 @@
 ---
 # tasks file for docker
 
+
+- name: Check for existing docker executable
+  stat:
+    path: "/usr/local/bin/docker"
+  register: register_docker
+
+
 - name: Install docker
   become: yes
   command: "bash <( curl https://get.docker.com/ )"
+  when:
+    - register_docker.stat.exists
+
+
+- name: Check for existing docker compose executable
+  stat:
+    path: "/usr/local/bin/docker-compose"
+  register: register_docker_compose
+
 
 - name: Install docker-compose
   become: yes
@@ -11,6 +27,7 @@
   with_items:
     - "curl -L \"https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose"
     - "chmod +x /usr/local/bin/docker-compose"
+
 
 - name: Add principal user to docker
   become: yes
