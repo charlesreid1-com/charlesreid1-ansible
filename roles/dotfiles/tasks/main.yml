@@ -1,0 +1,37 @@
+# ---
+# tasks file for dotfiles
+
+# Note: see the vim role for the vimrc file
+#
+# Note: we need to split the dotfiles into
+# a main, static body, plus sourced chunks
+# that contain machine-specific settings.
+# That way, the static portion can work on
+# all machines (dotfiles/debian), and the
+# machine-specific portions can be set manually
+# or by ansible per-machine.
+
+- name: Install dotfiles for non-root user
+  copy:
+    src: "{{ item }}"
+    dest: "/home/{{ username }}/.{{ item }}"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+  with_items:
+    - "aliases"
+    - "bash_profile"
+    - "bash_prompt"
+    - "bashrc"
+    - "curlrc"
+    - "exports"
+    - "functions"
+    - "gdbinit"
+    - "gitattributes"
+    - "gitconfig"
+    - "gitignore"
+    - "gvimrc"
+    - "hushlogin"
+    - "inputrc"
+    - "screenrc"
+    - "tmux.conf"
+
