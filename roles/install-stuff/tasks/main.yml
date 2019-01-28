@@ -16,7 +16,6 @@
     - curl
     - wget
     - graphviz
-    - awscli
     - openssh-server
     - ncdu
     - fail2ban
