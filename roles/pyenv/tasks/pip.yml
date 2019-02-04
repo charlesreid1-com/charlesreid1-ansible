@@ -1,0 +1,15 @@
+---
+# pip install things
+# using pyenv
+
+- name: Pip install things
+  tags:
+    - pip
+  command: "pip install --upgrade {{ item }}"
+  with_items:
+    - boto
+    - awscli
+    - Markdown
+    - pelican
+    - mkdocs
+

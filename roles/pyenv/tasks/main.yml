@@ -16,3 +16,8 @@
   tags:
   - pyenv
 
+# Install any pip packages we know we will need
+- include: pip.yml
+  tags:
+  - pyenv
+
