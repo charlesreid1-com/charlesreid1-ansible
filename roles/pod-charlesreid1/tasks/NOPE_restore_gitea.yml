@@ -1,0 +1,12 @@
+---
+
+
+- name: Restore Gitea repos from dump
+
+
+- name: Restore Gitea database and avatars from dump
+
+
+
+
+

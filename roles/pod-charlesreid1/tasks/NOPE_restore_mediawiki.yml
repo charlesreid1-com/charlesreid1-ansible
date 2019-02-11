@@ -1,0 +1,56 @@
+---
+# restore mediawiki from dumps
+
+
+- name: Copy get_most_recent_backup.py script
+  copy:
+
+
+
+- name: Fetch MediaWiki database dump from S3
+  tags:
+    - s3
+    - pod-charlesreid1
+  command: get_most_recent_backup.py
+
+- name: Restore MediaWiki database from dump
+
+- name: Clean MediaWiki database dump
+
+
+- name: Fetch MediaWiki files dump from S3
+
+- name: Restore MediaWiki files from dump
+
+- name: Clean MediaWiki files dump
+
+
+
+
+- name: Restore MediaWiki files from dump
+  tags:
+    - pod-charlesreid1
+  command: "{{ pod_install_dir }}/util-mw/restore_wiki_files.sh "
+
+
+- name: Make MediaWiki images dir writeable
+
+
+- name: Make MediaWiki texvc extension
+
+
+      ###### To enable MW image uploads, make sure the 'images' directory
+      ###### is writable, then set this to true:
+      ####$wgEnableUploads = true;
+      ####$wgMaxUploadSize = 1024*1024*100; # 100 MB
+      ##### also set in php.ini
+      #####
+      ##### /var/www/html/images
+      #
+      #
+      # Also, in extensions, we need to make the
+      # extension... 
+      # /var/www/html/extensions/Math/math/Makefile
+      #
+      #
+      #

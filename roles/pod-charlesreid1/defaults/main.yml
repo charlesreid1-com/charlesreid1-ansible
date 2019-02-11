@@ -1,0 +1,16 @@
+---
+# defaults file for pod-charlesreid1
+
+username: charles
+
+# where pod-charlesreid1 is installed
+pod_install_dir: "/home/{{ username }}/pod-charlesreid1"
+
+# main domain to check on
+top_domain: "charlesreid1.com"
+
+# default mysql password should be reset
+# using a vault in a group_vars dir in the
+# playbook dir
+mysql_password: dummy_password
+

@@ -1,0 +1,89 @@
+---
+# tasks file for pod-charlesreid1
+#
+# clone pod contents
+# docker-compose build
+# install service
+# port mapping? should be taken care of in dockerfile
+# (and cloud provider/Vagrantfile)
+# enable service?
+# need to deal with letsencrypt first...
+
+
+- name: Clone pod-charlesreid1
+  tags:
+    - pod-charlesreid1
+  git:
+    repo: 'https://github.com/charlesreid1-docker/pod-charlesreid1.git'
+    dest: "{{ pod_instal_dir }}"
+    recursive: yes
+
+
+- name: Set the MySQL password in the docker compose file
+  tags:
+    - pod-charlesreid1
+  command: "sed \"s/REPLACEME/{{ mysql_password }}/\" docker-compose.fixme.yml > docker-compose.yml"
+  args:
+    chdir: "{{ pod_install_dir }}"
+
+
+- name: Check that docker compose executable is available
+  tags:
+    - pod-charlesreid1
+  stat:
+    path: "/usr/local/bin/docker-compose"
+  register: pod_register_docker_compose
+
+
+- name: Build pod-charlesreid1 from scratch
+  tags:
+    - pod-charlesreid1
+  command: "docker-compose build --no-cache"
+  args:
+    chdir: "{{ pod_install_dir }}"
+  when:
+    - "pod_register_docker_compose.stat.exists"
+
+
+- name: Install pod-charlesreid1 service
+  tags:
+    - pod-charlesreid1
+  template:
+    src: pod-charlesreid1.service.j2
+    dest: /etc/systemd/system/pod-charlesreid1.service
+    mode: 0777
+
+
+- name: Check if LetsEncrypt live domain cert is present
+  tags:
+    - pod-charlesreid1
+    - letsencrypt
+  stat:
+    path: "/etc/letsencrypt/live/{{ top_domain }}"
+  register: register_letsencrypt_livecert
+
+
+- name: Enable pod-charlesreid1 service
+  tags:
+    - pod-charlesreid1
+  service:
+    name: pod-charlesreid1
+    enabled: yes
+    state: restarted
+  when:
+    - "pod_register_docker_compose.stat.exists"
+    - "register_letsencrypt_livecert.stat.exists"
+
+
+
+  # from pod docs:
+  # - mw database backup
+  # - mw files backup
+  # - gitea dump zip
+  # - gitea avatars zip
+  # 
+  # database restore script: utils-mysql
+  # mediawiki image restore script: utils-mw
+  # gitea database and avatar: utils-gitea
+
+
