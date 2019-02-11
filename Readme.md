@@ -11,14 +11,14 @@ Playbooks:
 Roles:
 - init root - system stuff (x)
 - init charles - user stuff (x)
-- dotfiles
-- vim
+- dotfiles (x)
+- vim (x)
 - pyenv (x)
 - goenv (x)
 - packages (x)
 - ssh keys (x)
-- docker
-- pod-charlesreid1
+- docker (x)
+- pod-charlesreid1 (x)
 - pod-bots
 - pod-webhooks
 
@@ -34,10 +34,12 @@ See below for details.
 
 See [Quickstart](Quickstart.md).
 
-For instructions running on local machines with Vagrant,
-see [Quickstart#Vagrant](Quickstart.md#Vagrant).
+For instructions on running playbooks on a local machine
+with Vagrant, see
+[Quickstart#Vagrant](Quickstart.md#Vagrant).
 
-For instructions running on DigitalOcean nodes,
-see [Quickstart#DigitalOcean](Quickstart.md#DigitalOcean).
+For instructions on running playbooks on DigitalOcean
+nodes, see
+[Quickstart#DigitalOcean](Quickstart.md#DigitalOcean).
 
 
