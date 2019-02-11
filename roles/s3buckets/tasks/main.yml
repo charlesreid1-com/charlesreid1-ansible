@@ -1,9 +1,0 @@
----
-# s3 backup/restore tasks
-
-
-# Install AWS credentials for charlesreid1
-- include: aws_credentials.yml
-  tags:
-  - aws
-

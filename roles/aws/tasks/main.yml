@@ -1,7 +1,7 @@
 ---
 # tasks file for aws
-
-
+#
+#
 # NOTE: Do not install the AWS cli via apt,
 # it is broken! (s3 functionality)
 # 
@@ -39,4 +39,5 @@
 - name: Install AWS credentials for root user
   become: yes
   template: src=templates/credentials.j2 dest=/home/{{ nonroot_user }}/.aws/credentials
+
 
