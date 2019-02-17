@@ -8,6 +8,6 @@
 # Set these two variable values using
 # encrypted variables in a vault.
 
-charlesreid1_aws_secret_access_key: XXXXXXXXXX
-charlesreid1_aws_access_key_id: XXXXXXXXXX
+aws_secret_access_key: XXXXXXXXXX
+aws_access_key_id: XXXXXXXXXX
 
