@@ -3,18 +3,7 @@
 
 
 - import_tasks: base.yml
-  hosts: servers
   tags: base-setup
-
-
-  #- name: Install AWS credentials
-  #  hosts: servers
-  #  become: yes
-  #  roles:
-  #    - role: aws
-  #      tags: aws
-  #      aws_secret_access_key: "{{ charlesreid1_aws_secret_access_key }}"
-  #      aws_access_key_id: "{{ charlesreid1_aws_access_key_id }}"
 
 
 - name: Install charlesreid1 docker pod
