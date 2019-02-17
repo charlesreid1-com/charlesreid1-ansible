@@ -1,0 +1,43 @@
+---
+# main playbook for charelsreid1 docker pod
+
+
+- name: Initial setup root
+  roles:
+    - role: init-root
+      tags: init-root
+      become: yes
+
+
+- name: Installation
+  roles:
+    - role: install-stuff
+      tags: apt
+      become: yes
+    - role: pyenv
+      tags: pyenv
+      become: yes
+    - role: goenv
+      tags: goenv
+      become: yes
+
+
+- name: Initial setup non-root
+  roles:
+    - role: init-nonroot
+      tags: init-nonroot
+
+
+- name: Install AWS credentials
+  hosts: servers
+  become: yes
+  roles:
+    - role: aws
+      tags: aws_role
+      aws_secret_access_key: "{{ carp_aws_secret_access_key }}"
+      aws_access_key_id: "{{ carp_aws_access_key_id }}"
+
+
+
+
+
