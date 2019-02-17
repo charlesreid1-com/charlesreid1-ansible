@@ -12,4 +12,10 @@
   pre_tasks:
     - name: "Install python2"
       raw: sudo apt-get -y install python
+    - name: Add the non-root user
+      user:
+        name: "{{ nonroot_user }}"
+        shell: /bin/bash
+        state: present
+        createhome: yes
 
