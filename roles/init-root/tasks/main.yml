@@ -5,16 +5,23 @@
 ##############
 # Machine name
 
-- name: Set machine name
+- name: Set machine name with hostname command
   become: yes
   command: "hostname {{ machine_name }}"
 
-- name: Add entries to the hosts 
+
+- name: Create new /etc/hostname
   become: yes
-  command: "{{ item }}"
-  with_items:
-    - "echo {{ machine_name }} > /etc/hostname"
-    - "echo 127.0.0.1 {{ machine_name }} >> /etc/hosts"
+  command: "echo {{ machine_name }} > /etc/hostname"
+
+
+- name: Set hostname entry to 127.0.0.1 in /etc/hosts
+  become: yes
+  lineinfile:
+    path: "/etc/hosts"
+    regexp: "^127.0.0.1"
+    line: "127.0.0.1 {{ machine_name }}"
+    create: yes
 
 
 ############
@@ -34,18 +41,17 @@
     validate: 'visudo -cf %s'
 
 
-###################################
-####
-#### to make a new sudo user:
-####
-### - name: Add the user charles
-###   user:
-###     name: charles
-###     shell: /bin/bash
-###     groups: wheel
-###     append: yes
-###     state: present
-###     createhome: yes
+####################################
+# Add non-root user to wheel group
+
+- name: Add the non-root user
+  user:
+    name: "{{ nonroot_user }}"
+    groups: wheel
+    append: yes
+    state: present
+
+
 
 
 ############
