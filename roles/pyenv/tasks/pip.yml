@@ -5,10 +5,8 @@
 - name: Pip install things
   tags:
     - pip
-  command: "pip install --upgrade {{ item }}"
+  command: "{{ pyenv_root }}/versions/{{ pyenv_global_version}}/bin/pip install --upgrade {{ item }}"
   with_items:
-    - boto
-    - awscli
     - Markdown
     - pelican
     - mkdocs

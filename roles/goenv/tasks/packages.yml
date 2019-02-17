@@ -6,12 +6,7 @@
 
 - name: Install requirements
   apt:
-    pkg: "{{ item }}"
-    state: present
-    update_cache: yes
-  become: true
-  become_user: root
-  with_items:
+    pkg:
     - make
     - build-essential
     - libssl-dev
@@ -22,4 +17,8 @@
     - curl
     - llvm
     - git
+    state: present
+    update_cache: yes
+  become: true
+  become_user: root
 
