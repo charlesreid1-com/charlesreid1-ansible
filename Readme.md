@@ -11,20 +11,20 @@ Playbooks:
 
 
 Roles:
-- init root - system stuff (x)
-- init charles - user stuff (x)
-- dotfiles (x)
-- vim (x)
-- pyenv (x)
-- goenv (x)
-- packages (x)
-- ssh keys (x)
-- docker (x)
+- init-root - prepare root user
+- init-nonroot - prepare nonroot user
+- install-stuff - use aptitude to install packaes
+- pyenv - install pyenv
+- goenv - install goenv
+- sshkeys - set up ssh keys
+- vim - set up vim
+- dotfiles - install and configure dotfiles for nonroot user
 
 Docker pods:
 - pod-charlesreid1
 - pod-bots
 - pod-webhooks
+
 
 ## Playbooks
 

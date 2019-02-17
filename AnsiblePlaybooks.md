@@ -51,3 +51,22 @@ scripts to keep some Twitter bots going.
 - Apollo Space Junk bot flock
 
 
+
+## List of Tags
+
+Tags associated with roles:
+* `base-setup`
+    * `init-root`
+    * `install-stuff`
+    * `goenv`
+    * `pyenv`
+    * `docker`
+    * `init-nonroot`
+    * `sshkeys`
+    * `dotfiles`
+    * `vim`
+
+charlesreid1pod:
+* `pod-charlesreid1`
+
+
