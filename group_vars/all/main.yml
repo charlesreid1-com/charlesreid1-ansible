@@ -1,0 +1,17 @@
+---
+# Variables for all roles
+# 
+# Since most of the defaults are set to the
+# values we want anyway, this file only sets
+# values for variables that require data from
+# the vault.
+
+
+#########################
+# aws role:
+
+charlesreid1_aws_secret_access_key: "{{ vault_aws_secret_access_key }}"
+charlesreid1_aws_access_key_id: "{{ vault_aws_access_key_id }}"
+
+nonroot_user: "charles"
+
