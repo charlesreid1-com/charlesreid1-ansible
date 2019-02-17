@@ -7,12 +7,12 @@
 
 - name: Generate SSH keys for root user
   become: yes
-  shell: ssh-keygen -t rsa -N '' -b 4096 -f /root/.ssh/id_rsa -q -C "{{ ssh_key_email }}"
+  shell: "ssh-keygen -t rsa -N '' -b 4096 -f /root/.ssh/id_rsa -q -C \"{{ ssh_key_email }}\""
 
 - name: Set permissions on .ssh directory
   become: yes
   file:
-  - path: /root/.ssh
+    path: /root/.ssh
     recurse: yes
     mode: "u+rwx,g-wx,o-rwx"
 
@@ -34,7 +34,7 @@
 - name: Set permissions on .ssh directory
   become: yes
   file:
-  - path: /root/.ssh
+    path: /root/.ssh
     recurse: yes
     mode: "u+rwx,g-wx,o-rwx"
 
