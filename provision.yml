@@ -1,0 +1,15 @@
+---
+# by default, ubuntu has python3 but not python
+# we have to fix this with a provision.yml
+
+# Note: also see https://stackoverflow.com/a/34402816/463213 
+# gather_facts: no is important because python is required to gather facts
+- name: "Provision worker nodes to make sure they have python and prepare them for Ansible"
+  hosts: servers
+  become: yes
+  gather_facts: no
+  remote_user: ubuntu
+  pre_tasks:
+    - name: "Install python2"
+      raw: sudo apt-get -y install python
+

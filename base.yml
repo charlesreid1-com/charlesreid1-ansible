@@ -1,0 +1,70 @@
+---
+# main playbook for 
+# all charlesreid1 nodes
+
+
+- name: Initial setup root
+  roles:
+    - role: init-root
+      tags: init-root
+      become: yes
+
+
+- name: Install packages with aptitude
+  roles:
+    - role: install-stuff
+      tags: install-stuff
+      become: yes
+
+
+- name: Install pyenv
+  roles:
+    - role: pyenv
+      tags: pyenv
+      become: yes
+
+
+- name: Install goenv
+  roles:
+    - role: goenv
+      tags: goenv
+      become: yes
+
+
+- name: Install docker and docker-compose
+  roles:
+    - role: docker
+      tags: docker
+      become: yes
+
+
+- name: Initial setup non-root
+  roles:
+    - role: init-nonroot
+      tags: init-nonroot
+
+
+- name: Set up SSH keys
+  roles:
+    - role: sshkeys
+      tags: sshkeys
+
+
+- name: Set up dotfiles
+  roles:
+    - role: dotfiles
+      tags: dotfiles
+
+
+- name: Set up vim
+  roles:
+    - role: vim
+      tags: vim
+
+
+- name: Set up AWS
+  roles:
+    - role: aws
+      tags: aws
+
+
