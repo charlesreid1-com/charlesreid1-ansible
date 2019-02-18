@@ -10,7 +10,7 @@ These docker pods are collections of related charlesreid1.com
 services. The Ansible playbooks prepare remote nodes so they
 are ready to run these docker pods.
 
-| Pod              | Link                                                 |
+|!Pod              |!Link                                                 |
 |------------------|------------------------------------------------------|
 | pod-charlesreid1 | https://git.charlesreid1.com/docker/pod-charlesreid1 |
 | pod-bots         | https://git.charlesreid1.com/docker/pod-bots         |
@@ -21,7 +21,7 @@ are ready to run these docker pods.
 There is one playbook per docker pod, plus a base playbook
 and a provision playbook.
 
-| Playbook                  | Description                                                                                                          |
+|!Playbook                  |!Description                                                                                                          |
 |---------------------------|----------------------------------------------------------------------------------------------------------------------|
 | `charlesreid1pod.yml`     | Playbook to install and run the charlesreid1.com docker pod (<https://git.charlesreid1.com/docker/pod-charlesreid1>) |
 | `charlesreid1hooks.yml`   | Playbook to install and run the webhooks pod (<https://git.charlesreid1.com/docker/pod-webhooks>)                    |
@@ -34,7 +34,7 @@ and a provision playbook.
 
 The following roles carry out groups of related tasks.
 
-| Role Name             | Description                                               |
+|!Role Name             |!Description                                               |
 |-----------------------|-----------------------------------------------------------|
 | init-root             | Prepare root user account                                 |
 | init-nonroot          | Prepare nonroot user account(s)                           |
