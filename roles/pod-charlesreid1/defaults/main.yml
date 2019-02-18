@@ -12,5 +12,5 @@ top_domain: "charlesreid1.com"
 # default mysql password should be reset
 # using a vault in a group_vars dir in the
 # playbook dir
-mysql_password: dummy_password
+mysql_password: changeme
 
