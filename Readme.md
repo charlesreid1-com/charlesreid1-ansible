@@ -4,7 +4,7 @@ Ansible playbooks for charlesreid1.com infrastructure.
 
 ## What is here?
 
-**Docker Pods:**
+## Docker Pods
 
 These docker pods are collections of related charlesreid1.com
 services. The Ansible playbooks prepare remote nodes so they
@@ -16,7 +16,7 @@ are ready to run these docker pods.
 | pod-bots         | https://git.charlesreid1.com/docker/pod-bots         |
 | pod-webhooks     | https://git.charlesreid1.com/docker/pod-webhooks     |
 
-**Playbooks:**
+## Playbooks
 
 There is one playbook per docker pod, plus a base playbook
 and a provision playbook.
@@ -30,7 +30,9 @@ and a provision playbook.
 | `provision.yml`           | Playbook to provision new Ubuntu machines with `/usr/bin/python`.                                                    |
 
 
-**Roles:**
+## Roles
+
+The following roles carry out groups of related tasks.
 
 | Role Name             | Description                                               |
 |-----------------------|-----------------------------------------------------------|
