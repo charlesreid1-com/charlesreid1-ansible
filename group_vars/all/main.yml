@@ -13,3 +13,6 @@ charlesreid1_aws_access_key_id: "{{ vault_aws_access_key_id }}"
 nonroot_user: "charles"
 ssh_key_email: "charlesreid1@gmail.com"
 
+# pod-charlesreid1 requires a mysql password
+charlesreid1_mysql_password: "{{ vault_mysql_password }}"
+
