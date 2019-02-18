@@ -2,6 +2,8 @@
 # install versions of golang
 
 - name: Install golang version
+  become: yes
+  become_user: "{{ nonroot_user }}"
   tags:
     - versions
   command: "{{ goenv_root }}/bin/goenv install -s {{ item }}"
@@ -12,6 +14,8 @@
     - "{{ goenv_global_version }}"
 
 - name: Set global golang version
+  become: yes
+  become_user: "{{ nonroot_user }}"
   tags:
     - global
   lineinfile:

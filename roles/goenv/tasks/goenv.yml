@@ -2,6 +2,8 @@
 # install goenv
 
 - name: Install goenv
+  become: yes
+  become_user: "{{ nonroot_user }}"
   git:
     repo: https://github.com/syndbg/goenv.git
     dest: "{{ goenv_root }}"

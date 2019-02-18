@@ -1,7 +1,5 @@
 ---
 # defaults file for dotfiles
 
-username: charles
-
-machine_name: dummy
+username: "{{ nonroot_user }}"
 

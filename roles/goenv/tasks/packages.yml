@@ -5,6 +5,7 @@
 # for pyenv...)
 
 - name: Install requirements
+  become: yes
   apt:
     pkg:
     - make
@@ -19,6 +20,4 @@
     - git
     state: present
     update_cache: yes
-  become: true
-  become_user: root
 

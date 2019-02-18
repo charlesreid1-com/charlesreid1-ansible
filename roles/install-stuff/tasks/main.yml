@@ -4,10 +4,7 @@
 - name: Install packages
   become: yes
   apt:
-    name: "{{ packages }}"
-    update_cache: yes
-  vars:
-    packages:
+    pkg:
     - git 
     - vim
     - screen
@@ -20,6 +17,8 @@
     - ncdu
     - fail2ban
     - iotop
+    state: present
+    update_cache: yes
 
 - name: Remove dependencies that are no longer required
   become: yes

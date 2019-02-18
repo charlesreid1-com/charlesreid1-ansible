@@ -6,12 +6,10 @@
 # values for variables that require data from
 # the vault.
 
-
-#########################
-# aws role:
-
+# AWS credentials:
 charlesreid1_aws_secret_access_key: "{{ vault_aws_secret_access_key }}"
 charlesreid1_aws_access_key_id: "{{ vault_aws_access_key_id }}"
 
 nonroot_user: "charles"
+ssh_key_email: "charlesreid1@gmail.com"
 

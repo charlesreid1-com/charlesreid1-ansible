@@ -10,26 +10,59 @@
     mode: 0755
 
 
+#####################
+# create .vim dir
+
+- name: Check if a .vim directory already exists
+  become: yes
+  become_user: "{{ username }}"
+  stat:
+    path: "/home/{{ username }}/.vim"
+  register: user_dotvim
+
+
 - name: Create ~/.vim directory
+  become: yes
+  become_user: "{{ username }}"
   file:
-    path: "{{ item }}"
+    path: "/home/{{ username }}/.vim"
+    state: directory
+    mode: 0755
+  when:
+    - "not user_dotvim.stat.exists"
+
+#############################
+# create .vim dir contents
+
+- name: "Copy contents of .vim dir into ~{{ username }}/.vim"
+  become: yes
+  become_user: "{{ username }}"
+  file:
+    path: "/home/{{ username }}/.vim/{{ item }}"
     state: directory
     mode: 0755
   with_items:
-    - "/home/{{ username }}/.vim"
-    - "/home/{{ username }}/.vim/swap"
-    - "/home/{{ username }}/.vim/undo"
-    - "/home/{{ username }}/.vim/backups"
-    - "/home/{{ username }}/.vim/syntax"
+    - swap
+    - undo
+    - backups
+    - syntax
 
 
-- name: Install vimrc
+
+###########################
+# install .vimrc 
+# (and related dotfiles)
+
+- name: Install .vimrc and related dotfiles
+  become: yes
+  become_user: "{{ username }}"
   copy:
     src: "{{ item }}"
-    dest: "/home/{{ username }}/{{ item }}"
+    dest: "/home/{{ username }}/.{{ item }}"
     owner: "{{ username }}"
     group: "{{ username }}"
   with_items:
-    - ".vimrc"
+    - "vimrc"
+
 
 

@@ -2,11 +2,16 @@
 # install pyenv
 
 - name: Install pyenv
+  become: yes
+  become_user: "{{ nonroot_user }}"
   git:
     repo: https://github.com/pyenv/pyenv.git
     dest: "{{ pyenv_root }}"
 
 - name: Install pyenv plugins
+  become: yes
+  become_user: "{{ nonroot_user }}"
+  become_flags: logon_type=interactive logon_flags=with_profile
   git:
     repo: "https://github.com/pyenv/{{ item }}.git"
     dest: "{{ pyenv_root }}/plugins/{{ item }}"

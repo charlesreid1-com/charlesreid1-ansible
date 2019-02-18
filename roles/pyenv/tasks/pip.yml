@@ -2,10 +2,24 @@
 # pip install things
 # using pyenv
 
+#- name: Pip install things
+#  become: yes
+#  become_user: "{{ nonroot_user }}"
+#  tags:
+#    - pip
+#  pip:
+#    executable: "{{ pyenv_root }}/versions/{{ pyenv_global_version }}/bin/pip"
+#    name:
+#      - Markdown
+#      - pelican
+#      - mkdocs
+
 - name: Pip install things
+  become: yes
+  become_user: "{{ nonroot_user }}"
   tags:
     - pip
-  command: "{{ pyenv_root }}/versions/{{ pyenv_global_version}}/bin/pip install --upgrade {{ item }}"
+  command: "{{ pyenv_root }}/versions/{{ pyenv_global_version }}/bin/pip install --no-cache-dir {{ item }}"
   with_items:
     - Markdown
     - pelican

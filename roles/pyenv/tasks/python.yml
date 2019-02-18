@@ -3,8 +3,8 @@
 # using pyenv
 
 - name: Install python versions
-  tags:
-    - versions
+  become: yes
+  become_user: "{{ nonroot_user }}"
   command: "{{ pyenv_root }}/bin/pyenv install -s {{ item }}"
   args:
     creates: "{{ pyenv_root }}/versions/{{ item }}"
@@ -12,14 +12,18 @@
     - "{{ pyenv_versions }}"
     - "{{ pyenv_global_version }}"
     - "{{ pyenv_project_versions|json_query('[*].version') }}"
+  tags:
+    - versions
 
 - name: Set global python version
-  tags:
-    - global
+  become: yes
+  become_user: "{{ nonroot_user }}"
   lineinfile:
     path: "{{ pyenv_root }}/version"
     regexp: "^{{ pyenv_global_version }}"
     line: "{{ pyenv_global_version }}"
     create: yes
   when: pyenv_global_version is defined
+  tags:
+    - global
 

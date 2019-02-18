@@ -12,9 +12,12 @@
 # or by ansible per-machine.
 
 - name: Install dotfiles for non-root user
+  become: yes
+  become_user: "{{ username }}"
   copy:
     src: "{{ item }}"
     dest: "/home/{{ username }}/.{{ item }}"
+    force: yes
     owner: "{{ username }}"
     group: "{{ username }}"
   with_items:

@@ -19,22 +19,6 @@
       become: yes
 
 
-- name: Install pyenv
-  hosts: servers
-  roles:
-    - role: pyenv
-      tags: pyenv
-      become: yes
-
-
-- name: Install goenv
-  hosts: servers
-  roles:
-    - role: goenv
-      tags: goenv
-      become: yes
-
-
 - name: Install docker and docker-compose
   hosts: servers
   roles:
@@ -69,6 +53,23 @@
   roles:
     - role: vim
       tags: vim
+
+
+- name: Install pyenv
+  hosts: servers
+  roles:
+    - role: pyenv
+      tags: pyenv
+      become: yes
+
+
+- name: Install goenv
+  hosts: servers
+  roles:
+    - role: goenv
+      tags: goenv
+      become: yes
+
 
 
       #- name: Install AWS credentials and tools
