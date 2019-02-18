@@ -12,4 +12,5 @@
   roles:
     - role: pod-charlesreid1
       tags: pod-charlesreid1
+      mysql_password: charlesreid1_mysql_password
 
