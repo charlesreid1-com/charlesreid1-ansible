@@ -14,16 +14,31 @@
 - name: Clone pod-charlesreid1
   git:
     repo: 'https://github.com/charlesreid1-docker/pod-charlesreid1.git'
-    dest: "{{ pod_instal_dir }}"
+    dest: "{{ pod_install_dir }}"
     recursive: yes
 
 
-# Set the MySQL password in the docker compose file
 
-- name: Set the MySQL password in the docker compose file
-  command: "sed \"s/REPLACEME/{{ mysql_password }}/\" docker-compose.fixme.yml > docker-compose.yml"
-  args:
-    chdir: "{{ pod_install_dir }}"
+# Rather than running a sed command to replace the password,
+# use the fetch module to copy the template from the remote machine
+# (i.e., the one in the git repo) to the local directory.
+#
+# Then use the template module to use the template.
+
+- name: Fetch the docker-compose template from the remote machine
+  run_once: true
+  fetch:
+    src: "{{ pod_install_dir }}/docker-compose.yml.j2"
+    dest: "/tmp/docker-compose.yml.j2"
+    flat: yes
+    fail_on_missing: yes
+
+
+- name: Install the docker-compose file
+  template:
+    src: /tmp/docker-compose.yml.j2
+    dest: "{{ pod_install_dir }}/docker-compose.yml"
+    mode: 0755
 
 
 # The docker role, in the base playbook,
@@ -54,6 +69,7 @@
     path: /etc/systemd/system/pod-charlesreid1.service
   register: pod_charlesreid1_service_check
 
+
 - name: Install pod-charlesreid1 service
   template:
     src: pod-charlesreid1.service.j2
@@ -63,7 +79,7 @@
     - "not pod_charlesreid1_service_check.stat.exists"
 
 
-# letsencrypt role will install certs,
+# LetsEncrypt role will install certs,
 # either fake or real, so this should
 # always pass.
 
@@ -85,7 +101,7 @@
     - "register_letsencrypt_livecert.stat.exists"
 
 
-# from pod docs:
+# From pod docs:
 # - mw database backup
 # - mw files backup
 # - gitea dump zip
