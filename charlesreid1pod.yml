@@ -2,10 +2,6 @@
 # main playbook for charlesreid1 docker pod
 
 
-- import_tasks: base.yml
-  tags: base-setup
-
-
 - name: Install charlesreid1 docker pod
   hosts: servers
   become: yes
