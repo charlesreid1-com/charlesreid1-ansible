@@ -1,40 +1,31 @@
 # ---
 # tasks file for dotfiles
-
-# Note: see the vim role for the vimrc file
 #
-# Note: we need to split the dotfiles into
-# a main, static body, plus sourced chunks
-# that contain machine-specific settings.
-# That way, the static portion can work on
-# all machines (dotfiles/debian), and the
-# machine-specific portions can be set manually
-# or by ansible per-machine.
+# clean up this mess.
+# use the debian dotfiles repo
+# and the bootstrap.sh script.
 
-- name: Install dotfiles for non-root user
+# Start by cloning our debian dotfiles repo.
+# 
+# The debian dotfiles repo contains all the
+# master versions of all the dotfiles.
+
+- name: Clone the debian dotfiles repo
   become: yes
   become_user: "{{ username }}"
-  copy:
-    src: "{{ item }}"
-    dest: "/home/{{ username }}/.{{ item }}"
-    force: yes
-    owner: "{{ username }}"
-    group: "{{ username }}"
-  with_items:
-    - "aliases"
-    - "bash_profile"
-    - "bash_prompt"
-    - "bashrc"
-    - "curlrc"
-    - "exports"
-    - "functions"
-    - "gdbinit"
-    - "gitattributes"
-    - "gitconfig"
-    - "gitignore"
-    - "gvimrc"
-    - "hushlogin"
-    - "inputrc"
-    - "screenrc"
-    - "tmux.conf"
+  git:
+    repo: https://github.com:charlesreid1/debian-dotfiles.git
+    dest: "/home/{{ username }}/dotfiles"
+    recursive: yes
+
+
+# Use the bootstrap.sh script in the 
+# dotfiles repo to install all the
+# dotfiles for our nonroot user.
+# ~/scripts/ -> machinename_scripts/ too.
+
+- name: Run bootstrap.sh to install all dotfiles
+  become: yes
+  become_user: "{{ username }}"
+  command: "/home/{{ username }}/dotfiles/dotfiles/bootstrap.sh -f"
 
