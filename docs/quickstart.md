@@ -4,12 +4,16 @@ This quickstart walks through the process of using
 Vagrant and running the charlesreid1 playbooks
 against a Vagrant machine.
 
-Step 1: Vagrant Setup
 
-Step 2: Run Base Playbook
+Table of Contents
+=================
 
-Step 3: Changing Variables
-
+* [Vagrant Setup](#vagrant-setup)
+  * [Start Vagrant Machines](#start-vagrant-machines)
+* [Run Ansible](#run-ansible)
+  * [Set Up Vault Secret](#set-up-vault-secret)
+  * [Run the Playbook](#run-the-playbook)
+* [Change Variables](#change-variables)
 
 
 ## Vagrant Setup
@@ -81,4 +85,33 @@ ANSIBLE_CONFIG="vagrant.cfg" ansible-playbook base.yml
 The config file specifies the inventory file, SSH key,
 vault password, and log file to use, among other details.
 
+
+## Change Variables
+
+You can modify variables in the 
+`group_vars/main.yml` file.
+
+```
+$ cat group_vars/main.yml 
+
+...
+
+my_var_1: "red"
+my_var_2: "blue"
+
+```
+
+Alternatively, you can pass custom
+variable values on the command line.
+This is how we specify the machine
+name when running charlesreid1.com
+playbooks.
+
+```
+$ ANSIBLE_CONFIG="my_config_file.cfg" \
+        ansible-playbook \
+        -i hosts \
+        --extra-vars "my_var_1=red,my_var_2=blue" \
+        playbook.yml
+```
 
