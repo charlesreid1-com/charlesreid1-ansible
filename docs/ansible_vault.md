@@ -14,6 +14,7 @@ Table of Contents
 * [How to create a vault file?](#how-to-create-a-vault-file)
 * [How to edit the vault file?](#how-to-edit-the-vault-file)
 * [How to use the vault file?](#how-to-use-the-vault-file)
+* [Adding new secret variables](#adding-new-secret-variables)
 
 
 ## What is Ansible Vault?
@@ -84,4 +85,84 @@ vault_password_file = .vault_secret
 Put your password into the file `.vault_secret` and use this
 configuration file (by pointing to it with the `ANSIBLE_CONFIG`
 environment variable when running ansible).
+
+
+## Adding new secret variables
+
+Suppose we have a role that utilizes a variable that is sensitive
+and should remain secret. To do this, we set up a series of
+variable definitions that allow the secret defined in the vault
+to be used for different roles.
+
+Suppose we have a role that uses an API key in a command. The role
+utilizes a variable `{{ api_key }}` like so:
+
+`roles/my-role/tasks/main.yml`:
+
+```
+---
+- name: A simple example task using a secret variable
+  command: "python script.py --api-key={{ api_key }}"
+```
+
+If the variable `api_key` is defined in the task default variable 
+values, this command will be run but with an invalid API key.
+If the above command should _only_ be run with a valid API key,
+you can leave `api_key` out of the default variable values.
+
+Here is what that would look like, if you defined the API key 
+to be an empty string by default:
+
+`roles/my-role/defaults/main.yml`:
+
+```
+---
+api_key: ""
+```
+
+To set the real `api_key` value, override the default variable
+value in the playbook(s) that run that role. For example, if
+the role `my-role` is called from a playbook `main.yml`,
+
+`main.yml`:
+
+```
+---
+- name: Run my-role
+  roles:
+    - role: my-role
+      api_key: "{{ charlesreid1_api_key }}"
+```
+
+This specifies that the `api_key` variable should be set to the 
+value of the variable `charlesreid1_api_key`.
+
+The prefix `charlesreid1` indicates a site-specific variable setting.
+Those variables are contained in `group_vars/all/main.yml`.
+The variable is defined there, but it is also defining the variable
+to be set to another variable value:
+
+`group_vars/all/main.yml`:
+
+```
+---
+charlesreid1_api_key: "{{ vault_api_key }}"
+```
+
+The last step is to define the variable in the vault.
+This is where we use the `ansible-vault` command to edit
+the vault file:
+
+```
+ANSIBLE_CONFIG="my_config.cfg" ansible-vault edit group_vars/all/vault
+```
+
+This is where you put the real API key:
+
+`group_vars/all/vault`:
+
+```
+---
+vault_api_key: "ABCXYZ123456"
+```
 
