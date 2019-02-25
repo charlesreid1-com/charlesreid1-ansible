@@ -6,6 +6,14 @@ username: "{{ nonroot_user }}"
 # where pod-charlesreid1 is installed
 pod_install_dir: "/home/{{ username }}/pod-charlesreid1"
 
+# gitea domain
+gitea_app_name: "git.charlesreid1.com"
+gitea_domain: "git.charlesreid1.com"
+
+# app.ini settings
+gitea_secret_key: "xxxxxxxxxxxxxxxxxxx"
+gitea_internal_token: "xxxxxxxxxxxxxxx"
+
 # main domain to check on
 top_domain: "charlesreid1.com"
 
