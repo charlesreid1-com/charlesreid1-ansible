@@ -1,2 +1,6 @@
 ---
-# handlers file for pod-bots
+# handlers file for pod-charlesreid1
+#
+- name: restart pod-charlesreid1
+  service: name=pod-charlesreid1 state=restarted
+

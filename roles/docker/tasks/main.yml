@@ -1,38 +1,31 @@
 ---
 # tasks file for docker
 
-
 - name: Check for existing docker executable
   stat:
     path: "/usr/bin/docker"
   register: register_docker
 
 
-- name: Install docker
-  become: yes
-  command: "{{ item }}"
-  with_items:
-    - "curl -L \"https://get.docker.com/\" -o /tmp/get-docker.sh"
-    - "chmod +x /tmp/get-docker.sh"
-    - "/tmp/get-docker.sh"
-  when:
-    - "not register_docker.stat.exists"
-
-
-- name: Check for existing docker compose executable
+- name: Check if existing docker-compose executable is present
   stat:
     path: "/usr/local/bin/docker-compose"
   register: register_docker_compose
 
 
-- name: Install docker-compose
+- name: Copy docker/docker-compose install script onto remote host
   become: yes
-  command: "{{ item }}"
-  with_items:
-    - "curl -L \"https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose"
-    - "chmod +x /usr/local/bin/docker-compose"
+  copy:
+    src: install.sh
+    dest: /tmp/install.sh
+    mode: 0700
+    force: yes
+
+
+- name: Run docker/docker-compose install script
+  command: "/tmp/install.sh"
   when:
-    - "not register_docker_compose.stat.exists"
+    - "not register_docker.stat.exists or not register_docker_compose.stat.exists"
 
 
 - name: Add principal user to docker group

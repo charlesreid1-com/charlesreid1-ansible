@@ -14,9 +14,15 @@
   become: yes
   become_user: "{{ username }}"
   git:
-    repo: https://github.com:charlesreid1/debian-dotfiles.git
+    repo: https://github.com/charlesreid1/debian-dotfiles.git
     dest: "/home/{{ username }}/dotfiles"
     recursive: yes
+
+
+- name: Check for bootstrap script
+  stat:
+    path: "/home/{{ username }}/dotfiles/dotfiles/bootstrap.sh"
+  register: bootstrap_present
 
 
 # Use the bootstrap.sh script in the 
@@ -28,4 +34,7 @@
   become: yes
   become_user: "{{ username }}"
   command: "/home/{{ username }}/dotfiles/dotfiles/bootstrap.sh -f"
+  args:
+    chdir: "/home/{{ username}}/dotfiles/dotfiles"
+  when: "bootstrap_present.stat.executable"
 

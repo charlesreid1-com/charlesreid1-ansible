@@ -12,6 +12,8 @@
 # Clone the charlesreid1 docker pod
 
 - name: Clone pod-charlesreid1
+  become: yes
+  become_user: "{{ username }}"
   git:
     repo: 'https://github.com/charlesreid1-docker/pod-charlesreid1.git'
     dest: "{{ pod_install_dir }}"
@@ -35,6 +37,8 @@
 
 
 - name: Install the docker-compose file
+  become: yes
+  become_user: "{{ username }}"
   template:
     src: /tmp/docker-compose.yml.j2
     dest: "{{ pod_install_dir }}/docker-compose.yml"
@@ -50,11 +54,44 @@
   register: pod_register_docker_compose
 
 
+
+# MEDIAWIKI PREP
+# We have to build the extensions dir for the MediaWiki container
+# /pod-charlesreid1/d-mediawiki/charlesreid1-config/mediawiki/build_extensions_dir.sh 
+
+- name: Check if extensions dir already exists
+  stat:
+    path: "{{ pod_install_dir }}/d-mediawiki/charlesreid1-config/mediawiki/extensions"
+  register: extensions_dir_exists
+
+
+- name: Make mediawiki extensions dir build script executable
+  become: yes
+  become_user: "{{ username }}"
+  file:
+    path: "{{ pod_install_dir }}/d-mediawiki/charlesreid1-config/mediawiki/build_extensions_dir.sh"
+    mode: "u+x"
+  when:
+    - "not extensions_dir_exists.stat.exists"
+
+
+- name: Build the mediawiki extensions dir
+  become: yes
+  become_user: "{{ username }}"
+  command: "{{ pod_install_dir }}/d-mediawiki/charlesreid1-config/mediawiki/build_extensions_dir.sh"
+  args:
+    chdir: "{{ pod_install_dir }}/d-mediawiki/charlesreid1-config/mediawiki"
+  when:
+    - "not extensions_dir_exists.stat.exists"
+
+
 # CONSTRUCT THE POD
 # This task will be time-consuming.
 
 - name: Build pod-charlesreid1 from scratch
-  command: "docker-compose build --no-cache"
+  become: yes
+  become_user: "{{ username }}"
+  command: "/usr/local/bin/docker-compose build --no-cache"
   args:
     chdir: "{{ pod_install_dir }}"
   when:
@@ -71,6 +108,7 @@
 
 
 - name: Install pod-charlesreid1 service
+  become: yes
   template:
     src: pod-charlesreid1.service.j2
     dest: /etc/systemd/system/pod-charlesreid1.service
@@ -92,12 +130,13 @@
 
 
 - name: Enable pod-charlesreid1 service
+  become: yes
   service:
     name: pod-charlesreid1
     enabled: yes
     state: restarted
   when:
-    - "pod_register_docker_compose.stat.exists"
+    - "pod_register_docker_compose.stat.executable"
     - "register_letsencrypt_livecert.stat.exists"
 
 

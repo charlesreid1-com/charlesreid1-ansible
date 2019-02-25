@@ -1,0 +1,47 @@
+---
+###########################
+# Set up pages pod
+#
+# d-nginx-subdomains
+###########################
+
+
+# Create /www dir
+
+- name: Create the /www directory structure
+  directory:
+    path: "/www/{{ item }}"
+    state: directory
+  with_items:
+    - "pages.charlesreid1.com"
+    - "bots.charlesreid1.com"
+    - "hooks.charlesreid1.com"
+
+
+# Check to make sure we cloned the 
+# webhooks docker pod...
+
+- name: Check if pod-webhooks repo is cloned
+  stat:
+    path: "{{ webhooks_install_dir }}"
+  register: pod_webhooks_clone_check
+
+
+# Run the script in the webhooks
+# docker pod to do initial setup
+# of /www/pages.charlesreid1.com
+
+- name: Run initial clone commands to set up pages at /www/pages.charlesreid1.com
+  command: "{{ webhooks_install_dir }}/scripts/pages_init_setup.py"
+
+- name: Run initial clone commands to set up subdomains at /www/*.charlesreid1.com
+  command: "{{ webhooks_install_dir }}/scripts/pages_init_setup.py"
+
+
+# We don't have any docker pods to run
+
+
+
+
+
+

@@ -1,7 +1,7 @@
 ---
 # defaults file for pod-charlesreid1
 
-username: charles
+username: "{{ nonroot_user }}"
 
 # where pod-charlesreid1 is installed
 pod_install_dir: "/home/{{ username }}/pod-charlesreid1"

@@ -1,0 +1,112 @@
+---
+###########################
+# Set up webhooks pod
+#
+# captain hook
+###########################
+
+
+# Clone the webhooks docker pod
+
+- name: Clone pod-webhooks
+  git:
+    repo: 'https://github.com/charlesreid1-docker/pod-webhooks.git'
+    dest: "{{ webhooks_install_dir }}"
+    recursive: yes
+
+
+# The docker-compose file is static, so we don't need to do anything.
+# Otherwise, this is where we would modify it.
+#
+# The docker role, in the base playbook,
+# will install docker-compose
+
+- name: Check that docker compose executable is available
+  stat:
+    path: "/usr/local/bin/docker-compose"
+  register: pod_register_docker_compose
+
+
+# CONSTRUCT THE POD
+
+- name: Build pod-charlesreid1 from scratch
+  command: "docker-compose build --no-cache"
+  args:
+    chdir: "{{ webhooks_install_dir }}"
+  when:
+    - "pod_register_docker_compose.stat.exists"
+
+
+########################################
+# Set up pod-webhooks startup service
+########################################
+
+# Check if the webhook docker pod service
+# is installed. If not, install it.
+
+- name: Check if pod-webhooks service is installed
+  stat:
+    path: /etc/systemd/system/pod-webhooks.service
+  register: pod_webhooks_service_check
+
+
+- name: Install pod-webhooks service
+  template:
+    src: pod-webhooks.service.j2
+    dest: /etc/systemd/system/pod-webhooks.service
+    mode: 0777
+  when:
+    - "not pod_webhooks_service_check.stat.exists"
+
+
+# Before we enable the service - 
+# LetsEncrypt role will install certs,
+# either fake or real, so this should
+# always pass.
+
+- name: Check if LetsEncrypt live domain cert is present
+  tags:
+    - letsencrypt
+  stat:
+    path: "/etc/letsencrypt/live/{{ top_domain }}"
+  register: register_letsencrypt_livecert
+
+
+# Enabling the service requires docker compose and LetsEncrypt certs
+
+- name: Enable pod-webhooks service
+  service:
+    name: pod-webhooks
+    enabled: yes
+    state: restarted
+  when:
+    - "pod_register_docker_compose.stat.exists"
+    - "register_letsencrypt_livecert.stat.exists"
+
+
+########################################
+# Set up captain-hook-canary service
+########################################
+
+# Check if the captain hook canary service
+# is installed. If not, install it.
+
+- name: Check if captain-hook-canary service is installed
+  stat:
+    path: /etc/systemd/system/captain-hook-canary.service
+  register: canary_service_check
+
+- name: Install captain-hook-canary service
+  template:
+    src: captain-hook-canary.service.j2
+    dest: /etc/systemd/system/captain-hook-canary.service
+    mode: 0777
+  when:
+    - "not canary_service_check.stat.exists"
+
+- name: Enable captain-hook-canary service
+  service:
+    name: captain-hook-canary
+    enabled: yes
+    state: restarted
+
