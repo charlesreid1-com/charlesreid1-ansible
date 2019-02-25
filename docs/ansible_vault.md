@@ -5,6 +5,17 @@ This page contains instructions for using the Ansible vault.
 Link: [Ansible vault documentation](https://docs.ansible.com/ansible/2.4/vault.html#creating-encrypted-files)
 
 
+Table of Contents
+=================
+
+* [What is Ansible Vault?](#what-is-ansible-vault)
+* [Where is the vault file?](#where-is-the-vault-file)
+* [How to view the vault file?](#how-to-view-the-vault-file)
+* [How to create a vault file?](#how-to-create-a-vault-file)
+* [How to edit the vault file?](#how-to-edit-the-vault-file)
+* [How to use the vault file?](#how-to-use-the-vault-file)
+
+
 ## What is Ansible Vault?
 
 Ansible provides a "vault" function that allows sensitive data
@@ -73,6 +84,4 @@ vault_password_file = .vault_secret
 Put your password into the file `.vault_secret` and use this
 configuration file (by pointing to it with the `ANSIBLE_CONFIG`
 environment variable when running ansible).
-
-
 
