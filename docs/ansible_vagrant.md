@@ -69,7 +69,7 @@ log_path=ansible_vagrant.log
 This example points to a vault secret contained
 in the file `.vault_secret`.
 
-See [AnsibleVault.md](AnsibleVault.md) for more info
+See [docs/ansible_vault.md](ansible_vault.md) for more info
 about vault secrets.
 
 

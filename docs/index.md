@@ -60,14 +60,14 @@ The following roles carry out groups of related tasks.
 
 ## Getting Started with Playbooks
 
-| Documentation Page                                 | Description                                                     |
-|----------------------------------------------------|-----------------------------------------------------------------|
-| [docs/index.md](docs/index.md)                     | Documentation index                                             |
-| [docs/quickstart.md](docs/quickstart.md)           | Quick start for the impatient (uses Vagrant)                    |
-| [docs/ansible_do.md](docs/ansible_do.md)           | Guide for running charlesreid1.com playbooks on Digital Ocean   |
-| [docs/ansible_vagrant.md](docs/ansible_vagrant.md) | Guide for running charlesreid1.com playbooks on Vagrant         |
+| Documentation Page                            | Description                                                     |
+|-----------------------------------------------|-----------------------------------------------------------------|
+| [docs/index.md](index.md)                     | Documentation index                                             |
+| [docs/quickstart.md](quickstart.md)           | Quick start for the impatient (uses Vagrant)                    |
+| [docs/ansible_do.md](ansible_do.md)           | Guide for running charlesreid1.com playbooks on Digital Ocean   |
+| [docs/ansible_vagrant.md](ansible_vagrant.md) | Guide for running charlesreid1.com playbooks on Vagrant         |
 
-See [ansible_playbooks.md](ansible_playbooks.md) for a list of all
+See [docs/ansible_playbooks.md](ansible_playbooks.md) for a list of all
 playbooks in this directory, list of all tags,
 and info about how to use the playbooks.
 
@@ -124,12 +124,12 @@ ANSIBLE_CONFIG="my_config.cfg" ansible-playbook -i hosts main.yml --tags tag1
 ANSIBLE_CONFIG="my_config.cfg" ansible-playbook -i hosts main.yml --tags tag1,tag2,tag3
 ```
 
-Find a full list of tags at [ansible_playbooks.md](ansible_playbooks.md).
+Find a full list of tags at [docs/ansible_playbooks.md](ansible_playbooks.md).
 
 
 ## Secrets and Sensitive Information
 
-See [ansible_vault.md](ansible_vault.md) for details about how to use
+See [docs/ansible_vault.md](ansible_vault.md) for details about how to use
 the Ansible vault to view/edit secrets and sensitive information.
 
 **NOTE:** THe vault and vault secret should be set up before 
@@ -138,13 +138,13 @@ running playbooks against either Vagrant or AWS machines.
 
 ## Vagrant Testing
 
-See [ansible_vagrant.md](ansible_vagrant.md) for instructions on how to set up
+See [docs/ansible_vagrant.md](ansible_vagrant.md) for instructions on how to set up
 a Vagrant virtual machine to run the Ansible playbook
 against, for testing purposes.
 
 
 ## DigitalOcean Deployment
 
-See [ansible_do.md](ansible_do.md) for instructions on how to set up an DigitalOcean
+See [docs/ansible_do.md](ansible_do.md) for instructions on how to set up an DigitalOcean
 node to run the Ansible playbook against.
 

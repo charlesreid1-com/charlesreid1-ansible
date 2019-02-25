@@ -2,7 +2,15 @@
 
 Ansible playbooks for charlesreid1.com infrastructure.
 
-## What is here?
+
+Table of Contents
+=================
+
+* [Docker Pods](#docker-pods)
+* [Playbooks](#playbooks)
+* [Roles](#roles)
+* [Getting Started with Playbooks](#getting-started-with-playbooks)
+
 
 ## Docker Pods
 
@@ -46,9 +54,16 @@ The following roles carry out groups of related tasks.
 | dotfiles              | Install and configure dotfiles for nonroot user           |
 
 
-# Ansible Playbook Documentation
+## Getting Started with Playbooks
 
-See [docs/index.md](docs/index.md) for the full documentation.
+| Documentation Page                                 | Description                                                     |
+|----------------------------------------------------|-----------------------------------------------------------------|
+| [docs/index.md](docs/index.md)                     | Documentation index                                             |
+| [docs/quickstart.md](docs/quickstart.md)           | Quick start for the impatient (uses Vagrant)                    |
+| [docs/ansible_do.md](docs/ansible_do.md)           | Guide for running charlesreid1.com playbooks on Digital Ocean   |
+| [docs/ansible_vagrant.md](docs/ansible_vagrant.md) | Guide for running charlesreid1.com playbooks on Vagrant         |
 
-See [docs/quickstart.md](docs/quickstart.md) for a quick start guide.
+See [docs/ansible_playbooks.md](docs/ansible_playbooks.md) for a list of all
+playbooks in this directory and how to run them, as well as a list 
+of all tags.
 
