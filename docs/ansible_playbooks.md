@@ -1,6 +1,19 @@
 # Ansible Playbooks
 
-This covers how to run the playbooks in this directory.
+This page covers what playbooks are in this directory
+and how to run them.
+
+
+Table of Contents
+=================
+
+* [provision\.yml: Provision Your Remote Node](#provisionyml-provision-your-remote-node)
+* [base\.yml: the base plays](#baseyml-the-base-plays)
+* [podcharlesreid1\.yml: charlesreid1 docker pod play](#podcharlesreid1yml-charlesreid1-docker-pod-play)
+* [charlesreid1hooks\.yml: webhooks server docker pod play](#charlesreid1hooksyml-webhooks-server-docker-pod-play)
+* [charlesreid1bots\.yml: bots docker pod play](#charlesreid1botsyml-bots-docker-pod-play)
+* [List of Tags](#list-of-tags)
+
 
 ## provision.yml: Provision Your Remote Node
 
@@ -14,22 +27,22 @@ step installs `/usr/bin/python`.
 ANSIBLE_CONFIG="vagrant.cfg" vagrant provision
 ```
 
-Running plays against an AWS node requires
+Running plays against a Digital Ocean node requires
 the provision playbook to be run explicitly with the
 command:
 
 ```plain
-ANSIBLE_CONFIG="aws.cfg" ansible-playbook -i awshosts provision.yml
+ANSIBLE_CONFIG="do.cfg" ansible-playbook provision.yml
 ```
 
-See "Provision" section of [AnsibleAWS.md](AnsibleAWS.md)
-or [AnsibleVagrant.md](AnsibleVagrant.md) for more info
-about the provision step.
+Also see the Provision sections of the 
+[ansible_vagrant.md](ansible_vagrant.md)
+and [ansible_do.md](ansible_do.md) pages.
 
 
 ## base.yml: the base plays
 
-The base.yml playbook contains the base set of plays for all
+The base.yml playbook contains a base set of plays for all
 charlesreid1.com nodes. This includes setup, tooling, dotfiles,
 user accounts, SSH keys, and so on.
 
@@ -39,11 +52,23 @@ be defined manually. To do that, use the `--extra-vars` flag:
 
 ```plain
 ANSIBLE_CONFIG="vagrant.cfg" \
-  ansible-playbook -i vagranthosts base.yml \
-  --extra-vars "machine_name=yoyo"
+        ansible-playbook \
+        --extra-vars "machine_name=yoyo" \
+        base.yml
 ```
 
-## charlesreid1pod.yml: charlesreid1 docker pod play
+To run on Digital Ocean, use the same command
+but specify the corrsponding config file:
+
+```plain
+ANSIBLE_CONFIG="do.cfg" \
+        ansible-playbook \
+        --extra-vars "machine_name=yoyo" \
+        base.yml
+```
+
+
+## podcharlesreid1.yml: charlesreid1 docker pod play
 
 **host: krash**
 
@@ -65,15 +90,17 @@ and the vagrant hosts file:
 
 ```plain
 ANSIBLE_CONFIG="vagrant.cfg" \
-  ansible-playbook -i vagranthosts charlesreid1pod.yml
+        ansible-playbook \
+        podcharlesreid1.yml
 ```
 
 To set a custom hostname, use the `--extra-vars` flag as above:
 
 ```plain
 ANSIBLE_CONFIG="vagrant.cfg" \
-  ansible-playbook -i vagranthosts charlesreid1pod.yml \
-  --extra-vars "machine_name=yoyo"
+        ansible-playbook \
+        --extra-vars "machine_name=yoyo" \
+        podcharlesreid1.yml
 ```
 
 **Example:** Deploy the charlesreid1 docker pod play
@@ -81,8 +108,9 @@ to a Digital Ocean droplet.
 
 ```plain
 ANSIBLE_CONFIG="do.cfg" \
-  ansible-playbook -i dohosts charlesreid1pod.yml \
-  --extra-vars "machine_name=redbeard"
+        ansible-playbook \
+        --extra-vars "machine_name=yoyo" \
+        podcharlesreid1.yml
 ```
 
 
@@ -110,10 +138,12 @@ scripts to keep some Twitter bots going.
 - Apollo Space Junk bot flock
 
 
-
 ## List of Tags
 
+(Incomplete)
+
 Tags associated with roles:
+
 * `base-setup`
     * `init-root`
     * `install-stuff`
@@ -125,7 +155,8 @@ Tags associated with roles:
     * `dotfiles`
     * `vim`
 
-charlesreid1pod:
+podcharlesreid1:
+
 * `pod-charlesreid1`
 
 
