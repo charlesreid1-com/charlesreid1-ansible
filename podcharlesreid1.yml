@@ -8,5 +8,7 @@
   roles:
     - role: pod-charlesreid1
       tags: pod-charlesreid1
-      mysql_password: charlesreid1_mysql_password
+      mysql_password: "{{ charlesreid1_mysql_password }}"
+      gitea_secret_key: "{{ charlesreid1_gitea_secret_key }}"
+      gitea_internal_token: "{{ charlesreid1_gitea_internal_token }}"
 
