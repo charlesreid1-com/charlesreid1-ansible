@@ -2,7 +2,19 @@
 
 Ansible playbooks for charlesreid1.com infrastructure.
 
-## What is here?
+Table of Contents
+=================
+
+* [Docker Pods](#docker-pods)
+* [Playbooks](#playbooks)
+* [Roles](#roles)
+* [Getting Started with Playbooks](#getting-started-with-playbooks)
+* [Running Playbooks](#running-playbooks)
+  * [Running Select Tasks with Tags](#running-select-tasks-with-tags)
+* [Secrets and Sensitive Information](#secrets-and-sensitive-information)
+* [Vagrant Testing](#vagrant-testing)
+* [DigitalOcean Deployment](#digitalocean-deployment)
+
 
 ## Docker Pods
 
@@ -46,20 +58,21 @@ The following roles carry out groups of related tasks.
 | dotfiles              | Install and configure dotfiles for nonroot user           |
 
 
+## Getting Started with Playbooks
 
-## Playbooks
+| Documentation Page                                 | Description                                                     |
+|----------------------------------------------------|-----------------------------------------------------------------|
+| [docs/index.md](docs/index.md)                     | Documentation index                                             |
+| [docs/quickstart.md](docs/quickstart.md)           | Quick start for the impatient (uses Vagrant)                    |
+| [docs/ansible_do.md](docs/ansible_do.md)           | Guide for running charlesreid1.com playbooks on Digital Ocean   |
+| [docs/ansible_vagrant.md](docs/ansible_vagrant.md) | Guide for running charlesreid1.com playbooks on Vagrant         |
 
 See [ansible_playbooks.md](ansible_playbooks.md) for a list of all
-playbooks in this directory, list of a ll tags,
+playbooks in this directory, list of all tags,
 and info about how to use the playbooks.
 
 
-### Quick Start
-
-
-
-
-### Running Playbooks
+## Running Playbooks
 
 To run Ansible playbooks, use the `ansible-playbook` command.
 
@@ -71,14 +84,15 @@ You will need to specify:
 * An inventory file to tell Ansible how to connect to
   remote machines, using the `-i` flag 
 
-Here's how the `ansible-playbook` command should look:
+Here is an example call to `ansible-playbook`
+to show how it should look:
 
 ```plain
-ANSIBLE_CONFIG="my_config_file.cfg" ansible-playbook -i myhosts   base.yml
-^^^^^^^^^^^^^^                                       ^^^^^^^^^^   ^^^^^^^^
-specify config file                                  specify the  the ansible
-with this env var                                    inventory    playbook
-                                                     file
+ANSIBLE_CONFIG="my_config.cfg" ansible-playbook -i myhosts   main.yml
+^^^^^^^^^^^^^^                                  ^^^^^^^^^^   ^^^^^^^^
+specify config file                             specify the  the ansible
+with this env var                               inventory    playbook
+                                                file
 ```
 
 Use the **Vagrant configuration file** `vagrant.cfg` to run 
@@ -88,7 +102,7 @@ Edit the `vagranthosts` file to match info printed by the
 
 ```plain
 # Run ansible playbook on vagrant machines
-ANSIBLE_CONFIG="vagrant.cfg" ansible-playbook -i vagranthosts base.yml
+ANSIBLE_CONFIG="vagrant.cfg" ansible-playbook -i vagranthosts main.yml
 ```
 
 Use the **DigitalOcean configuration file** `do.cfg` to run
@@ -97,7 +111,7 @@ to the correct SSH key and remote host IP address.
 
 ```plain
 # Run ansible playbook on DigitalOcean machines
-ANSIBLE_CONFIG="do.cfg" ansible-playbook -i dohosts base.yml
+ANSIBLE_CONFIG="do.cfg" ansible-playbook -i dohosts main.yml
 ```
 
 ### Running Select Tasks with Tags
@@ -106,8 +120,8 @@ To run a specific task, you can filter tasks using tags.
 Use the `--tags` flag with the `ansible-playbook` command:
 
 ```plain
-ANSIBLE_CONFIG="asdf.cfg" ansible-playbook -i hosts base.yml --tags tag1
-ANSIBLE_CONFIG="asdf.cfg" ansible-playbook -i hosts base.yml --tags tag1,tag2,tag3
+ANSIBLE_CONFIG="my_config.cfg" ansible-playbook -i hosts main.yml --tags tag1
+ANSIBLE_CONFIG="my_config.cfg" ansible-playbook -i hosts main.yml --tags tag1,tag2,tag3
 ```
 
 Find a full list of tags at [ansible_playbooks.md](ansible_playbooks.md).
