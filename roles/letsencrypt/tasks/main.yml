@@ -31,6 +31,7 @@
     repo: ppa:certbot/certbot
 
 - name: Update aptitude after adding apt repo
+  become: yes
   apt:
     update_cache: yes
 
@@ -55,7 +56,6 @@
   get_url:
     url: "https://raw.githubusercontent.com/certbot/certbot/master/certbot-nginx/certbot_nginx/options-ssl-nginx.conf"
     dest: /etc/letsencrypt/options-ssl-nginx.conf
-  notify: restart nginx
   when:
   - not ssl_options_installed.stat.exists
 
@@ -69,10 +69,21 @@
   get_url:
     url: "https://raw.githubusercontent.com/certbot/certbot/master/certbot/ssl-dhparams.pem"
     dest: /etc/letsencrypt/ssl-dhparams.pem
-  notify: restart nginx
   when:
   - not dhparams_installed.stat.exists
 
+
+
+
+# Make the LetsEncrypt live certificate directory 
+# if it does not exist already
+
+- name: Make LetsEncrypt certificate directory
+  become: yes
+  file:
+    path: "/etc/letsencrypt/live/{{ item }}"
+    state: directory
+  with_items: "{{ domain_names }}"
 
 
 
@@ -93,122 +104,29 @@
 
 - name: Check if LetsEncrypt renewal certificate is present
   stat:
-    path: "/etc/letsencrypt/renewal/{{ domain_name }}.conf"
+    path: "/etc/letsencrypt/renewal/{{ item }}.conf"
+  with_items: "{{ domain_names }}"
   register: cert_installed
 
 
-# Make the LetsEncrypt live certificate directory 
-# if it does not exist already
 
-- name: Make letsencrypt certificate directory
-  become: yes
-  file:
-    path: "/etc/letsencrypt/live/{{ domain_name }}"
-    state: directory
-
-
-
-
-
-# STAGING MODE ONLY:
-# If the server is in staging mode, no LetsEncrypt cert
-# has been requested and cert_installed.stat.exists is false.
-# When the user run the script to obtain the LetsEncrypt
-# cert, this snakeoil certificate will be overwritten
-# and cert_installed.stat.exists will be true (so this 
-# rule will not be run again, and the live certs will
-# be left alone).
-
-
-- name: Install snakeoil cert
+- name: Install snakeoil cert file
   become: yes
   copy:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
+    src: "/etc/ssl/certs/ssl-cert-snakeoil.pem"
     remote_src: yes
-  when:
-  - not cert_installed.stat.exists
-  with_items:
-  - { src: /etc/ssl/certs/ssl-cert-snakeoil.pem, dest: "/etc/letsencrypt/live/{{ domain_name }}/fullchain.pem" }
-  - { src: /etc/ssl/private/ssl-cert-snakeoil.key, dest: "/etc/letsencrypt/live/{{ domain_name }}/privkey.pem" }
+    dest: "/etc/letsencrypt/live/{{ item.item }}/fullchain.pem"
+  with_items: "{{ cert_installed.results }}"
+  when: not item.stat.exists
 
 
 
-
-
-# PRODUCTION MODE ONLY:
-# If our live certificates are fake certificates,
-# and letsencrypt has been run before (LE renewal file exists),
-# remove the fake certs and ask for new certs.
-
-
-# Normally the user manually runs the get certs script,
-# the certs are genuine, they aren't touched,
-# and none of these tasks are ever run.
-
-
-# Compare the certificates in the letsencrypt directory to
-# fake snakeoil certs to see if we still have fake certs.
-
-- name: Snakeoil checksum
-  stat:
-    path: "/etc/ssl/certs/ssl-cert-snakeoil.key"
-    get_checksum: yes
-  register: snakeoil_checksum
-
-- name: Real cert checksum
-  stat:
-    path: "/etc/letsencrypt/live/{{ domain_name }}/privkey.pem"
-    get_checksum: yes
-  register: realcert_checksum
-
-# To only run a task when the certs are identical:
-#   when: snakeoil_checksum==realcert_checksum
-#
-# To only run a task when the certs are different
-# (that is, when our LE certs are genuine):
-#   when: snakeoil_checksum!=realcert_checksum
-
-
-
-# This task is only run if the user has a renewal file
-# but the certificate is still the snakeoil cert.
-# (This shouldn't usually happen.)
-
-- name: Get rid of old snakeoil certificate in /etc/letsencrypt/live
+- name: Install snakeoil cert private key
   become: yes
-  file:
-    path: "/etc/letsencrypt/live/{{ domain_name }}"
-    state: absent
-  notify: restart nginx
-  when:
-    - cert_installed.stat.exists
-    - snakeoil_checksum==realcert_checksum
-
-
-# This task is only run if the user has a renewal file
-# but the certificate is still the snakeoil cert.
-# (This shouldn't usually happen.)
-
-- name: Obtain genuine certificate with certbot
-  become: yes
-  shell: "certbot certonly --webroot -n -w /var/www/letsencrypt/ -d {{ domain_name }} -m {{ site_email }} --agree-tos"
-  notify: restart nginx
-  when: 
-    - cert_installed.stat.exists
-    - snakeoil_checksum==realcert_checksum
-
-
-
-# If the user has installed the real LE certificate,
-# add a monthly cron job to renew it.
-
-- name: Cron job to renew certificates once a month
-  cron:
-    name: Renew certificates
-    job: "/bin/bash -c '{ /usr/bin/letsencrypt renew --renew-hook \"systemctl reload nginx\" | /usr/bin/logger -t letsencrypt -p syslog.info -i; } 2>&1 | /usr/bin/logger -t letsencrypt -p syslog.err -i'"
-    cron_file: letsencrypt
-    special_time: monthly
-    user: letsencrypt
-  when: cert_installed.stat.exists
+  copy:
+    src: "/etc/ssl/private/ssl-cert-snakeoil.pem"
+    remote_src: yes
+    dest: "/etc/letsencrypt/live/{{ item.item }}/privkey.pem"
+  with_items: "{{ cert_installed.results }}"
+  when: not item.stat.exists
 

@@ -11,8 +11,8 @@ pod_install_dir: "/home/{{ username }}/pod-charlesreid1"
 top_domain: "charlesreid1.com"
 
 # gitea domain
-gitea_app_name: "git.charlesreid1.com"
-gitea_domain: "git.charlesreid1.com"
+gitea_app_name: "git.{{ top_domain }}"
+gitea_domain: "git.{{ top_domain }}"
 
 # app.ini settings
 gitea_secret_key: "xxxxxxxxxxxxxxxxxxx"
