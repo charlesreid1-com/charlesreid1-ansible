@@ -13,6 +13,7 @@
 #####################
 # create .vim dir
 
+
 - name: Check if a .vim directory already exists
   become: yes
   become_user: "{{ username }}"
@@ -31,10 +32,12 @@
   when:
     - "not user_dotvim.stat.exists"
 
+
 #############################
 # create .vim dir contents
 
-- name: "Copy contents of .vim dir into ~{{ username }}/.vim"
+
+- name: Create .vim directory contents
   become: yes
   become_user: "{{ username }}"
   file:
@@ -46,23 +49,55 @@
     - undo
     - backups
     - syntax
+    - colors
 
 
+##############################
+# install vim pathogen
 
-###########################
-# install .vimrc 
-# (and related dotfiles)
 
-- name: Install .vimrc and related dotfiles
+- name: Create autoload and bundle directories in .vim directory
   become: yes
   become_user: "{{ username }}"
-  copy:
-    src: "{{ item }}"
-    dest: "/home/{{ username }}/.{{ item }}"
-    owner: "{{ username }}"
-    group: "{{ username }}"
+  file:
+    path: "/home/{{ username }}/.vim/{{ item }}"
+    state: directory
+    mode: 0755
   with_items:
-    - "vimrc"
+    - autoload
+    - bundle
 
+
+- name: Download pathogen to .vim/autoload
+  become: yes
+  become_user: "{{ username }}"
+  get_url:
+    url: https://tpo.pe/pathogen.vim
+    dest: "/home/{{ username }}/.vim/autoload/pathogen.vim"
+    mode: 0755
+
+
+#############################
+# install vim-go
+
+
+- name: Clone vim-go to ~/.vim/bundle
+  become: yes
+  become_user: "{{ username }}"
+  git:
+    repo: "https://github.com/fatih/vim-go.git"
+    dest: "/home/{{ username }}/.vim/bundle/vim-go"
+
+
+############################
+# install solarized color scheme
+
+- name: Download solarized color scheme to ~/.vim/colors
+  become: yes
+  become_user: "{{ username }}"
+  get_url:
+    url: "https://raw.githubusercontent.com/altercation/vim-colors-solarized/master/colors/solarized.vim"
+    dest: "/home/{{ username }}/.vim/colors/solarized.vim"
+    mode: 0755
 
 
