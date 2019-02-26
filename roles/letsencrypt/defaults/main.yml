@@ -1,3 +1,7 @@
 ---
 # defaults file for letsencrypt
 
+domain_name: "example.com"
+
+site_email: "email@example.com"
+
