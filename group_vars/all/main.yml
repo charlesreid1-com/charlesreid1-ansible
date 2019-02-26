@@ -16,3 +16,6 @@ ssh_key_email: "charlesreid1@gmail.com"
 # pod-charlesreid1 requires a mysql password
 charlesreid1_mysql_password: "{{ vault_mysql_password }}"
 
+charlesreid1_gitea_secret_key: "{{ vault_gitea_secret_key }}"
+charlesreid1_gitea_internal_token: "{{ vault_gitea_internal_token }}"
+
