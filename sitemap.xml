@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+     <loc>https://pages.charlesreid1.com/charlesreid1-ansible/</loc>
+     <lastmod>2019-02-25</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://pages.charlesreid1.com/charlesreid1-ansible/quickstart/</loc>
+     <lastmod>2019-02-25</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://pages.charlesreid1.com/charlesreid1-ansible/ansible_vagrant/</loc>
+     <lastmod>2019-02-25</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://pages.charlesreid1.com/charlesreid1-ansible/ansible_do/</loc>
+     <lastmod>2019-02-25</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://pages.charlesreid1.com/charlesreid1-ansible/ansible_playbooks/</loc>
+     <lastmod>2019-02-25</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://pages.charlesreid1.com/charlesreid1-ansible/ansible_vault/</loc>
+     <lastmod>2019-02-25</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+</urlset>
