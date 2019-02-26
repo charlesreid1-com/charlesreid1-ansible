@@ -21,8 +21,8 @@
 
 
 
-# Rather than running a sed command to replace the password,
-# use the fetch module to copy the template from the remote machine
+# Don't use sed.
+# Use the fetch module to copy the template from the remote machine
 # (i.e., the one in the git repo) to the local directory.
 #
 # Then use the template module to use the template.
@@ -40,7 +40,7 @@
   become: yes
   become_user: "{{ username }}"
   template:
-    src: /tmp/docker-compose.yml.j2
+    src: "/tmp/docker-compose.yml.j2"
     dest: "{{ pod_install_dir }}/docker-compose.yml"
     mode: 0755
 
@@ -83,6 +83,31 @@
     chdir: "{{ pod_install_dir }}/d-mediawiki/charlesreid1-config/mediawiki"
   when:
     - "not extensions_dir_exists.stat.exists"
+
+
+
+# GITEA PREP
+# We have to create an app.ini file,
+# use a jinja template in the pod-charlesreid1 
+# repository
+
+- name: Fetch the app.ini jinja template
+  run_once: true
+  fetch:
+    src: "{{ pod_install_dir }}/d-gitea/app.ini.j2"
+    dest: "/tmp/app.ini.j2"
+    flat: yes
+    fail_on_missing: yes
+
+
+- name: Install the app.ini file
+  become: yes
+  become_user: "{{ username }}"
+  template:
+    src: "/tmp/app.ini.j2"
+    dest: "{{ pod_install_dir }}/d-gitea/app.ini"
+    mode: 0755
+
 
 
 # CONSTRUCT THE POD
