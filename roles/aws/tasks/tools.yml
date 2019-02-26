@@ -7,23 +7,17 @@
     name: awscli
     state: latest
   tags:
-    - aws
-    - aws_tools
-    - aptitude
+    - apt
 
 - name: Install boto using pip3 for root user
   become: yes
   command: pip3 install --upgrade boto
   tags:
-    - aws
-    - aws_tools
     - pip
   
 - name: Install boto3 using pip3 for root user
   become: yes
   command: pip3 install --upgrade boto3
   tags:
-    - aws
-    - aws_tools
     - pip
 

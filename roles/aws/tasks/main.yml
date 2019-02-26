@@ -5,13 +5,11 @@
 - name: "Import tools.yml (tasks that install AWS tools)"
   import_tasks: tools.yml
   tags:
-    - aws
     - aws_tools
 
 
 - name: "Import credentials.yml (tasks that install AWS credentials)"
   import_tasks: credentials.yml
   tags:
-    - aws
-    - aws_credentials
+    - aws_creds
 
