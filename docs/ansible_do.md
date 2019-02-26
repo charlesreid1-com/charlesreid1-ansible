@@ -19,20 +19,25 @@ Start by logging in to your digital ocean account
 and creating a droplet. You should be able to 
 create or specify an SSH key. 
 
-You must do the following first:
+!!! warning
+    You must modify the path to the SSH private
+    key, specified in `do.cfg` (the Digital Ocean
+    Ansible config file), to match the SSH key that
+    you added to the droplet at its creation.
 
-**Modify the SSH key in do.cfg (the digital ocean
-ansible config file) to match the SSH key you added
-to the droplet at creation.**
-
-**Modify the host file dohosts (the digital ocean
-inventory file) to have an IP address matching
-your droplet.**
+!!! warning
+    Once you create your droplet and it is connected
+    to the internet via a public IP, you must update
+    the file `dohosts` (the Digital Ocean Ansible
+    inventory file) to point to the correct IP address
+    for the droplet.
 
 
 ## Run provision and base playbooks
 
-Now you're ready to run the Ansible playbooks.
+Once you have the correct SSH key in `do.cfg`
+and the correct droplet IP address in `dohosts`,
+you are ready to run the Ansible playbooks.
 
 Run the provision playbook to prepare the droplet for Ansible:
 
@@ -44,7 +49,11 @@ ANSIBLE_CONFIG="do.cfg" \
 
 Now you can run the base playbook.
 
-**NOTE: You must provide a `machine_name` parameter using the `--extra-vars` flag.**
+!!! warning
+    You must provide a `machine_name` parameter to
+    the base playbook. This variable is **_not_**
+    defined by default. Define it using the 
+    `--extra-vars` flag.
 
 ```
 ANSIBLE_CONFIG="do.cfg" \
@@ -55,8 +64,8 @@ ANSIBLE_CONFIG="do.cfg" \
 
 ## Run pod playbooks
 
-Once you've run the base playbook, you can install the docker pod
-with the corresponding playbook.
+Once you've run the base playbook, you can install the
+docker pod with the corresponding playbook.
 
 pod-charlesreid1:
 

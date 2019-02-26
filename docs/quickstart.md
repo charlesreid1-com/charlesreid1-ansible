@@ -10,9 +10,11 @@ Table of Contents
 
 * [Vagrant Setup](#vagrant-setup)
   * [Start Vagrant Machines](#start-vagrant-machines)
+  * [Provision Vagrant Machines](#provision-vagrant-machines)
+  * [Configure Ansible-Vagrant SSH Info](#configure-ansible-vagrant-ssh-info)
 * [Run Ansible](#run-ansible)
   * [Set Up Vault Secret](#set-up-vault-secret)
-  * [Run the Playbook](#run-the-playbook)
+  * [Run the Base Playbook](#run-the-base-playbook)
 * [Change Variables](#change-variables)
 
 
@@ -23,7 +25,11 @@ VirtualBox and allows setting up one or more
 virtual machines to test out Ansible playbooks
 locally.
 
-we have a vagrant file for the role, but if you don't you can do `vagrant init ubuntu/xenial64`
+To run Vagrant boxes, you need a Vagrantfile.
+One is provided in this repo, but if you don't have one
+you can run `vagrant init ubuntu/xenial64` to create
+a new one.
+
 
 ### Start Vagrant Machines
 
@@ -36,6 +42,9 @@ Start a vagrant virtual machine with:
 vagrant up
 ```
 
+
+### Provision Vagrant Machines
+
 Run the initial setup play with Ansible using the 
 `provision.yml` provision playbook:
 
@@ -43,21 +52,31 @@ Run the initial setup play with Ansible using the
 ANSIBLE_CONFIG="vagrant.cfg" vagrant provision
 ```
 
-Get info about how to connect to the vagrant machine(s)
-via SSH:
+
+### Configure Ansible-Vagrant SSH Info
+
+Vagrant provides info about how to connect to
+the Vagrant machine(s) created using the `ssh-config`
+verb:
 
 ```
 vagrant ssh-config
 ```
 
-This information should match what is in the `vagranthosts`
-inventory file.
-
+Copy this information into the `vagranthosts`
+inventory file so that Ansible knows how to
+connect to the Vagrant boxes.
 
 
 ## Run Ansible
 
 ### Set Up Vault Secret
+
+!!! warning
+    The vault secret should match the
+    original secret used to encrypt
+    the vault. If you don't have it,
+    delete `vault` and start over.
 
 Before running Ansible with the Ansible-Vagrant config file,
 it will expect the vault secret to be in a file called
@@ -72,7 +91,7 @@ this_is_my_super_strong_password!
 ```
 
 
-### Run the Playbook
+### Run the Base Playbook
 
 To run a playbook, use the `ANSIBLE_CONFIG` environment 
 variable to specify the Ansible-Vagrant config file, and 
@@ -89,7 +108,9 @@ vault password, and log file to use, among other details.
 ## Change Variables
 
 You can modify variables in the 
-`group_vars/main.yml` file.
+`group_vars/main.yml` file by 
+adding additional variable definitions
+in YAML format:
 
 ```
 $ cat group_vars/main.yml 
@@ -103,9 +124,9 @@ my_var_2: "blue"
 
 Alternatively, you can pass custom
 variable values on the command line.
-This is how we specify the machine
-name when running charlesreid1.com
-playbooks.
+(This is how we specify the machine
+name when running playbooks.) Here,
+we set a few example variables:
 
 ```
 $ ANSIBLE_CONFIG="my_config_file.cfg" \
@@ -114,4 +135,7 @@ $ ANSIBLE_CONFIG="my_config_file.cfg" \
         --extra-vars "my_var_1=red,my_var_2=blue" \
         playbook.yml
 ```
+
+See [Ansible Playbooks](ansible_playbooks.md)
+for next steps.
 

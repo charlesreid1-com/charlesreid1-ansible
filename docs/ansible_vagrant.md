@@ -18,7 +18,7 @@ by running the following command in this directory:
 vagrant up
 ```
 
-This will start a Ubuntu xenial (16.04) machine.
+This will start a Ubuntu Xenial (16.04) machine.
 
 
 ## Provision Vagrant Machine (Setup Step)
@@ -28,7 +28,8 @@ which is basically a step that gets it ready for
 the "real" Ansible playbook.
 
 (Specifically, the provision step installs `/usr/bin/python`,
-which is not included by default in Ubuntu 16.04+).
+which is not included by default in newer versions of
+Ubuntu.)
 
 Use the Ansible configuration file that is intended
 for use with Vagrant, `vagrant.cfg`, when running
@@ -61,15 +62,15 @@ inventory = vagranthosts
 remote_user = vagrant
 private_key_file = ~/.vagrant.d/insecure_private_key
 host_key_checking = False
+log_path = ansible_vagrant.log
+command_warnings=False
 vault_password_file = .vault_secret
-command_warnings = False
-log_path=ansible_vagrant.log
 ```
 
 This example points to a vault secret contained
-in the file `.vault_secret`.
+in the file `.vault_secret` as seen in the last line.
 
-See [docs/ansible_vault.md](ansible_vault.md) for more info
+See [Ansible Vault](ansible_vault.md) for more info
 about vault secrets.
 
 

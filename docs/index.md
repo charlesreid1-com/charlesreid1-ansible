@@ -67,7 +67,7 @@ The following roles carry out groups of related tasks.
 | [docs/ansible_do.md](ansible_do.md)           | Guide for running charlesreid1.com playbooks on Digital Ocean   |
 | [docs/ansible_vagrant.md](ansible_vagrant.md) | Guide for running charlesreid1.com playbooks on Vagrant         |
 
-See [docs/ansible_playbooks.md](ansible_playbooks.md) for a list of all
+See [Ansible Playbooks](ansible_playbooks.md) for a list of all
 playbooks in this directory, list of all tags,
 and info about how to use the playbooks.
 
@@ -129,7 +129,7 @@ Find a full list of tags at [docs/ansible_playbooks.md](ansible_playbooks.md).
 
 ## Secrets and Sensitive Information
 
-See [docs/ansible_vault.md](ansible_vault.md) for details about how to use
+See [Ansible Vault](ansible_vault.md) for details about how to use
 the Ansible vault to view/edit secrets and sensitive information.
 
 **NOTE:** THe vault and vault secret should be set up before 
@@ -138,13 +138,13 @@ running playbooks against either Vagrant or AWS machines.
 
 ## Vagrant Testing
 
-See [docs/ansible_vagrant.md](ansible_vagrant.md) for instructions on how to set up
+See [Ansible Vagrant](ansible_vagrant.md) for instructions on how to set up
 a Vagrant virtual machine to run the Ansible playbook
 against, for testing purposes.
 
 
 ## DigitalOcean Deployment
 
-See [docs/ansible_do.md](ansible_do.md) for instructions on how to set up an DigitalOcean
+See [Ansible Digital Ocean](ansible_do.md) for instructions on how to set up an DigitalOcean
 node to run the Ansible playbook against.
 
