@@ -3,21 +3,13 @@
 
 # Install any system packages required by goenv
 - include: packages.yml
-  tags:
-  - goenv
 
 # Install profile environment variables
 - include: envvars.yml
-  tags:
-  - goenv
 
 # Install goenv itself
 - include: goenv.yml
-  tags:
-  - goenv
 
 # Install versions of golang
 - include: golang.yml
-  tags:
-  - goenv
 

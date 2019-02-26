@@ -19,9 +19,13 @@
     - iotop
     state: present
     update_cache: yes
+  tags:
+    - apt
 
 - name: Remove dependencies that are no longer required
   become: yes
   apt:
     autoremove: yes
+  tags:
+    - apt
 

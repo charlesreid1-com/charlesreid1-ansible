@@ -5,27 +5,36 @@
   stat:
     path: "/usr/bin/docker"
   register: register_docker
-
+  tags:
+    - docker
 
 - name: Check if existing docker-compose executable is present
   stat:
     path: "/usr/local/bin/docker-compose"
   register: register_docker_compose
+  tags:
+    - docker-compose
 
 
-- name: Copy docker/docker-compose install script onto remote host
+- name: Copy docker+docker-compose install script onto remote host
   become: yes
   copy:
     src: install.sh
     dest: /tmp/install.sh
     mode: 0700
     force: yes
+  tags:
+    - docker
+    - docker-compose
 
 
-- name: Run docker/docker-compose install script
+- name: Run docker+docker-compose install script
   command: "/tmp/install.sh"
   when:
     - "not register_docker.stat.exists or not register_docker_compose.stat.exists"
+  tags:
+    - docker
+    - docker-compose
 
 
 - name: Add principal user to docker group
@@ -34,4 +43,6 @@
     name: "{{ username }}"
     groups: docker
     append: yes
+  tags:
+    - docker
 

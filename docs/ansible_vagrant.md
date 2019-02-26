@@ -46,7 +46,7 @@ Now get info about how to SSH into the vagrant machines
 and provide this information in the `vagranthosts`
 Ansible inventory file:
 
-```
+```plain
 vagrant ssh-config
 ```
 

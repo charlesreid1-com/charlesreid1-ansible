@@ -41,7 +41,7 @@ you are ready to run the Ansible playbooks.
 
 Run the provision playbook to prepare the droplet for Ansible:
 
-```
+```plain
 ANSIBLE_CONFIG="do.cfg" \
         ansible-playbook \
         provision.yml
@@ -55,7 +55,7 @@ Now you can run the base playbook.
     defined by default. Define it using the 
     `--extra-vars` flag.
 
-```
+```plain
 ANSIBLE_CONFIG="do.cfg" \
         ansible-playbook \
         --extra-vars "machine_name=redbeard" \
@@ -69,7 +69,7 @@ docker pod with the corresponding playbook.
 
 pod-charlesreid1:
 
-```
+```plain
 ANSIBLE_CONFIG="do.cfg" \
         ansible-playbook \
         --extra-vars "machine_name=redbeard" \

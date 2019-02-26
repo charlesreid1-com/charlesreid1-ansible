@@ -46,12 +46,25 @@
 
 
 # The docker role, in the base playbook,
-# will install docker-compose
+# will install docker-compose, but we want
+# to double check that the executable exists
 
 - name: Check that docker compose executable is available
   stat:
     path: "/usr/local/bin/docker-compose"
   register: pod_register_docker_compose
+
+
+# Also make sure the docker daemon is running
+
+- name: Enable docker service
+  become: yes
+  service:
+    name: docker
+    enabled: yes
+    state: restarted
+  tags:
+    - pod-charlesreid1-services
 
 
 
@@ -63,6 +76,8 @@
   stat:
     path: "{{ pod_install_dir }}/d-mediawiki/charlesreid1-config/mediawiki/extensions"
   register: extensions_dir_exists
+  tags:
+    - pod-charlesreid1-mw
 
 
 - name: Make mediawiki extensions dir build script executable
@@ -73,6 +88,8 @@
     mode: "u+x"
   when:
     - "not extensions_dir_exists.stat.exists"
+  tags:
+    - pod-charlesreid1-mw
 
 
 - name: Build the mediawiki extensions dir
@@ -83,6 +100,8 @@
     chdir: "{{ pod_install_dir }}/d-mediawiki/charlesreid1-config/mediawiki"
   when:
     - "not extensions_dir_exists.stat.exists"
+  tags:
+    - pod-charlesreid1-mw
 
 
 
@@ -98,6 +117,8 @@
     dest: "/tmp/app.ini.j2"
     flat: yes
     fail_on_missing: yes
+  tags:
+    - pod-charlesreid1-gitea
 
 
 - name: Install the app.ini file
@@ -107,6 +128,8 @@
     src: "/tmp/app.ini.j2"
     dest: "{{ pod_install_dir }}/d-gitea/app.ini"
     mode: 0755
+  tags:
+    - pod-charlesreid1-gitea
 
 
 
@@ -130,6 +153,8 @@
   stat:
     path: /etc/systemd/system/pod-charlesreid1.service
   register: pod_charlesreid1_service_check
+  tags:
+    - pod-charlesreid1-services
 
 
 - name: Install pod-charlesreid1 service
@@ -140,6 +165,8 @@
     mode: 0777
   when:
     - "not pod_charlesreid1_service_check.stat.exists"
+  tags:
+    - pod-charlesreid1-services
 
 
 # LetsEncrypt role will install certs,
@@ -163,6 +190,8 @@
   when:
     - "pod_register_docker_compose.stat.executable"
     - "register_letsencrypt_livecert.stat.exists"
+  tags:
+    - pod-charlesreid1-services
 
 
 # From pod docs:

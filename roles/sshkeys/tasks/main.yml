@@ -6,25 +6,31 @@
 # root: create ssh keys
 
 
-- name: Create .ssh directory
+- name: Create root .ssh directory
   become: yes
   file:
     path: /root/.ssh
     state: directory
+  tags:
+    - root-ssh
 
 - name: Check if a root user SSH key already exists
   become: yes
   stat:
     path: "/root/.ssh/id_rsa"
   register: root_key_check
+  tags:
+    - root-ssh
 
 - name: "Generate SSH keys for root user ({{ ssh_key_email }})"
   become: yes
   shell: "ssh-keygen -t rsa -N '' -b 4096 -f /root/.ssh/id_rsa -q -C \"{{ ssh_key_email }}\""
   when:
     - "not root_key_check.stat.exists"
+  tags:
+    - root-ssh
 
-- name: Set permissions on .ssh directory
+- name: Set permissions on root .ssh directory
   become: yes
   file:
     path: /root/.ssh
@@ -33,6 +39,8 @@
     mode: "u+rwx,g-wx,o-rwx"
   when:
     - "not root_key_check.stat.exists"
+  tags:
+    - root-ssh
 
 
 
@@ -47,12 +55,15 @@
     dest: /root/.ssh/authorized_keys
     mode: 0600
     force: yes
+  tags:
+    - root-ssh
+
 
 
 #####################
 # nonroot user
 
-- name: Create .ssh directory
+- name: Create nonroot .ssh directory
   become: yes
   become_user: "{{ username }}"
   file:
@@ -60,6 +71,8 @@
     state: directory
     owner: "{{ username }}"
     group: "{{ username }}"
+  tags:
+    - nonroot-ssh
 
 - name: Check if a nonroot user SSH key already exists
   become: yes
@@ -67,6 +80,8 @@
   stat:
     path: "/home/{{ username }}/.ssh/id_rsa"
   register: nonroot_key_check
+  tags:
+    - nonroot-ssh
 
 - name: "Generate SSH keys for nonroot user {{ username }} ({{ ssh_key_email }})"
   become: yes
@@ -74,8 +89,10 @@
   shell: "ssh-keygen -t rsa -N '' -b 4096 -f /home/{{ username }}/.ssh/id_rsa -q -C \"{{ ssh_key_email }}\""
   when:
     - "not nonroot_key_check.stat.exists"
+  tags:
+    - nonroot-ssh
 
-- name: Set permissions on .ssh directory
+- name: Set permissions on nonroot .ssh directory
   become: yes
   become_user: "{{ username }}"
   file:
@@ -85,6 +102,8 @@
     mode: "u+rwx,g-wx,o-rwx"
     owner: "{{ username }}"
     group: "{{ username }}"
+  tags:
+    - nonroot-ssh
 
 
 
@@ -101,4 +120,7 @@
     force: yes
     owner: "{{ username }}"
     group: "{{ username }}"
+  tags:
+    - nonroot-ssh
+
 

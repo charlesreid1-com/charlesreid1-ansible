@@ -41,7 +41,7 @@ It is located in the repository at `group_vars/all/vault`.
 
 To view the contents of the vault file, use the view action:
 
-```
+```plain
 ansible-vault edit my_vault_file
 ```
 
@@ -99,7 +99,7 @@ utilizes a variable `{{ api_key }}` like so:
 
 `roles/my-role/tasks/main.yml`:
 
-```
+```yaml
 ---
 - name: A simple example task using a secret variable
   command: "python script.py --api-key={{ api_key }}"
@@ -115,7 +115,7 @@ to be an empty string by default:
 
 `roles/my-role/defaults/main.yml`:
 
-```
+```yaml
 ---
 api_key: ""
 ```
@@ -126,7 +126,7 @@ the role `my-role` is called from a playbook `main.yml`,
 
 `main.yml`:
 
-```
+```yaml
 ---
 - name: Run my-role
   roles:
@@ -144,7 +144,7 @@ to be set to another variable value:
 
 `group_vars/all/main.yml`:
 
-```
+```yaml
 ---
 charlesreid1_api_key: "{{ vault_api_key }}"
 ```
@@ -153,7 +153,7 @@ The last step is to define the variable in the vault.
 This is where we use the `ansible-vault` command to edit
 the vault file:
 
-```
+```plain
 ANSIBLE_CONFIG="my_config.cfg" ansible-vault edit group_vars/all/vault
 ```
 
@@ -161,7 +161,7 @@ This is where you put the real API key:
 
 `group_vars/all/vault`:
 
-```
+```yaml
 ---
 vault_api_key: "ABCXYZ123456"
 ```

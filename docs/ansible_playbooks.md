@@ -142,21 +142,63 @@ scripts to keep some Twitter bots going.
 
 (Incomplete)
 
-Tags associated with roles:
+Each role has a tag associated with it, so you can
+run each role in isolation:
 
-* `base-setup`
-    * `init-root`
-    * `install-stuff`
-    * `goenv`
-    * `pyenv`
-    * `docker`
-    * `init-nonroot`
-    * `sshkeys`
-    * `dotfiles`
-    * `vim`
-
-podcharlesreid1:
-
+* `aws`
+* `init-root`
+* `install-stuff`
+* `goenv`
+* `pyenv`
+* `docker`
+* `init-nonroot`
+* `sshkeys`
+* `dotfiles`
+* `vim`
 * `pod-charlesreid1`
+
+
+### Base Playbook Tags
+
+The base playbook `base.yml` includes the majority of
+the roles, whose tags are listed here:
+
+* `aws`
+* `init-root`
+* `install-stuff`
+* `goenv`
+* `pyenv`
+* `docker`
+* `init-nonroot`
+* `sshkeys`
+* `dotfiles`
+* `vim`
+
+The base playbook also uses the following tags
+for sub-groups of tasks, or for groups of tasks
+that cross roles:
+
+* `aws_tools` (aws command line tools and libraries only)
+* `aws_creds` (aws credentials only)
+* `pip` (all tasks installing packages using pip)
+* `apt` (" " " apt)
+* `docker-no-compose` (docker-only tasks)
+* `docker-compose`  (docker-compose-only tasks)
+* `root-ssh` (setup of ssh keys for root user)
+* `nonroot-ssh` (setup of ssh keys for nonroot user)
+
+### pod-charlesreid1 Playbook Tags
+
+The pod-charlesreid1 playbook contains the docker pod
+playbook for charlesreid1.com. This is a single role.
+The entire role is run with the tag:
+
+* `pod-charlesreid1
+
+Subtasks are grouped as follows:
+
+* `pod-charlesreid1-services` (runs tasks that start the docker service and the pod service)
+* `pod-charlesreid1-gitea` (set up gitea for pod-charlesreid1)
+* `pod-charlesreid1-mw` (set up mediawiki for pod-charlesreid1)
 
 

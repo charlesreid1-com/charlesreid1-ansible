@@ -1,5 +1,10 @@
 ---
 # tasks file for vim
+# 
+# no reason to split these tasks up any further with tags
+
+#################################
+# system environment variables
 
 
 - name: Set vim as the system-wide editor
