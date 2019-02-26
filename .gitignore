@@ -1,3 +1,4 @@
 .vault_secret
 .vagrant/
 *.log
+site/
