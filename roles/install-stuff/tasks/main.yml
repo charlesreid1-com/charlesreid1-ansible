@@ -17,6 +17,7 @@
     - ncdu
     - fail2ban
     - iotop
+    - ssl-cert
     state: present
     update_cache: yes
   tags:

@@ -20,24 +20,34 @@
 - name: Install software-properties-common
   become: yes
   apt: name=software-properties-common update_cache=yes
+  tags:
+    - apt
 
 - name: Install ssl-cert package
   become: yes
   apt: name=ssl-cert update_cache=yes
+  tags:
+    - apt
 
 - name: Add LetsEncrypt certbot apt repo
   become: yes
   apt_repository:
     repo: ppa:certbot/certbot
+  tags:
+    - apt
 
 - name: Update aptitude after adding apt repo
   become: yes
   apt:
     update_cache: yes
+  tags:
+    - apt
 
 - name: Install certbot
   become: yes
   apt: name=python-certbot-nginx update_cache=yes
+  tags:
+    - apt
 
 
 
@@ -47,6 +57,7 @@
 # config file. We need to do it ourselves.
 
 - name: "Check if /etc/letsencrypt/options-nginx-ssl.conf is present"
+  become: yes
   stat:
     path: "/etc/letsencrypt/options-nginx-ssl.conf"
   register: ssl_options_installed
@@ -60,6 +71,7 @@
   - not ssl_options_installed.stat.exists
 
 - name: "Check if /etc/letsencrypt/ssl-dhparams.conf is present"
+  become: yes
   stat:
     path: "/etc/letsencrypt/ssl-dhparams.conf"
   register: dhparams_installed
@@ -103,6 +115,7 @@
 # once node is live.)
 
 - name: Check if LetsEncrypt renewal certificate is present
+  become: yes
   stat:
     path: "/etc/letsencrypt/renewal/{{ item }}.conf"
   with_items: "{{ domain_names }}"
@@ -110,23 +123,49 @@
 
 
 
-- name: Install snakeoil cert file
+
+- name: Check if snakeoil certs are present (???)
+  become: yes
+  stat:
+    path: "/etc/ssl/certs/ssl-cert-snakeoil.pem"
+  register: snakeoil_certs_installed
+
+
+- name: Install snakeoil certs
   become: yes
   copy:
     src: "/etc/ssl/certs/ssl-cert-snakeoil.pem"
     remote_src: yes
     dest: "/etc/letsencrypt/live/{{ item.item }}/fullchain.pem"
   with_items: "{{ cert_installed.results }}"
-  when: not item.stat.exists
+  when: "not item.stat.exists and snakeoil_certs_installed.stat.exists"
 
 
 
-- name: Install snakeoil cert private key
+
+- name: Check if snakeoil private keys are present (???)
+  become: yes
+  stat:
+    path: "/etc/ssl/private/ssl-cert-snakeoil.key"
+  register: snakeoil_keys_installed
+
+
+- name: Install snakeoil cert private keys
   become: yes
   copy:
-    src: "/etc/ssl/private/ssl-cert-snakeoil.pem"
+    src: "/etc/ssl/private/ssl-cert-snakeoil.key"
     remote_src: yes
     dest: "/etc/letsencrypt/live/{{ item.item }}/privkey.pem"
   with_items: "{{ cert_installed.results }}"
-  when: not item.stat.exists
+  when: "not item.stat.exists and snakeoil_keys_installed.stat.exists"
+
+
+
+# I think the letsencrypt nginx certbot above installs nginx,
+# which automatically installs and runs itself. 
+
+- name: Stop service nginx, if started
+  service:
+    name: nginx
+    state: stopped
 
