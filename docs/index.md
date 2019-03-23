@@ -22,29 +22,33 @@ These docker pods are collections of related charlesreid1.com
 services. The Ansible playbooks prepare remote nodes so they
 are ready to run these docker pods.
 
-| Pod              | Link                                                 |
-|------------------|------------------------------------------------------|
-| pod-charlesreid1 | https://git.charlesreid1.com/docker/pod-charlesreid1 |
-| pod-bots         | https://git.charlesreid1.com/docker/pod-bots         |
-| pod-webhooks     | https://git.charlesreid1.com/docker/pod-webhooks     |
+| Pod              | Link                                                   |
+|------------------|--------------------------------------------------------|
+| pod-charlesreid1 | <https://git.charlesreid1.com/docker/pod-charlesreid1> |
+| pod-webhooks     | <https://git.charlesreid1.com/docker/pod-webhooks>     |
+| pod-bots         | <https://git.charlesreid1.com/docker/pod-bots>         |
 
 ## Playbooks
 
 There is one playbook per docker pod, plus a base playbook
 and a provision playbook.
 
-| Playbook                  | Description                                                                                                          |
-|---------------------------|----------------------------------------------------------------------------------------------------------------------|
-| `charlesreid1pod.yml`     | Playbook to install and run the charlesreid1.com docker pod (<https://git.charlesreid1.com/docker/pod-charlesreid1>) |
-| `charlesreid1hooks.yml`   | Playbook to install and run the webhooks pod (<https://git.charlesreid1.com/docker/pod-webhooks>)                    |
-| `charlesreid1bots.yml`    | Playbook to install and run the bot pod (<https://git.charlesreid1.com/docker/pod-bots>)                             |
-| `base.yml`                | Base playbook run by all of the pod playbooks above.                                                                 |
-| `provision.yml`           | Playbook to provision new Ubuntu machines with `/usr/bin/python`.                                                    |
+| Playbook                  | Description                                                                                                                                                                       |
+|---------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `charlesreid1pod.yml`     | Playbook to install and run the charlesreid1.com docker pod (<https://git.charlesreid1.com/docker/pod-charlesreid1> or <https://github.com/charlesreid1-docker/pod-charlesreid1>) |
+| `charlesreid1hooks.yml`   | Playbook to install and run the webhooks pod (<https://git.charlesreid1.com/docker/pod-webhooks> or <https://github.com/charlesreid1-docker/pod-webhooks>)                        |
+| `charlesreid1bots.yml`    | Playbook to install and run the bot pod (<https://git.charlesreid1.com/docker/pod-bots> or <https://github.com/charlesreid1-docker/pod-bots>)                                     |
+| `base.yml`                | Base playbook run by all of the pod playbooks above.                                                                                                                              |
+| `provision.yml`           | Playbook to provision new Ubuntu machines with `/usr/bin/python`.                                                                                                                 |
 
 
 ## Roles
 
-The following roles carry out groups of related tasks.
+
+### Base Playbook Roles
+
+The following roles carry out groups of tasks for setting up the base machine
+to run charlesreid1.com infrastructure.
 
 | Role Name             | Description                                               |
 |-----------------------|-----------------------------------------------------------|
@@ -56,6 +60,18 @@ The following roles carry out groups of related tasks.
 | sshkeys               | Set up ssh keys for all users                             |
 | vim                   | Set up vim for nonroot user                               |
 | dotfiles              | Install and configure dotfiles for nonroot user           |
+
+
+### Pod-Specific Roles
+
+The following roles are run by playbooks specific to the
+respective docker pod.
+
+| Role Name             | Description                                                  |
+|-----------------------|--------------------------------------------------------------|
+| pod-charlesreid1      | Role specific to the charlesreid1.com docker pod             |
+| pod-webhooks          | Role specific to \{hooks,pages\}.charlesreid1.com docker pod |
+| pod-bots              | Role specific to bots docker pod                             |
 
 
 ## Getting Started with Playbooks
