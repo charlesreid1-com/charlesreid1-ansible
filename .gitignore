@@ -1,4 +1,5 @@
 .vault_secret
 .vagrant/
 *.log
+*.retry
 site/
