@@ -8,7 +8,26 @@
   roles:
     - role: letsencrypt
       tags: letsencrypt
-      domain_name: "charlesreid1.com"
+      site_email: "charles@charlesreid1.com"
+      domains:
+        - "charlesreid1.com"
+        - "www.charlesreid1.com"
+        - "git.charlesreid1.com"
+        - "pages.charlesreid1.com"
+        - "hooks.charlesreid1.com"
+        - "bots.charlesreid1.com"
+        - "charlesreid1.blue"
+        - "www.charlesreid1.blue"
+        - "git.charlesreid1.blue"
+        - "pages.charlesreid1.blue"
+        - "hooks.charlesreid1.blue"
+        - "bots.charlesreid1.blue"
+        - "charlesreid1.red"
+        - "www.charlesreid1.red"
+        - "git.charlesreid1.red"
+        - "pages.charlesreid1.red"
+        - "hooks.charlesreid1.red"
+        - "bots.charlesreid1.red"
 
 
 - name: Install charlesreid1 docker pod
@@ -17,6 +36,7 @@
   roles:
     - role: pod-charlesreid1
       tags: pod-charlesreid1
+      top_domain: "charlesreid1.com"
       mysql_password: "{{ charlesreid1_mysql_password }}"
       gitea_secret_key: "{{ charlesreid1_gitea_secret_key }}"
       gitea_internal_token: "{{ charlesreid1_gitea_internal_token }}"
