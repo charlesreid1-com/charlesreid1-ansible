@@ -9,7 +9,8 @@
 # enable service
 
 
-# Clone the charlesreid1 docker pod
+# #####################################
+# CLONE POD-CHARLESREID1
 
 - name: Clone pod-charlesreid1
   become: yes
@@ -21,10 +22,12 @@
 
 
 
-# Don't use sed.
+# #####################################
+# BUILD DOCKER-COMPOSE FILE FROM TEMPLATE
+# 
+# Note: Don't use sed to replace the MySQL password placeholder.
 # Use the fetch module to copy the template from the remote machine
 # (i.e., the one in the git repo) to the local directory.
-#
 # Then use the template module to use the template.
 
 - name: Fetch the docker-compose template from the remote machine
@@ -68,7 +71,9 @@
 
 
 
+# #####################################
 # MEDIAWIKI PREP
+#
 # We have to build the extensions dir for the MediaWiki container
 # /pod-charlesreid1/d-mediawiki/charlesreid1-config/mediawiki/build_extensions_dir.sh 
 
@@ -104,8 +109,9 @@
     - pod-charlesreid1-mw
 
 
-
+# #####################################
 # GITEA PREP
+#
 # We have to create an app.ini file,
 # use a jinja template in the pod-charlesreid1 
 # repository
@@ -148,8 +154,10 @@
 
 
 
+# #####################################
 # CONSTRUCT THE POD
-# This task will be time-consuming.
+#
+# This task is very time-consuming.
 
 - name: Build pod-charlesreid1 from scratch
   become: yes
@@ -161,6 +169,9 @@
     - "pod_register_docker_compose.stat.exists"
 
 
+# #####################################
+# INSTALL STARTUP SERVICE
+# 
 # Check if the charlesreid1 docker pod service
 # is installed. If not, install it.
 
@@ -195,6 +206,9 @@
     path: "/etc/letsencrypt/live/{{ top_domain }}"
   register: register_letsencrypt_livecert
 
+
+# If certs are present, start/restart the
+# pod-charlesreid1 service.
 
 - name: Enable pod-charlesreid1 service
   become: yes
