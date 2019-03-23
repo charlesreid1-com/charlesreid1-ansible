@@ -95,7 +95,7 @@
   file:
     path: "/etc/letsencrypt/live/{{ item }}"
     state: directory
-  with_items: "{{ domain_names }}"
+  with_items: "{{ domains }}"
 
 
 
@@ -118,7 +118,7 @@
   become: yes
   stat:
     path: "/etc/letsencrypt/renewal/{{ item }}.conf"
-  with_items: "{{ domain_names }}"
+  with_items: "{{ domains }}"
   register: cert_installed
 
 
