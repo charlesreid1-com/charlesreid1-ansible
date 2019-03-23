@@ -7,11 +7,13 @@
 
 
 # Create /www dir
-
 - name: Create the /www directory structure
-  directory:
+  become: yes
+  file:
     path: "/www/{{ item }}"
     state: directory
+    owner: "{{ nonroot_user }}"
+    owner: "{{ nonroot_user }}"
   with_items:
     - "pages.charlesreid1.com"
     - "bots.charlesreid1.com"
