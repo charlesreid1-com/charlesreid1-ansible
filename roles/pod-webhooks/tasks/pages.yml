@@ -1,49 +1,226 @@
 ---
 ###########################
-# Set up pages pod
+# Set up webhooks pod
 #
-# d-nginx-subdomains
+# git.charlesreid1.com/docker/pod-webhooks
+# git.charlesreid1.com/docker/d-nginx-subdomains
+#
+# Tasks:
+# ------
+# 
+# clone pod contents
+#
+# /www setup
+#   pages subdomain clone
+#   hooks subdomain clone
+#   bots subdomain clone
+# docker and docker compose checks
+# pages subdomain prep
+# captain hook setup
+# captain hook canary setup
+#
+# construct the pod (docker-compose build)
+# install service
+# (port mapping in Dockerfile)
+# (letsencrypt cert check)
+# enable service
+#
+# NOTE: This is almost identical to
+# pod-charlesreid1, except for a few
+# different sections. We could have
+# made everything shared, but f--k it
+# this has dragged on long enough.
+#
 ###########################
 
 
-# Create /www dir
-- name: Create the /www directory structure
-  become: yes
-  file:
-    path: "/www/{{ item }}"
-    state: directory
-    owner: "{{ nonroot_user }}"
-    owner: "{{ nonroot_user }}"
-  with_items:
-    - "pages.charlesreid1.com"
-    - "bots.charlesreid1.com"
-    - "hooks.charlesreid1.com"
 
+# #####################################
+# CLONE POD-WEBHOOKS
 
-# Check to make sure we cloned the 
-# webhooks docker pod...
-
+# Check if we already cloned it
 - name: Check if pod-webhooks repo is cloned
   stat:
     path: "{{ webhooks_install_dir }}"
   register: pod_webhooks_clone_check
 
 
-# Run the script in the webhooks
-# docker pod to do initial setup
-# of /www/pages.charlesreid1.com
+# Clone it
+- name: Clone pod-webhooks
+  become: yes
+  become_user: "{{ username }}"
+  git:
+    repo: 'https://github.com/charlesreid1-docker/pod-webhooks.git'
+    dest: "{{ webhooks_install_dir }}"
+    recursive: yes
+  when:
+    - "not pod_webhooks_clone_check.stat.exists"
 
+
+
+# #####################################
+# SET UP /WWW DIRECTORY
+#
+# /www/pages.charlesreid1.com/
+#                 pages.charlesreid1.com-src/
+#                 git/
+#                 htdocs/
+#
+# /www/bots.charlesreid1.com/
+#                 bots.charlesreid1.com-src/
+#                 git/
+#                 htdocs/
+#
+# /www/hooks.charlesreid1.com/
+#                 hooks.charlesreid1.com-src/
+#                 git/
+#                 htdocs/
+#
+
+# Create /www directories for 
+# pages, bots, and hooks subdomains
+- name: Create the /www directory structure
+  become: yes
+  file:
+    path: "/www/{{ item }}"
+    state: directory
+    owner: "{{ username }}"
+    group: "{{ username }}"
+  with_items:
+    - "pages.charlesreid1.com"
+    - "bots.charlesreid1.com"
+    - "hooks.charlesreid1.com"
+
+# TODO: Revisit /www dir structure for {pages,bots,hooks}.charlesreid1.com to add .blue and .red
+#
+
+
+# Run the script (included in the pod-webhooks repo)
+# to do the initial clone of the gh-pages branch of
+# the subdomain sites into /www.
+#
 - name: Run initial clone commands to set up pages at /www/pages.charlesreid1.com
   command: "{{ webhooks_install_dir }}/scripts/pages_init_setup.py"
 
-- name: Run initial clone commands to set up subdomains at /www/*.charlesreid1.com
-  command: "{{ webhooks_install_dir }}/scripts/pages_init_setup.py"
-
-
-# We don't have any docker pods to run
+- name: Run initial clone commands to set up bots/pages/hooks subdomains at /www/
+  command: "{{ webhooks_install_dir }}/scripts/subdomains_init_setup.py"
 
 
 
+# #####################################
+# DOCKER/DOCKER COMPOSE
 
+# The docker role, in the base playbook,
+# will install docker-compose, but we want
+# to double check that the executable exists
+
+- name: Check that docker compose executable is available
+  stat:
+    path: "/usr/local/bin/docker-compose"
+  register: webhooks_register_docker_compose
+
+
+# Also make sure the docker daemon is running
+
+- name: Enable docker service
+  become: yes
+  service:
+    name: docker
+    enabled: yes
+    state: restarted
+  tags:
+    - pod-webhooks-services
+
+
+
+# #####################################
+# PAGES SETUP
+
+
+
+# #####################################
+# CAPTAIN HOOK SETUP
+
+
+
+# #####################################
+# CAPTAIN HOOK CANARY SETUP
+
+
+
+# #####################################
+# CONSTRUCT THE POD
+#
+# This task is very time-consuming.
+
+- name: Build pod-webhooks from scratch
+  become: yes
+  become_user: "{{ username }}"
+  command: "/usr/local/bin/docker-compose build --no-cache"
+  args:
+    chdir: "{{ webhooks_install_dir }}"
+  when:
+    - "webhooks_register_docker_compose.stat.exists"
+
+
+
+# #####################################
+# INSTALL STARTUP SERVICE
+# 
+# Check if the webhooks docker pod service
+# is installed. If not, install it.
+
+- name: Check if pod-webhooks service is installed
+  stat:
+    path: /etc/systemd/system/pod-webhooks.service
+  register: pod_webhooks_service_check
+  tags:
+    - pod-webhooks-services
+
+
+- name: Install pod-webhooks service
+  become: yes
+  template:
+    src: pod-webhooks.service.j2
+    dest: /etc/systemd/system/pod-webhooks.service
+    mode: 0777
+  when:
+    - "not pod_webhooks_service_check.stat.exists"
+  tags:
+    - pod-webhooks-services
+
+
+### # LetsEncrypt role will install certs,
+### # either fake or real, so this should
+### # always pass.
+### 
+### - name: Check if LetsEncrypt live domain cert is present
+###   tags:
+###     - letsencrypt
+###   stat:
+###     path: "/etc/letsencrypt/live/{{ subdomain }}"
+###   register: register_letsencrypt_livecert
+#
+#
+#
+### above is excluded cuz we have 3 subdomains
+### and we really don't need to check all 3.
+### get this show on the road.
+
+
+# If certs are present, start/restart the
+# pod-webhooks service.
+
+- name: Enable pod-webhooks service
+  become: yes
+  service:
+    name: pod-webhooks
+    enabled: yes
+    state: restarted
+  when:
+    - "webhooks_register_docker_compose.stat.executable"
+    - "register_letsencrypt_livecert.stat.exists"
+  tags:
+    - pod-webhooks-services
 
 

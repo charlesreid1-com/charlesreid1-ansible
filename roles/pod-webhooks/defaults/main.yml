@@ -1,3 +1,21 @@
 ---
 # defaults file for pod-webhooks
 
+username: "{{ nonroot_user }}"
+
+# where pod-webhooks is installed
+webhooks_install_dir: "/home/{{ username }}/pod-webhooks"
+
+# check for letsencrypt certificates to these domains
+# (since this pod hosts their respective pages)
+subdomains:
+  - "pages.charlesreid1.com"
+  - "hooks.charlesreid1.com"
+  - "bots.charlesreid1.com"
+
+# any other config details,
+# secrets, tokens, pws, or 
+# api keys should go here.
+
+
+
