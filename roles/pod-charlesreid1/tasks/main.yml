@@ -121,12 +121,27 @@
     - pod-charlesreid1-gitea
 
 
+- name: Make the custom conf dir for app.ini
+  become: yes
+  file:
+    dest: "{{ pod_install_dir }}/d-gitea/custom/conf"
+    mode: "u+x"
+    state: directory
+    recurse: yes
+    owner: "{{ username }}"
+    group: "{{ username }}"
+  tags:
+    - pod-charlesreid1-gitea
+
+
 - name: Install the app.ini file
   become: yes
   become_user: "{{ username }}"
   template:
     src: "/tmp/app.ini.j2"
-    dest: "{{ pod_install_dir }}/d-gitea/app.ini"
+    dest: "{{ pod_install_dir }}/d-gitea/custom/conf/app.ini"
+    owner: "{{ username }}"
+    group: "{{ username }}"
     mode: 0755
   tags:
     - pod-charlesreid1-gitea
