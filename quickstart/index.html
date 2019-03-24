@@ -288,6 +288,18 @@
   </li>
 
     
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../ansible_cowsay/" title="Ansible Cowsay" class="md-nav__link">
+      Ansible Cowsay
+    </a>
+  </li>
+
+    
   </ul>
 </nav>
                   </div>
@@ -324,9 +336,11 @@ against a Vagrant machine.</p>
 <ul>
 <li><a href="#vagrant-setup">Vagrant Setup</a></li>
 <li><a href="#start-vagrant-machines">Start Vagrant Machines</a></li>
+<li><a href="#provision-vagrant-machines">Provision Vagrant Machines</a></li>
+<li><a href="#configure-ansible-vagrant-ssh-info">Configure Ansible-Vagrant SSH Info</a></li>
 <li><a href="#run-ansible">Run Ansible</a></li>
 <li><a href="#set-up-vault-secret">Set Up Vault Secret</a></li>
-<li><a href="#run-the-playbook">Run the Playbook</a></li>
+<li><a href="#run-the-base-playbook">Run the Base Playbook</a></li>
 <li><a href="#change-variables">Change Variables</a></li>
 </ul>
 <h2 id="vagrant-setup">Vagrant Setup<a class="headerlink" href="#vagrant-setup" title="Permanent link">&para;</a></h2>
@@ -334,7 +348,10 @@ against a Vagrant machine.</p>
 VirtualBox and allows setting up one or more
 virtual machines to test out Ansible playbooks
 locally.</p>
-<p>we have a vagrant file for the role, but if you don't you can do <code>vagrant init ubuntu/xenial64</code></p>
+<p>To run Vagrant boxes, you need a Vagrantfile.
+One is provided in this repo, but if you don't have one
+you can run <code>vagrant init ubuntu/xenial64</code> to create
+a new one.</p>
 <h3 id="start-vagrant-machines">Start Vagrant Machines<a class="headerlink" href="#start-vagrant-machines" title="Permanent link">&para;</a></h3>
 <p>The following commands require a <code>Vagrantfile</code>.
 Use the provided one or modify it for your needs.</p>
@@ -343,22 +360,33 @@ Use the provided one or modify it for your needs.</p>
 </pre></div>
 
 
+<h3 id="provision-vagrant-machines">Provision Vagrant Machines<a class="headerlink" href="#provision-vagrant-machines" title="Permanent link">&para;</a></h3>
 <p>Run the initial setup play with Ansible using the 
 <code>provision.yml</code> provision playbook:</p>
 <div class="codehilite"><pre><span></span>ANSIBLE_CONFIG=&quot;vagrant.cfg&quot; vagrant provision
 </pre></div>
 
 
-<p>Get info about how to connect to the vagrant machine(s)
-via SSH:</p>
+<h3 id="configure-ansible-vagrant-ssh-info">Configure Ansible-Vagrant SSH Info<a class="headerlink" href="#configure-ansible-vagrant-ssh-info" title="Permanent link">&para;</a></h3>
+<p>Vagrant provides info about how to connect to
+the Vagrant machine(s) created using the <code>ssh-config</code>
+verb:</p>
 <div class="codehilite"><pre><span></span>vagrant ssh-config
 </pre></div>
 
 
-<p>This information should match what is in the <code>vagranthosts</code>
-inventory file.</p>
+<p>Copy this information into the <code>vagranthosts</code>
+inventory file so that Ansible knows how to
+connect to the Vagrant boxes.</p>
 <h2 id="run-ansible">Run Ansible<a class="headerlink" href="#run-ansible" title="Permanent link">&para;</a></h2>
 <h3 id="set-up-vault-secret">Set Up Vault Secret<a class="headerlink" href="#set-up-vault-secret" title="Permanent link">&para;</a></h3>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The vault secret should match the
+original secret used to encrypt
+the vault. If you don't have it,
+delete <code>vault</code> and start over.</p>
+</div>
 <p>Before running Ansible with the Ansible-Vagrant config file,
 it will expect the vault secret to be in a file called
 <code>.vault_secret</code> in the current directory.</p>
@@ -368,7 +396,7 @@ it will expect the vault secret to be in a file called
 </pre></div>
 
 
-<h3 id="run-the-playbook">Run the Playbook<a class="headerlink" href="#run-the-playbook" title="Permanent link">&para;</a></h3>
+<h3 id="run-the-base-playbook">Run the Base Playbook<a class="headerlink" href="#run-the-base-playbook" title="Permanent link">&para;</a></h3>
 <p>To run a playbook, use the <code>ANSIBLE_CONFIG</code> environment 
 variable to specify the Ansible-Vagrant config file, and 
 use the <code>ansible-playbook</code> command:</p>
@@ -380,7 +408,9 @@ use the <code>ansible-playbook</code> command:</p>
 vault password, and log file to use, among other details.</p>
 <h2 id="change-variables">Change Variables<a class="headerlink" href="#change-variables" title="Permanent link">&para;</a></h2>
 <p>You can modify variables in the 
-<code>group_vars/main.yml</code> file.</p>
+<code>group_vars/main.yml</code> file by 
+adding additional variable definitions
+in YAML format:</p>
 <div class="codehilite"><pre><span></span>$ cat group_vars/main.yml 
 
 ...
@@ -392,15 +422,19 @@ my_var_2: &quot;blue&quot;
 
 <p>Alternatively, you can pass custom
 variable values on the command line.
-This is how we specify the machine
-name when running charlesreid1.com
-playbooks.</p>
+(This is how we specify the machine
+name when running playbooks.) Here,
+we set a few example variables:</p>
 <div class="codehilite"><pre><span></span>$ ANSIBLE_CONFIG=&quot;my_config_file.cfg&quot; \
         ansible-playbook \
         -i hosts \
         --extra-vars &quot;my_var_1=red,my_var_2=blue&quot; \
         playbook.yml
 </pre></div>
+
+
+<p>See <a href="../ansible_playbooks/">Ansible Playbooks</a>
+for next steps.</p>
                 
                   
                 

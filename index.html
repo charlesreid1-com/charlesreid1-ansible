@@ -288,6 +288,18 @@
   </li>
 
     
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="ansible_cowsay/" title="Ansible Cowsay" class="md-nav__link">
+      Ansible Cowsay
+    </a>
+  </li>
+
+    
   </ul>
 </nav>
                   </div>
@@ -344,15 +356,15 @@ are ready to run these docker pods.</p>
 <tbody>
 <tr>
 <td>pod-charlesreid1</td>
-<td>https://git.charlesreid1.com/docker/pod-charlesreid1</td>
-</tr>
-<tr>
-<td>pod-bots</td>
-<td>https://git.charlesreid1.com/docker/pod-bots</td>
+<td><a href="https://git.charlesreid1.com/docker/pod-charlesreid1">https://git.charlesreid1.com/docker/pod-charlesreid1</a></td>
 </tr>
 <tr>
 <td>pod-webhooks</td>
-<td>https://git.charlesreid1.com/docker/pod-webhooks</td>
+<td><a href="https://git.charlesreid1.com/docker/pod-webhooks">https://git.charlesreid1.com/docker/pod-webhooks</a></td>
+</tr>
+<tr>
+<td>pod-bots</td>
+<td><a href="https://git.charlesreid1.com/docker/pod-bots">https://git.charlesreid1.com/docker/pod-bots</a></td>
 </tr>
 </tbody>
 </table>
@@ -368,16 +380,16 @@ and a provision playbook.</p>
 </thead>
 <tbody>
 <tr>
-<td><code>charlesreid1pod.yml</code></td>
+<td><code>podcharlesreid1.yml</code></td>
 <td>Playbook to install and run the charlesreid1.com docker pod (<a href="https://git.charlesreid1.com/docker/pod-charlesreid1">https://git.charlesreid1.com/docker/pod-charlesreid1</a>)</td>
 </tr>
 <tr>
-<td><code>charlesreid1hooks.yml</code></td>
-<td>Playbook to install and run the webhooks pod (<a href="https://git.charlesreid1.com/docker/pod-webhooks">https://git.charlesreid1.com/docker/pod-webhooks</a>)</td>
+<td><code>podwebhooks.yml</code></td>
+<td>(TBA) Playbook to install and run the webhooks pod (<a href="https://git.charlesreid1.com/docker/pod-webhooks">https://git.charlesreid1.com/docker/pod-webhooks</a>)</td>
 </tr>
 <tr>
-<td><code>charlesreid1bots.yml</code></td>
-<td>Playbook to install and run the bot pod (<a href="https://git.charlesreid1.com/docker/pod-bots">https://git.charlesreid1.com/docker/pod-bots</a>)</td>
+<td><code>podbots.yml</code></td>
+<td>(TBA) Playbook to install and run the bot pod (<a href="https://git.charlesreid1.com/docker/pod-bots">https://git.charlesreid1.com/docker/pod-bots</a>)</td>
 </tr>
 <tr>
 <td><code>base.yml</code></td>
@@ -390,7 +402,9 @@ and a provision playbook.</p>
 </tbody>
 </table>
 <h2 id="roles">Roles<a class="headerlink" href="#roles" title="Permanent link">&para;</a></h2>
-<p>The following roles carry out groups of related tasks.</p>
+<h3 id="base-playbook-roles">Base Playbook Roles<a class="headerlink" href="#base-playbook-roles" title="Permanent link">&para;</a></h3>
+<p>The following roles carry out groups of tasks for setting up the base machine
+to run charlesreid1.com infrastructure.</p>
 <table>
 <thead>
 <tr>
@@ -433,6 +447,31 @@ and a provision playbook.</p>
 </tr>
 </tbody>
 </table>
+<h3 id="pod-specific-roles">Pod-Specific Roles<a class="headerlink" href="#pod-specific-roles" title="Permanent link">&para;</a></h3>
+<p>The following roles are run by playbooks specific to the
+respective docker pod.</p>
+<table>
+<thead>
+<tr>
+<th>Role Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pod-charlesreid1</td>
+<td>Role specific to the charlesreid1.com docker pod</td>
+</tr>
+<tr>
+<td>pod-webhooks</td>
+<td>Role specific to {hooks,pages}.charlesreid1.com docker pod</td>
+</tr>
+<tr>
+<td>pod-bots</td>
+<td>Role specific to bots docker pod</td>
+</tr>
+</tbody>
+</table>
 <h2 id="getting-started-with-playbooks">Getting Started with Playbooks<a class="headerlink" href="#getting-started-with-playbooks" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -460,7 +499,7 @@ and a provision playbook.</p>
 </tr>
 </tbody>
 </table>
-<p>See <a href="ansible_playbooks/">docs/ansible_playbooks.md</a> for a list of all
+<p>See <a href="ansible_playbooks/">Ansible Playbooks</a> for a list of all
 playbooks in this directory, list of all tags,
 and info about how to use the playbooks.</p>
 <h2 id="running-playbooks">Running Playbooks<a class="headerlink" href="#running-playbooks" title="Permanent link">&para;</a></h2>
@@ -513,16 +552,16 @@ ANSIBLE_CONFIG=&quot;my_config.cfg&quot; ansible-playbook -i hosts main.yml --ta
 
 <p>Find a full list of tags at <a href="ansible_playbooks/">docs/ansible_playbooks.md</a>.</p>
 <h2 id="secrets-and-sensitive-information">Secrets and Sensitive Information<a class="headerlink" href="#secrets-and-sensitive-information" title="Permanent link">&para;</a></h2>
-<p>See <a href="ansible_vault/">docs/ansible_vault.md</a> for details about how to use
+<p>See <a href="ansible_vault/">Ansible Vault</a> for details about how to use
 the Ansible vault to view/edit secrets and sensitive information.</p>
 <p><strong>NOTE:</strong> THe vault and vault secret should be set up before 
 running playbooks against either Vagrant or AWS machines.</p>
 <h2 id="vagrant-testing">Vagrant Testing<a class="headerlink" href="#vagrant-testing" title="Permanent link">&para;</a></h2>
-<p>See <a href="ansible_vagrant/">docs/ansible_vagrant.md</a> for instructions on how to set up
+<p>See <a href="ansible_vagrant/">Ansible Vagrant</a> for instructions on how to set up
 a Vagrant virtual machine to run the Ansible playbook
 against, for testing purposes.</p>
 <h2 id="digitalocean-deployment">DigitalOcean Deployment<a class="headerlink" href="#digitalocean-deployment" title="Permanent link">&para;</a></h2>
-<p>See <a href="ansible_do/">docs/ansible_do.md</a> for instructions on how to set up an DigitalOcean
+<p>See <a href="ansible_do/">Ansible Digital Ocean</a> for instructions on how to set up an DigitalOcean
 node to run the Ansible playbook against.</p>
                 
                   

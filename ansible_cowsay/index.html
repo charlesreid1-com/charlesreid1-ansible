@@ -11,7 +11,7 @@
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
       
-        <link rel="canonical" href="https://charlesreid1-docker.github.io/charlesreid1-ansible/ansible_vault/">
+        <link rel="canonical" href="https://charlesreid1-docker.github.io/charlesreid1-ansible/ansible_cowsay/">
       
       
       
@@ -38,7 +38,7 @@
     
     
       
-        <title>Ansible Vault - charlesreid1-ansible</title>
+        <title>Ansible Cowsay - charlesreid1-ansible</title>
       
     
     
@@ -83,7 +83,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="../#ansible-vault" tabindex="1" class="md-skip">
+      <a href="../#ansible-cowsay" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -109,7 +109,7 @@
                 charlesreid1-ansible
               </span>
               <span class="md-header-nav__topic">
-                Ansible Vault
+                Ansible Cowsay
               </span>
             
           
@@ -271,6 +271,18 @@
       
       
 
+
+  <li class="md-nav__item">
+    <a href="../ansible_vault/" title="Ansible Vault" class="md-nav__link">
+      Ansible Vault
+    </a>
+  </li>
+
+    
+      
+      
+      
+
   
 
 
@@ -281,22 +293,10 @@
       
     
     
-    <a href="./" title="Ansible Vault" class="md-nav__link md-nav__link--active">
-      Ansible Vault
-    </a>
-    
-  </li>
-
-    
-      
-      
-      
-
-
-  <li class="md-nav__item">
-    <a href="../ansible_cowsay/" title="Ansible Cowsay" class="md-nav__link">
+    <a href="./" title="Ansible Cowsay" class="md-nav__link md-nav__link--active">
       Ansible Cowsay
     </a>
+    
   </li>
 
     
@@ -328,127 +328,105 @@
               
                 
                 
-                <h1 id="ansible-vault">Ansible Vault<a class="headerlink" href="#ansible-vault" title="Permanent link">&para;</a></h1>
-<p>This page contains instructions for using the Ansible vault.</p>
-<p>Link: <a href="https://docs.ansible.com/ansible/2.4/vault.html#creating-encrypted-files">Ansible vault documentation</a></p>
+                <h1 id="ansible-cowsay">Ansible Cowsay<a class="headerlink" href="#ansible-cowsay" title="Permanent link">&para;</a></h1>
+<p>This page covers the <code>cowsay</code> command and all the cows
+that show up when you run ansible.</p>
 <h1 id="table-of-contents">Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h1>
 <ul>
-<li><a href="#what-is-ansible-vault">What is Ansible Vault?</a></li>
-<li><a href="#where-is-the-vault-file">Where is the vault file?</a></li>
-<li><a href="#how-to-view-the-vault-file">How to view the vault file?</a></li>
-<li><a href="#how-to-create-a-vault-file">How to create a vault file?</a></li>
-<li><a href="#how-to-edit-the-vault-file">How to edit the vault file?</a></li>
-<li><a href="#how-to-use-the-vault-file">How to use the vault file?</a></li>
-<li><a href="#adding-new-secret-variables">Adding new secret variables</a></li>
+<li><a href="#wat">Wat</a></li>
+<li><a href="#turn-off-cows">Turn off cows</a></li>
+<li><a href="#weird-cows">Weird cows</a></li>
 </ul>
-<h2 id="what-is-ansible-vault">What is Ansible Vault?<a class="headerlink" href="#what-is-ansible-vault" title="Permanent link">&para;</a></h2>
-<p>Ansible provides a "vault" function that allows sensitive data
-(passwords, sensitive info, or certificate files) to be encrypted,
-so it can be stored in a repository with the rest of the playbook.</p>
-<p>The vault is an ordinary YAML file that defines variables, except
-that the variables it defines are sensitive. These variables can
-be used elsewhere in the playbook.</p>
-<p>Ansible provides an <code>ansible-vault</code> command to interact with 
-vault files.</p>
-<h2 id="where-is-the-vault-file">Where is the vault file?<a class="headerlink" href="#where-is-the-vault-file" title="Permanent link">&para;</a></h2>
-<p>There is currently one vault file that applies to all servers.
-It is located in the repository at <code>group_vars/all/vault</code>.</p>
-<h2 id="how-to-view-the-vault-file">How to view the vault file?<a class="headerlink" href="#how-to-view-the-vault-file" title="Permanent link">&para;</a></h2>
-<p>To view the contents of the vault file, use the view action:</p>
-<div class="codehilite"><pre><span></span>ansible-vault edit my_vault_file
+<h2 id="wat">Wat<a class="headerlink" href="#wat" title="Permanent link">&para;</a></h2>
+<p>One of the first things you notice about ansible is that
+it tells you what's going on via a series of cows:</p>
+<div class="codehilite"><pre><span></span>____________
+&lt; PLAY [all] &gt;
+------------
+       \   ^__^
+        \  (oo)\_______
+           (__)\       )\/\
+               ||----w |
+               ||     ||
 </pre></div>
 
 
-<h2 id="how-to-create-a-vault-file">How to create a vault file?<a class="headerlink" href="#how-to-create-a-vault-file" title="Permanent link">&para;</a></h2>
-<p>No new vault files should be needed for this repository, but to create
-a new vault file called <code>my_vault_file</code>, use the create action:</p>
-<div class="codehilite"><pre><span></span>ansible-vault create my_vault_file
+<p>That's because Ansible is wrapping log messages with the
+program cowsay, which prints out text in a text bubble
+accompanied by a cow.</p>
+<h2 id="turn-off-cows">Turn off cows<a class="headerlink" href="#turn-off-cows" title="Permanent link">&para;</a></h2>
+<p>To turn off the cows, set <code>ANSIBLE_NOCOWS=1</code>:</p>
+<div class="codehilite"><pre><span></span>ANSIBLE_NOCOWS=1 \
+ANSIBLE_CONFIG=&quot;vagrant.cfg&quot; \
+        ansible-playbook \
+        base.yml
 </pre></div>
 
 
-<h2 id="how-to-edit-the-vault-file">How to edit the vault file?<a class="headerlink" href="#how-to-edit-the-vault-file" title="Permanent link">&para;</a></h2>
-<p>To edit the contents of the vualt file, use the edit action</p>
-<div class="codehilite"><pre><span></span>EDITOR=&quot;vim&quot; ansible-vault edit my_vault_file
+<p>which is boring:</p>
+<div class="codehilite"><pre><span></span>GATHERING FACTS *************************************************************** 
+ok: [127.0.0.1]
 </pre></div>
 
 
-<h2 id="how-to-use-the-vault-file">How to use the vault file?<a class="headerlink" href="#how-to-use-the-vault-file" title="Permanent link">&para;</a></h2>
-<p>Vault files are used by ansible in the process of running playbooks.
-The user can provide Ansible with the vault password either on the
-command line (via an interactive prompt), or the user can put the
-vault password into a file, and point Ansible to the vault password
-file when it is run.</p>
-<p>We do that latter, putting the vault password in the file <code>.vault_secret</code>.</p>
-<p>To tell ansible wehre to find the vault password, we set <code>vault_password_file</code>
-in the configuration file. In both configuration files, we have:</p>
-<div class="codehilite"><pre><span></span>vault_password_file = .vault_secret
+<h2 id="weird-cows">Weird cows<a class="headerlink" href="#weird-cows" title="Permanent link">&para;</a></h2>
+<p>Fortunately, cowsay comes with many kinds of cows:</p>
+<div class="codehilite"><pre><span></span>$ cowsay -l
+Cow files in /usr/local/Cellar/cowsay/3.04/share/cows:
+beavis.zen blowfish bong bud-frogs bunny cheese cower daemon default dragon
+dragon-and-cow elephant elephant-in-snake eyes flaming-sheep ghostbusters
+head-in hellokitty kiss kitty koala kosh luke-koala meow milk moofasa moose
+mutilated ren satanic sheep skeleton small sodomized stegosaurus stimpy
+supermilker surgery telebears three-eyes turkey turtle tux udder vader
+vader-koala www
 </pre></div>
 
 
-<p>Put your password into the file <code>.vault_secret</code> and use this
-configuration file (by pointing to it with the <code>ANSIBLE_CONFIG</code>
-environment variable when running ansible).</p>
-<h2 id="adding-new-secret-variables">Adding new secret variables<a class="headerlink" href="#adding-new-secret-variables" title="Permanent link">&para;</a></h2>
-<p>Suppose we have a role that utilizes a variable that is sensitive
-and should remain secret. To do this, we set up a series of
-variable definitions that allow the secret defined in the vault
-to be used for different roles.</p>
-<p>Suppose we have a role that uses an API key in a command. The role
-utilizes a variable <code>{{ api_key }}</code> like so:</p>
-<p><code>roles/my-role/tasks/main.yml</code>:</p>
-<div class="codehilite"><pre><span></span><span class="nn">---</span>
-<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">A simple example task using a secret variable</span>
-  <span class="nt">command</span><span class="p">:</span> <span class="s">&quot;python</span><span class="nv"> </span><span class="s">script.py</span><span class="nv"> </span><span class="s">--api-key={{</span><span class="nv"> </span><span class="s">api_key</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<p>...so many questions.</p>
+<p>To specify a particular cow, set the <code>ANSIBLE_COW_SELECTION</code> variable:</p>
+<div class="codehilite"><pre><span></span>ANSIBLE_COW_SELECTION=vader
 </pre></div>
 
 
-<p>If the variable <code>api_key</code> is defined in the task default variable 
-values, this command will be run but with an invalid API key.
-If the above command should <em>only</em> be run with a valid API key,
-you can leave <code>api_key</code> out of the default variable values.</p>
-<p>Here is what that would look like, if you defined the API key 
-to be an empty string by default:</p>
-<p><code>roles/my-role/defaults/main.yml</code>:</p>
-<div class="codehilite"><pre><span></span><span class="nn">---</span>
-<span class="nt">api_key</span><span class="p">:</span> <span class="s">&quot;&quot;</span>
+<p>gives you</p>
+<div class="codehilite"><pre><span></span> ___________________________
+&lt; PLAY [Initial setup root] &gt;
+ ---------------------------
+        \    ,-^-.
+         \   !oYo!
+          \ /./=\.\______
+               ##        )\/\
+                ||-----w||
+                ||      ||
+
+               Cowth Vader
+
+ ________________________
+&lt; TASK [Gathering Facts] &gt;
+ ------------------------
+        \    ,-^-.
+         \   !oYo!
+          \ /./=\.\______
+               ##        )\/\
+                ||-----w||
+                ||      ||
+
+               Cowth Vader
 </pre></div>
 
 
-<p>To set the real <code>api_key</code> value, override the default variable
-value in the playbook(s) that run that role. For example, if
-the role <code>my-role</code> is called from a playbook <code>main.yml</code>,</p>
-<p><code>main.yml</code>:</p>
-<div class="codehilite"><pre><span></span><span class="nn">---</span>
-<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Run my-role</span>
-  <span class="nt">roles</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="nt">role</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">my-role</span>
-      <span class="nt">api_key</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">charlesreid1_api_key</span><span class="nv"> </span><span class="s">}}&quot;</span>
-</pre></div>
-
-
-<p>This specifies that the <code>api_key</code> variable should be set to the 
-value of the variable <code>charlesreid1_api_key</code>.</p>
-<p>The prefix <code>charlesreid1</code> indicates a site-specific variable setting.
-Those variables are contained in <code>group_vars/all/main.yml</code>.
-The variable is defined there, but it is also defining the variable
-to be set to another variable value:</p>
-<p><code>group_vars/all/main.yml</code>:</p>
-<div class="codehilite"><pre><span></span><span class="nn">---</span>
-<span class="nt">charlesreid1_api_key</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">vault_api_key</span><span class="nv"> </span><span class="s">}}&quot;</span>
-</pre></div>
-
-
-<p>The last step is to define the variable in the vault.
-This is where we use the <code>ansible-vault</code> command to edit
-the vault file:</p>
-<div class="codehilite"><pre><span></span>ANSIBLE_CONFIG=&quot;my_config.cfg&quot; ansible-vault edit group_vars/all/vault
-</pre></div>
-
-
-<p>This is where you put the real API key:</p>
-<p><code>group_vars/all/vault</code>:</p>
-<div class="codehilite"><pre><span></span><span class="nn">---</span>
-<span class="nt">vault_api_key</span><span class="p">:</span> <span class="s">&quot;ABCXYZ123456&quot;</span>
+<p>Here is <code>ANSIBLE_COW_SELECTION=tux</code>:</p>
+<div class="codehilite"><pre><span></span>&lt; GATHERING FACTS &gt;
+ -----------------
+   \
+    \
+        .--.
+       |o_o |
+       |:_/ |
+      //   \ \
+     (|     | )
+    /&#39;\_   _/`\
+    \___)=(___/
 </pre></div>
                 
                   
@@ -470,7 +448,7 @@ the vault file:</p>
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../ansible_playbooks/" title="Ansible Playbooks" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../ansible_vault/" title="Ansible Vault" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -479,25 +457,11 @@ the vault file:</p>
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Ansible Playbooks
+                Ansible Vault
               </span>
             </div>
           </a>
         
-        
-          <a href="../ansible_cowsay/" title="Ansible Cowsay" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
-            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
-              <span class="md-flex__ellipsis">
-                <span class="md-footer-nav__direction">
-                  Next
-                </span>
-                Ansible Cowsay
-              </span>
-            </div>
-            <div class="md-flex__cell md-flex__cell--shrink">
-              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
-            </div>
-          </a>
         
       </nav>
     </div>

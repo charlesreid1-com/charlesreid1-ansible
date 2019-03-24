@@ -331,6 +331,18 @@
   </li>
 
     
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../ansible_cowsay/" title="Ansible Cowsay" class="md-nav__link">
+      Ansible Cowsay
+    </a>
+  </li>
+
+    
   </ul>
 </nav>
                   </div>
@@ -404,13 +416,14 @@ by running the following command in this directory:</p>
 </pre></div>
 
 
-<p>This will start a Ubuntu xenial (16.04) machine.</p>
+<p>This will start a Ubuntu Xenial (16.04) machine.</p>
 <h2 id="provision-vagrant-machine-setup-step">Provision Vagrant Machine (Setup Step)<a class="headerlink" href="#provision-vagrant-machine-setup-step" title="Permanent link">&para;</a></h2>
 <p>Ansible can be used to provision the vagrant machine,
 which is basically a step that gets it ready for
 the "real" Ansible playbook.</p>
 <p>(Specifically, the provision step installs <code>/usr/bin/python</code>,
-which is not included by default in Ubuntu 16.04+).</p>
+which is not included by default in newer versions of
+Ubuntu.)</p>
 <p>Use the Ansible configuration file that is intended
 for use with Vagrant, <code>vagrant.cfg</code>, when running
 the vagrant provision command:</p>
@@ -435,15 +448,15 @@ inventory = vagranthosts
 remote_user = vagrant
 private_key_file = ~/.vagrant.d/insecure_private_key
 host_key_checking = False
+log_path = ansible_vagrant.log
+command_warnings=False
 vault_password_file = .vault_secret
-command_warnings = False
-log_path=ansible_vagrant.log
 </pre></div>
 
 
 <p>This example points to a vault secret contained
-in the file <code>.vault_secret</code>.</p>
-<p>See <a href="../ansible_vault/">docs/ansible_vault.md</a> for more info
+in the file <code>.vault_secret</code> as seen in the last line.</p>
+<p>See <a href="../ansible_vault/">Ansible Vault</a> for more info
 about vault secrets.</p>
                 
                   

@@ -288,6 +288,18 @@
   </li>
 
     
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../ansible_cowsay/" title="Ansible Cowsay" class="md-nav__link">
+      Ansible Cowsay
+    </a>
+  </li>
+
+    
   </ul>
 </nav>
                   </div>
@@ -426,9 +438,26 @@ scripts to keep some Twitter bots going.
 - Apollo Space Junk bot flock</p>
 <h2 id="list-of-tags">List of Tags<a class="headerlink" href="#list-of-tags" title="Permanent link">&para;</a></h2>
 <p>(Incomplete)</p>
-<p>Tags associated with roles:</p>
+<p>Each role has a tag associated with it, so you can
+run each role in isolation:</p>
 <ul>
-<li><code>base-setup</code><ul>
+<li><code>aws</code></li>
+<li><code>init-root</code></li>
+<li><code>install-stuff</code></li>
+<li><code>goenv</code></li>
+<li><code>pyenv</code></li>
+<li><code>docker</code></li>
+<li><code>init-nonroot</code></li>
+<li><code>sshkeys</code></li>
+<li><code>dotfiles</code></li>
+<li><code>vim</code></li>
+<li><code>pod-charlesreid1</code></li>
+</ul>
+<h3 id="base-playbook-tags">Base Playbook Tags<a class="headerlink" href="#base-playbook-tags" title="Permanent link">&para;</a></h3>
+<p>The base playbook <code>base.yml</code> includes the majority of
+the roles, whose tags are listed here:</p>
+<ul>
+<li><code>aws</code></li>
 <li><code>init-root</code></li>
 <li><code>install-stuff</code></li>
 <li><code>goenv</code></li>
@@ -439,11 +468,31 @@ scripts to keep some Twitter bots going.
 <li><code>dotfiles</code></li>
 <li><code>vim</code></li>
 </ul>
-</li>
-</ul>
-<p>podcharlesreid1:</p>
+<p>The base playbook also uses the following tags
+for sub-groups of tasks, or for groups of tasks
+that cross roles:</p>
 <ul>
-<li><code>pod-charlesreid1</code></li>
+<li><code>aws_tools</code> (aws command line tools and libraries only)</li>
+<li><code>aws_creds</code> (aws credentials only)</li>
+<li><code>pip</code> (all tasks installing packages using pip)</li>
+<li><code>apt</code> (" " " apt)</li>
+<li><code>docker-no-compose</code> (docker-only tasks)</li>
+<li><code>docker-compose</code>  (docker-compose-only tasks)</li>
+<li><code>root-ssh</code> (setup of ssh keys for root user)</li>
+<li><code>nonroot-ssh</code> (setup of ssh keys for nonroot user)</li>
+</ul>
+<h3 id="pod-charlesreid1-playbook-tags">pod-charlesreid1 Playbook Tags<a class="headerlink" href="#pod-charlesreid1-playbook-tags" title="Permanent link">&para;</a></h3>
+<p>The pod-charlesreid1 playbook contains the docker pod
+playbook for charlesreid1.com. This is a single role.
+The entire role is run with the tag:</p>
+<ul>
+<li>`pod-charlesreid1</li>
+</ul>
+<p>Subtasks are grouped as follows:</p>
+<ul>
+<li><code>pod-charlesreid1-services</code> (runs tasks that start the docker service and the pod service)</li>
+<li><code>pod-charlesreid1-gitea</code> (set up gitea for pod-charlesreid1)</li>
+<li><code>pod-charlesreid1-mw</code> (set up mediawiki for pod-charlesreid1)</li>
 </ul>
                 
                   

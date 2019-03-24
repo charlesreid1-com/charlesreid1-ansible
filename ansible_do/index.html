@@ -288,6 +288,18 @@
   </li>
 
     
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../ansible_cowsay/" title="Ansible Cowsay" class="md-nav__link">
+      Ansible Cowsay
+    </a>
+  </li>
+
+    
   </ul>
 </nav>
                   </div>
@@ -330,15 +342,25 @@ using these Ansible playbooks.</p>
 <p>Start by logging in to your digital ocean account
 and creating a droplet. You should be able to 
 create or specify an SSH key. </p>
-<p>You must do the following first:</p>
-<p><strong>Modify the SSH key in do.cfg (the digital ocean
-ansible config file) to match the SSH key you added
-to the droplet at creation.</strong></p>
-<p><strong>Modify the host file dohosts (the digital ocean
-inventory file) to have an IP address matching
-your droplet.</strong></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>You must modify the path to the SSH private
+key, specified in <code>do.cfg</code> (the Digital Ocean
+Ansible config file), to match the SSH key that
+you added to the droplet at its creation.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Once you create your droplet and it is connected
+to the internet via a public IP, you must update
+the file <code>dohosts</code> (the Digital Ocean Ansible
+inventory file) to point to the correct IP address
+for the droplet.</p>
+</div>
 <h2 id="run-provision-and-base-playbooks">Run provision and base playbooks<a class="headerlink" href="#run-provision-and-base-playbooks" title="Permanent link">&para;</a></h2>
-<p>Now you're ready to run the Ansible playbooks.</p>
+<p>Once you have the correct SSH key in <code>do.cfg</code>
+and the correct droplet IP address in <code>dohosts</code>,
+you are ready to run the Ansible playbooks.</p>
 <p>Run the provision playbook to prepare the droplet for Ansible:</p>
 <div class="codehilite"><pre><span></span>ANSIBLE_CONFIG=&quot;do.cfg&quot; \
         ansible-playbook \
@@ -347,7 +369,13 @@ your droplet.</strong></p>
 
 
 <p>Now you can run the base playbook.</p>
-<p><strong>NOTE: You must provide a <code>machine_name</code> parameter using the <code>--extra-vars</code> flag.</strong></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>You must provide a <code>machine_name</code> parameter to
+the base playbook. This variable is <strong><em>not</em></strong>
+defined by default. Define it using the 
+<code>--extra-vars</code> flag.</p>
+</div>
 <div class="codehilite"><pre><span></span>ANSIBLE_CONFIG=&quot;do.cfg&quot; \
         ansible-playbook \
         --extra-vars &quot;machine_name=redbeard&quot; \
@@ -356,8 +384,8 @@ your droplet.</strong></p>
 
 
 <h2 id="run-pod-playbooks">Run pod playbooks<a class="headerlink" href="#run-pod-playbooks" title="Permanent link">&para;</a></h2>
-<p>Once you've run the base playbook, you can install the docker pod
-with the corresponding playbook.</p>
+<p>Once you've run the base playbook, you can install the
+docker pod with the corresponding playbook.</p>
 <p>pod-charlesreid1:</p>
 <div class="codehilite"><pre><span></span>ANSIBLE_CONFIG=&quot;do.cfg&quot; \
         ansible-playbook \
