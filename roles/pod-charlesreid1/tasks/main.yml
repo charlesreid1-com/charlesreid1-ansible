@@ -233,6 +233,7 @@
     - "pod_register_docker_compose.stat.exists"
 
 
+
 # #####################################
 # INSTALL STARTUP SERVICE
 # 
@@ -252,7 +253,7 @@
   template:
     src: pod-charlesreid1.service.j2
     dest: /etc/systemd/system/pod-charlesreid1.service
-    mode: 0777
+    mode: 0664
   when:
     - "not pod_charlesreid1_service_check.stat.exists"
   tags:
