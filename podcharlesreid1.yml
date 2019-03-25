@@ -13,21 +13,14 @@
         - "charlesreid1.com"
         - "www.charlesreid1.com"
         - "git.charlesreid1.com"
-        - "pages.charlesreid1.com"
-        - "hooks.charlesreid1.com"
-        - "bots.charlesreid1.com"
-        - "charlesreid1.blue"
-        - "www.charlesreid1.blue"
-        - "git.charlesreid1.blue"
-        - "pages.charlesreid1.blue"
-        - "hooks.charlesreid1.blue"
-        - "bots.charlesreid1.blue"
-        - "charlesreid1.red"
-        - "www.charlesreid1.red"
-        - "git.charlesreid1.red"
-        - "pages.charlesreid1.red"
-        - "hooks.charlesreid1.red"
-        - "bots.charlesreid1.red"
+#
+#        - "charlesreid1.blue"
+#        - "www.charlesreid1.blue"
+#        - "git.charlesreid1.blue"
+#
+#        - "charlesreid1.red"
+#        - "www.charlesreid1.red"
+#        - "git.charlesreid1.red"
 
 
 - name: Install charlesreid1 docker pod
