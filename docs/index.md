@@ -33,13 +33,13 @@ are ready to run these docker pods.
 There is one playbook per docker pod, plus a base playbook
 and a provision playbook.
 
-| Playbook                  | Description                                                                                                                                                                       |
-|---------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `charlesreid1pod.yml`     | Playbook to install and run the charlesreid1.com docker pod (<https://git.charlesreid1.com/docker/pod-charlesreid1> or <https://github.com/charlesreid1-docker/pod-charlesreid1>) |
-| `charlesreid1hooks.yml`   | Playbook to install and run the webhooks pod (<https://git.charlesreid1.com/docker/pod-webhooks> or <https://github.com/charlesreid1-docker/pod-webhooks>)                        |
-| `charlesreid1bots.yml`    | Playbook to install and run the bot pod (<https://git.charlesreid1.com/docker/pod-bots> or <https://github.com/charlesreid1-docker/pod-bots>)                                     |
-| `base.yml`                | Base playbook run by all of the pod playbooks above.                                                                                                                              |
-| `provision.yml`           | Playbook to provision new Ubuntu machines with `/usr/bin/python`.                                                                                                                 |
+| Playbook               | Description                                                                                                          |
+|------------------------|----------------------------------------------------------------------------------------------------------------------|
+| `podcharlesreid1.yml`  | Playbook to install and run the charlesreid1.com docker pod (<https://git.charlesreid1.com/docker/pod-charlesreid1>) |
+| `podwebhooks.yml`      | (TBA) Playbook to install and run the webhooks pod (<https://git.charlesreid1.com/docker/pod-webhooks>)                    |
+| `podbots.yml`          | (TBA) Playbook to install and run the bot pod (<https://git.charlesreid1.com/docker/pod-bots>)                             |
+| `base.yml`             | Base playbook run by all of the pod playbooks above.                                                                 |
+| `provision.yml`        | Playbook to provision new Ubuntu machines with `/usr/bin/python`.                                                    |
 
 
 ## Roles
