@@ -6,20 +6,51 @@ username: "{{ nonroot_user }}"
 # where pod-charlesreid1 is installed
 pod_install_dir: "/home/{{ username }}/pod-charlesreid1"
 
-# check for letsencrypt certificates to this domain
-# (top level domain of entire pod)
-top_domain: "charlesreid1.com"
+# admin email
+admin_email: "{{ charlesreid1_admin_email }}"
+
+# ----------------
+# charlesreid1.com nginx 
+# configuration variables
+server_name_default: "{{ charlesreid1_server_name_default }}"
+server_name_gitea: "{{ charlesreid1_server_name_gitea }}"
+server_name_files: "{{ charlesreid1_server_name_files }}"
+server_name_pages: "{{ charlesreid1_server_name_pages }}"
+server_name_hooks: "{{ charlesreid1_server_name_hooks }}"
+server_name_bots: "{{ charlesreid1_server_name_bots }}"
+
+pod_webhooks_server: "{{ charlesreid1_pod_webhooks_server }}"
+
+port_default: "{{ charlesreid1_port_default }}"
+port_gitea: "{{ charlesreid1_port_gitea }}"
+port_files: "{{ charlesreid1_port_files }}"
+port_pages: "{{ charlesreid1_port_pages }}"
+port_hooks: "{{ charlesreid1_port_hooks }}"
+port_bots: "{{ charlesreid1_port_bots }}"
+
+port_ssl_default: "{{ charlesreid1_port_ssl_default }}"
+port_ssl_gitea: "{{ charlesreid1_port_ssl_gitea }}"
+port_ssl_files: "{{ charlesreid1_port_ssl_files }}"
+port_ssl_pages: "{{ charlesreid1_port_ssl_pages }}"
+port_ssl_hooks: "{{ charlesreid1_port_ssl_hooks }}"
+port_ssl_bots: "{{ charlesreid1_port_ssl_bots }}"
+
+# end nginx configuration variables
+# ----------------
 
 # gitea domain
-gitea_app_name: "git.{{ top_domain }}"
-gitea_domain: "git.{{ top_domain }}"
+gitea_app_name: "{{ server_name_gitea }}"
+gitea_domain: "{{ server_name_gitea }}"
 
-# app.ini settings
-gitea_secret_key: "xxxxxxxxxxxxxxxxxxx"
-gitea_internal_token: "xxxxxxxxxxxxxxx"
+# gitea secrets should be set
+# using variable stored in vault
+gitea_secret_key: "{{ charlesreid1_gitea_secret_key }}"
+gitea_internal_token: "{{ charlesreid1_gitea_internal_token }}"
 
-# default mysql password should be reset
-# using a vault in a group_vars dir in the
-# playbook dir
-mysql_password: changeme
+# default mysql password should be set
+# using variable stored in vault
+mysql_password: "{{ charlesreid1_mysql_password }}"
+
+# mediawiki secret key should be set using vault var
+mediawiki_secretkey: "{{ charlesreid1_mediawiki_secretkey }}"
 
