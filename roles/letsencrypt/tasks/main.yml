@@ -111,8 +111,8 @@
 # has not yet been run, `cert_installed` will be false.
 #
 # This boolean is used to control how we deal with
-# the nginx configuration file. (Test config is removed
-# once node is live.)
+# the nginx configuration file. (Test config is only
+# removed once node is live.)
 
 - name: Check if LetsEncrypt renewal certificate is present
   become: yes
@@ -124,7 +124,7 @@
 
 
 
-- name: Check if snakeoil certs are present (???)
+- name: Check if snakeoil certs are installed
   become: yes
   stat:
     path: "/etc/ssl/certs/ssl-cert-snakeoil.pem"
@@ -143,7 +143,7 @@
 
 
 
-- name: Check if snakeoil private keys are present (???)
+- name: Check if snakeoil private keys are installed
   become: yes
   stat:
     path: "/etc/ssl/private/ssl-cert-snakeoil.key"
@@ -161,8 +161,9 @@
 
 
 
-# I think the letsencrypt nginx certbot above installs nginx,
-# which automatically installs and runs itself. 
+# Unfortunately the letsencrypt nginx certbot 
+# installs nginx, which automatically installs 
+# and runs itself.
 
 - name: Stop service nginx, if started
   service:
