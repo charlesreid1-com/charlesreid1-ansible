@@ -11,9 +11,7 @@
 # clone pod contents
 #
 # /www setup
-#   charlesreid1.com top level domain clone
-#   charlesreid1.red top level domain clone
-#   charlesreid1.blue top level domain clone
+#   server-name_default top level domain clone
 # docker and docker compose checks
 # mediawiki prep
 # gitea prep
@@ -62,7 +60,7 @@
   run_once: true
   fetch:
     src: "{{ pod_install_dir }}/docker-compose.yml.j2"
-    dest: "/tmp/docker-compose.yml.j2"
+    dest: "/tmp/pod-charlesreid1-docker-compose.yml.j2"
     flat: yes
     fail_on_missing: yes
 
@@ -71,33 +69,21 @@
   become: yes
   become_user: "{{ username }}"
   template:
-    src: "/tmp/docker-compose.yml.j2"
+    src: "/tmp/pod-charlesreid1-docker-compose.yml.j2"
     dest: "{{ pod_install_dir }}/docker-compose.yml"
-    mode: 0755
+    mode: 0640
 
 
 # #####################################
 # SET UP /WWW DIRECTORY
 #
-# /www/charlesreid1.TLD/
-#                 charlesreid1.TLD-src/   <-- clone of charlesreid1.com repo, src branch
+# /www/<domain>/
+#                 charlesreid1.com-src/   <-- clone of charlesreid1.com repo, src branch
 #                 git/            <-- .git dir for charlesreid1.com repo gh-pages branch
 #                 git.data/       <-- .git dir for charlesreid1-data
 #                 htdocs/         <-- clone of charlesreid1.com repo gh-pages branch
 #                     data/       <-- clone of charlesreid1-data
-
-
-# Create /www directories for main site
-- name: Create the /www directory structure
-  file:
-    path: "/www/{{ item }}"
-    state: directory
-    owner: "{{ nonroot_user }}"
-    group: "{{ nonroot_user }}"
-  with_items:
-    - "charlesreid1.com"
-    - "charlesreid1.red"
-    - "charlesreid1.blue"
+#
 
 
 # Run the script (included in the pod-webhooks repo)
@@ -105,8 +91,8 @@
 # into /www. The script checks if it already exists
 # so we don't have to.
 
-- name: Run initial clone commands to set up htdocs at /www/charlesreid1.TLD
-  command: "{{ pod_install_dir }}/scripts/git_clone_www.sh"
+- name: "Run initial clone commands to set up htdocs at /www/{{ server_name_default }}"
+  command: "{{ pod_install_dir }}/scripts/git_clone_www.sh {{ server_name_default }}"
 
 
 
@@ -136,11 +122,58 @@
 
 
 
+
+# #####################################
+# NGIX PREP
+#
+# prepare the config files for the 
+# charlesreid1.com nginx server:
+# - copy templates from remote machine
+# - clean conf.d directory
+# - copy rendered templates to remote machine
+
+
+- name: Fetch d-nginx-charlesreid1 configuration templates from remote machine
+  run_once: true
+  fetch:
+    src: "{{ pod_install_dir }}/d-nginx-charlesreid1/conf.d_templates/{{ item }}"
+    dest: "/tmp/{{ item }}"
+    flat: yes
+    fail_on_missing: yes
+  with_items:
+    - "http.DOMAIN.conf.j2"
+    - "https.DOMAIN.conf.j2"
+    - "https.DOMAIN.subdomains.conf.j2"
+  tags:
+    - pod-charlesreid1-mw
+
+- name: Clean d-nginx-charlesreid1 conf.d directory
+  become: yes
+  become_user: "{{ username }}"
+  command: "python {{ pod_install_dir }}}/d-nginx-charlesreid1/scripts/clean_config.py"
+
+- name: Install the d-nginx-charlesreid1 configuration templates
+  become: yes
+  become_user: "{{ username }}"
+  template:
+    src: "/tmp/{{ item.src_name }}"
+    dest: "{{ pod_install_dir }}/{{ item.dest_name }}"
+  with_items:
+    - { "src_name": "http.DOMAIN.conf.j2", "dest_name": "http.{{ server_name_default }}.conf"}
+    - { "src_name": "https.DOMAIN.conf.j2", "dest_name": "https.{{ server_name_default }}.conf"}
+    - { "src_name": "https.DOMAIN.subdomains.conf.j2", "dest_name": "https.{{ server_name_default }}.subdomains.conf"}
+
+
+
 # #####################################
 # MEDIAWIKI PREP
 #
 # We have to build the extensions dir for the MediaWiki container
 # /pod-charlesreid1/d-mediawiki/charlesreid1-config/mediawiki/build_extensions_dir.sh 
+#
+# Then we have to use the LocalSettings.php and
+# Apache config file templates to configure
+# the mediawiki container to run correctly.
 
 - name: Check if extensions dir already exists
   stat:
@@ -172,6 +205,59 @@
     - "not extensions_dir_exists.stat.exists"
   tags:
     - pod-charlesreid1-mw
+
+
+# Deal with MediaWiki configuration templates:
+# - LocalSettings.php
+# - Apache config file
+
+- name: Fetch the LocalSettings.php jinja template
+  run_once: true
+  fetch:
+    src: "{{ pod_install_dir }}/d-mediawiki/charlesreid1-config/mediawiki/LocalSettings.php.j2"
+    dest: "/tmp/LocalSettings.php.j2"
+    flat: yes
+    fail_on_missing: yes
+  tags:
+    - pod-charlesreid1-mw
+
+
+- name: Install the LocalSettings.php file
+  become: yes
+  become_user: "{{ username }}"
+  template:
+    src: "/tmp/LocalSettings.php.j2"
+    dest: "{{ pod_install_dir }}/d-mediawiki/charlesreid1-config/mediawiki/LocalSettings.php"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: 0640
+  tags:
+    - pod-charlesreid1-mw
+
+
+- name: Fetch the Apache config jinja template
+  run_once: true
+  fetch:
+    src: "{{ pod_install_dir }}/d-mediawiki/charlesreid1-config/apache/charlesreid1.wiki.conf.j2"
+    dest: "/tmp/charlesreid1.wiki.conf.j2"
+    flat: yes
+    fail_on_missing: yes
+  tags:
+    - pod-charlesreid1-mw
+
+
+- name: Install the Apache config file
+  become: yes
+  become_user: "{{ username }}"
+  template:
+    src: "/tmp/charlesreid1.wiki.conf.j2"
+    dest: "{{ pod_install_dir }}/d-mediawiki/charlesreid1-config/apache/charlesreid1.wiki.conf"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: 0640
+  tags:
+    - pod-charlesreid1-mw
+
 
 
 # #####################################
@@ -213,7 +299,7 @@
     dest: "{{ pod_install_dir }}/d-gitea/custom/conf/app.ini"
     owner: "{{ username }}"
     group: "{{ username }}"
-    mode: 0755
+    mode: 0640
   tags:
     - pod-charlesreid1-gitea
 
@@ -261,16 +347,29 @@
     - pod-charlesreid1-services
 
 
-# LetsEncrypt role will install certs,
-# either fake or real, so this should
-# always pass.
+# Make sure we called the LetsEncrypt role to install
+# certs (fake or real) for each of the domains/subdomains.
 
-- name: Check if LetsEncrypt live domain cert is present
+- name: Check if LetsEncrypt cert for default server name is present
   tags:
     - letsencrypt
   stat:
-    path: "/etc/letsencrypt/live/{{ top_domain }}"
-  register: register_letsencrypt_livecert
+    path: "/etc/letsencrypt/live/{{ server_name_default }}"
+  register: register_letsencrypt_livecert_default
+
+- name: Check if LetsEncrypt cert for gitea server name is present
+  tags:
+    - letsencrypt
+  stat:
+    path: "/etc/letsencrypt/live/{{ server_name_gitea }}"
+  register: register_letsencrypt_livecert_gitea
+
+#- name: Check if LetsEncrypt cert for files server name is present
+#  tags:
+#    - letsencrypt
+#  stat:
+#    path: "/etc/letsencrypt/live/{{ server_name_files }}"
+#  register: register_letsencrypt_livecert_files
 
 
 # If certs are present, start/restart the
@@ -284,7 +383,8 @@
     state: restarted
   when:
     - "pod_register_docker_compose.stat.executable"
-    - "register_letsencrypt_livecert.stat.exists"
+    - "register_letsencrypt_livecert_default.stat.exists"
+    - "register_letsencrypt_livecert_gitea.stat.exists"
   tags:
     - pod-charlesreid1-services
 
