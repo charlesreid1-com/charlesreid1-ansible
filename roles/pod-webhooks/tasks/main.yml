@@ -151,7 +151,30 @@
 # #####################################
 # CAPTAIN HOOK CANARY SETUP
 
-# Install service script
+# Check if the captain hook canary service
+# is installed. If not, install it.
+
+- name: Check if captain-hook-canary service is installed
+  stat:
+    path: /etc/systemd/system/captain-hook-canary.service
+  register: canary_service_check
+
+- name: Fetch the Captain Hook canary service template file from the remote machine
+  run_once: true
+  fetch:
+    src: "{{ webhooks_install_dir }}/docker-compose.yml.j2"
+    dest: "/tmp/pod-webhooks-docker-compose.yml.j2"
+    flat: yes
+    fail_on_missing: yes
+
+- name: Install the docker-compose file
+  become: yes
+  become_user: "{{ username }}"
+  template:
+    src: "/tmp/pod-webhooks-docker-compose.yml.j2"
+    dest: "{{ webhooks_install_dir }}/docker-compose.yml"
+    mode: 0755
+
 
 
 # #####################################
@@ -196,22 +219,8 @@
     - pod-webhooks-services
 
 
-### # LetsEncrypt role will install certs,
-### # either fake or real, so this should
-### # always pass.
-### 
-### - name: Check if LetsEncrypt live domain cert is present
-###   tags:
-###     - letsencrypt
-###   stat:
-###     path: "/etc/letsencrypt/live/{{ subdomain }}"
-###   register: register_letsencrypt_livecert
-#
-#
-#
-### above is excluded cuz we have 3 subdomains
-### and we really don't need to check all 3.
-### get this show on the road.
+# LetsEncrypt role will install certs as needed,
+# but should probably check certs anyway.
 
 
 # If certs are present, start/restart the
@@ -225,8 +234,28 @@
     state: restarted
   when:
     - "webhooks_register_docker_compose.stat.executable"
-    - "register_letsencrypt_livecert.stat.exists"
+    #- "register_letsencrypt_livecert.stat.exists"
   tags:
     - pod-webhooks-services
 
+
+########################################
+# Set up captain-hook-canary service
+########################################
+
+
+
+- name: Install captain-hook-canary service
+  template:
+    src: captain-hook-canary.service.j2
+    dest: /etc/systemd/system/captain-hook-canary.service
+    mode: 0777
+  when:
+    - "not canary_service_check.stat.exists"
+
+- name: Enable captain-hook-canary service
+  service:
+    name: captain-hook-canary
+    enabled: yes
+    state: restarted
 
