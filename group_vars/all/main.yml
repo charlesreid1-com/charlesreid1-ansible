@@ -1,10 +1,55 @@
 ---
 # Variables for all roles
 # 
-# Since most of the defaults are set to the
-# values we want anyway, this file only sets
-# values for variables that require data from
-# the vault.
+# This file contains variables that
+# need to be set using the vault,
+# and variables that are used across
+# multiple roles.
+
+
+########################
+# multi-role variables
+
+# admin email
+charlesreid1_admin_email: "charles@charlesreid1.com"
+
+# charlesreid1.com nginx 
+# configuration variables
+# 
+# the variable values prefixed with
+# charlesreid1_ are hard-coded default values.
+# to override, don't change them here.
+# instead, set the variable name 
+# (without the charlesreid1_ prefix)
+# in the relevant playbook.
+# 
+charlesreid1_server_name_default: "charlesreid1.com"
+charlesreid1_server_name_gitea: "git.charlesreid1.com"
+charlesreid1_server_name_files: "files.charlesreid1.com"
+charlesreid1_server_name_pages: "pages.charlesreid1.com"
+charlesreid1_server_name_hooks: "hooks.charlesreid1.com"
+charlesreid1_server_name_bots: "bots.charlesreid1.com"
+
+charlesreid1_pod_webhooks_server: "localhost"
+
+charlesreid1_port_default: "80"
+charlesreid1_port_gitea: "80"
+charlesreid1_port_files: "80"
+charlesreid1_port_pages: "80"
+charlesreid1_port_hooks: "80"
+charlesreid1_port_bots: "80"
+
+charlesreid1_port_ssl_default: "443"
+charlesreid1_port_ssl_gitea: "443"
+charlesreid1_port_ssl_files: "443"
+charlesreid1_port_ssl_pages: "443"
+charlesreid1_port_ssl_hooks: "443"
+charlesreid1_port_ssl_bots: "443"
+
+
+
+########################
+# vault variables
 
 # AWS credentials:
 charlesreid1_aws_secret_access_key: "{{ vault_aws_secret_access_key }}"
@@ -16,8 +61,12 @@ ssh_key_email: "charlesreid1@gmail.com"
 # pod-charlesreid1 requires a mysql password
 charlesreid1_mysql_password: "{{ vault_mysql_password }}"
 
+# gitea secret key for web sessions
 charlesreid1_gitea_secret_key: "{{ vault_gitea_secret_key }}"
 charlesreid1_gitea_internal_token: "{{ vault_gitea_internal_token }}"
+
+# mediawiki secret key for web sessions
+charlesreid1_mediawiki_secretkey: "{{ vault_mediawiki_secretkey }}"
 
 # pod-webhooks requires a secret to be sent
 # with the webhook.
