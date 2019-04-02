@@ -150,19 +150,40 @@
 - name: Clean d-nginx-charlesreid1 conf.d directory
   become: yes
   become_user: "{{ username }}"
-  command: "python {{ pod_install_dir }}}/d-nginx-charlesreid1/scripts/clean_config.py"
+  command: "python {{ pod_install_dir }}/d-nginx-charlesreid1/scripts/clean_config.py"
 
-- name: Install the d-nginx-charlesreid1 configuration templates
+
+#- name: Install the d-nginx-charlesreid1 configuration templates
+#  become: yes
+#  become_user: "{{ username }}"
+#  template:
+#    src: "/tmp/{{ item.src_name }}"
+#    dest: "{{ pod_install_dir }}/{{ item.dest_name }}"
+#  with_items:
+#    - { "src_name": "http.DOMAIN.conf.j2", "dest_name": "http.{{ server_name_default }}.conf"}
+#    - { "src_name": "https.DOMAIN.conf.j2", "dest_name": "https.{{ server_name_default }}.conf"}
+#    - { "src_name": "https.DOMAIN.subdomains.conf.j2", "dest_name": "https.{{ server_name_default }}.subdomains.conf"}
+
+- name: Install the d-nginx-charlesreid1 http configuration templates
   become: yes
   become_user: "{{ username }}"
   template:
-    src: "/tmp/{{ item.src_name }}"
-    dest: "{{ pod_install_dir }}/{{ item.dest_name }}"
-  with_items:
-    - { "src_name": "http.DOMAIN.conf.j2", "dest_name": "http.{{ server_name_default }}.conf"}
-    - { "src_name": "https.DOMAIN.conf.j2", "dest_name": "https.{{ server_name_default }}.conf"}
-    - { "src_name": "https.DOMAIN.subdomains.conf.j2", "dest_name": "https.{{ server_name_default }}.subdomains.conf"}
+    src: "/tmp/http.DOMAIN.conf.j2"
+    dest: "{{ pod_install_dir }}/http.{{ server_name_default }}.conf"
 
+- name: Install the d-nginx-charlesreid1 https configuration templates
+  become: yes
+  become_user: "{{ username }}"
+  template:
+    src: "/tmp/https.DOMAIN.conf.j2"
+    dest: "{{ pod_install_dir }}/https.{{ server_name_default }}.conf"
+
+- name: Install the d-nginx-charlesreid1 https subdomains configuration templates
+  become: yes
+  become_user: "{{ username }}"
+  template:
+    src: "/tmp/https.DOMAIN.subdomains.conf.j2"
+    dest: "{{ pod_install_dir }}/https.{{ server_name_default }}.subdomains.conf"
 
 
 # #####################################
