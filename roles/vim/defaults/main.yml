@@ -1,4 +1,4 @@
 ---
 # variables used by vim role
 
-username: charles
+username: "{{ nonroot_user }}"

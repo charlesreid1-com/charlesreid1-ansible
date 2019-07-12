@@ -1,4 +1,4 @@
 ---
 # defaults file for docker
 
-username: charles
+username: "{{ nonroot_user }}"

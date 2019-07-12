@@ -10,6 +10,9 @@
 ########################
 # multi-role variables
 
+nonroot_user: "charles"
+username: "{{ nonroot_user }}"
+
 # admin email
 charlesreid1_admin_email: "charles@charlesreid1.com"
 
@@ -51,11 +54,13 @@ charlesreid1_port_ssl_bots: "443"
 ########################
 # vault variables
 
+# unix system password
+charlesreid1_system_password: "{{ vault_system_password }}"
+
 # AWS credentials:
 charlesreid1_aws_secret_access_key: "{{ vault_aws_secret_access_key }}"
 charlesreid1_aws_access_key_id: "{{ vault_aws_access_key_id }}"
 
-nonroot_user: "charles"
 ssh_key_email: "charlesreid1@gmail.com"
 
 # pod-charlesreid1 requires a mysql password

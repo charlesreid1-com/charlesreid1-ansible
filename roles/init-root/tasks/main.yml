@@ -44,7 +44,7 @@
 ####################################
 # Add non-root user to wheel group
 
-- name: Add the non-root user
+- name: Add the non-root user to the wheel group
   user:
     name: "{{ nonroot_user }}"
     groups: wheel

@@ -1,4 +1,4 @@
 ---
 # variables for init-nonroot
 
-username: charles
+username: "{{ nonroot_user }}"
