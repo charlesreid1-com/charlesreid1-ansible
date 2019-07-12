@@ -9,12 +9,14 @@ Table of Contents
 =================
 
 * [Vagrant Setup](#vagrant-setup)
-  * [Start Vagrant Machines](#start-vagrant-machines)
-  * [Provision Vagrant Machines](#provision-vagrant-machines)
-  * [Configure Ansible-Vagrant SSH Info](#configure-ansible-vagrant-ssh-info)
+    * [Start Vagrant Machines](#start-vagrant-machines)
+    * [Provision Vagrant Machines](#provision-vagrant-machines)
+    * [Configure Ansible-Vagrant SSH Info](#configure-ansible-vagrant-ssh-info)
+* [Cloud Node Setup](#cloud-node-setup)
+    * [Installing SSH Keys](#installing-ssh-keys)
 * [Run Ansible](#run-ansible)
-  * [Set Up Vault Secret](#set-up-vault-secret)
-  * [Run the Base Playbook](#run-the-base-playbook)
+    * [Set Up Vault Secret](#set-up-vault-secret)
+    * [Run the Base Playbook](#run-the-base-playbook)
 * [Change Variables](#change-variables)
 
 
@@ -68,6 +70,27 @@ inventory file so that Ansible knows how to
 connect to the Vagrant boxes.
 
 
+## Cloud Node Setup
+
+Different cloud providers set up their compute nodes
+differently, but the following is required to do
+on a cloud node before you can run Ansible on it.
+
+* Ensure your operating system has a version of
+  `python3` available from the command line
+
+* Ensure the public SSH key of the machine from
+  which you are running Ansible matches the 
+  public SSH key in the authorized keys file that
+  will be installed via Ansible
+
+    * The authorized keys file is located in 
+      `roles/ssh/files/authorized_keys`
+
+* Ensure the hosts file for this cloud node contains
+  a username that actually exists on the remote system
+
+
 ## Run Ansible
 
 ### Set Up Vault Secret
@@ -90,6 +113,14 @@ Example `.vault_secret` file:
 this_is_my_super_strong_password!
 ```
 
+To use this file to access variables in the vault,
+pass the vault password file using the flag:
+
+```
+ansible-playbook \
+        --vault-password-file=.vault_secret \
+        <other-flags>
+```
 
 ### Run the Base Playbook
 
@@ -98,7 +129,9 @@ variable to specify the Ansible-Vagrant config file, and
 use the `ansible-playbook` command:
 
 ```plain
-ANSIBLE_CONFIG="vagrant.cfg" ansible-playbook base.yml
+ANSIBLE_CONFIG="vagrant.cfg" ansible-playbook \
+        --vault-password-file=.vault_secret \
+        base.yml
 ```
 
 The config file specifies the inventory file, SSH key,
@@ -131,6 +164,7 @@ we set a few example variables:
 ```
 $ ANSIBLE_CONFIG="my_config_file.cfg" \
         ansible-playbook \
+        --vault-password-file=.vault_secret \
         -i hosts \
         --extra-vars "my_var_1=red,my_var_2=blue" \
         playbook.yml
