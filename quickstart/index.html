@@ -334,13 +334,21 @@ Vagrant and running the charlesreid1 playbooks
 against a Vagrant machine.</p>
 <h1 id="table-of-contents">Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h1>
 <ul>
-<li><a href="#vagrant-setup">Vagrant Setup</a></li>
+<li><a href="#vagrant-setup">Vagrant Setup</a><ul>
 <li><a href="#start-vagrant-machines">Start Vagrant Machines</a></li>
 <li><a href="#provision-vagrant-machines">Provision Vagrant Machines</a></li>
 <li><a href="#configure-ansible-vagrant-ssh-info">Configure Ansible-Vagrant SSH Info</a></li>
-<li><a href="#run-ansible">Run Ansible</a></li>
+</ul>
+</li>
+<li><a href="#cloud-node-setup">Cloud Node Setup</a><ul>
+<li><a href="#installing-ssh-keys">Installing SSH Keys</a></li>
+</ul>
+</li>
+<li><a href="#run-ansible">Run Ansible</a><ul>
 <li><a href="#set-up-vault-secret">Set Up Vault Secret</a></li>
 <li><a href="#run-the-base-playbook">Run the Base Playbook</a></li>
+</ul>
+</li>
 <li><a href="#change-variables">Change Variables</a></li>
 </ul>
 <h2 id="vagrant-setup">Vagrant Setup<a class="headerlink" href="#vagrant-setup" title="Permanent link">&para;</a></h2>
@@ -378,6 +386,30 @@ verb:</p>
 <p>Copy this information into the <code>vagranthosts</code>
 inventory file so that Ansible knows how to
 connect to the Vagrant boxes.</p>
+<h2 id="cloud-node-setup">Cloud Node Setup<a class="headerlink" href="#cloud-node-setup" title="Permanent link">&para;</a></h2>
+<p>Different cloud providers set up their compute nodes
+differently, but the following is required to do
+on a cloud node before you can run Ansible on it.</p>
+<ul>
+<li>
+<p>Ensure your operating system has a version of
+  <code>python3</code> available from the command line</p>
+</li>
+<li>
+<p>Ensure the public SSH key of the machine from
+  which you are running Ansible matches the 
+  public SSH key in the authorized keys file that
+  will be installed via Ansible</p>
+<ul>
+<li>The authorized keys file is located in 
+  <code>roles/ssh/files/authorized_keys</code></li>
+</ul>
+</li>
+<li>
+<p>Ensure the hosts file for this cloud node contains
+  a username that actually exists on the remote system</p>
+</li>
+</ul>
 <h2 id="run-ansible">Run Ansible<a class="headerlink" href="#run-ansible" title="Permanent link">&para;</a></h2>
 <h3 id="set-up-vault-secret">Set Up Vault Secret<a class="headerlink" href="#set-up-vault-secret" title="Permanent link">&para;</a></h3>
 <div class="admonition warning">
@@ -396,11 +428,21 @@ it will expect the vault secret to be in a file called
 </pre></div>
 
 
+<p>To use this file to access variables in the vault,
+pass the vault password file using the flag:</p>
+<div class="codehilite"><pre><span></span>ansible-playbook \
+        --vault-password-file=.vault_secret \
+        &lt;other-flags&gt;
+</pre></div>
+
+
 <h3 id="run-the-base-playbook">Run the Base Playbook<a class="headerlink" href="#run-the-base-playbook" title="Permanent link">&para;</a></h3>
 <p>To run a playbook, use the <code>ANSIBLE_CONFIG</code> environment 
 variable to specify the Ansible-Vagrant config file, and 
 use the <code>ansible-playbook</code> command:</p>
-<div class="codehilite"><pre><span></span>ANSIBLE_CONFIG=&quot;vagrant.cfg&quot; ansible-playbook base.yml
+<div class="codehilite"><pre><span></span>ANSIBLE_CONFIG=&quot;vagrant.cfg&quot; ansible-playbook \
+        --vault-password-file=.vault_secret \
+        base.yml
 </pre></div>
 
 
@@ -427,6 +469,7 @@ name when running playbooks.) Here,
 we set a few example variables:</p>
 <div class="codehilite"><pre><span></span>$ ANSIBLE_CONFIG=&quot;my_config_file.cfg&quot; \
         ansible-playbook \
+        --vault-password-file=.vault_secret \
         -i hosts \
         --extra-vars &quot;my_var_1=red,my_var_2=blue&quot; \
         playbook.yml

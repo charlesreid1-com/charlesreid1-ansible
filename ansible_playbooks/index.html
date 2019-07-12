@@ -369,6 +369,7 @@ usually run explicitly, except in tests, so machine name must
 be defined manually. To do that, use the <code>--extra-vars</code> flag:</p>
 <div class="codehilite"><pre><span></span>ANSIBLE_CONFIG=&quot;vagrant.cfg&quot; \
         ansible-playbook \
+        --vault-password-file=.vault_secret \
         --extra-vars &quot;machine_name=yoyo&quot; \
         base.yml
 </pre></div>
@@ -378,6 +379,7 @@ be defined manually. To do that, use the <code>--extra-vars</code> flag:</p>
 but specify the corrsponding config file:</p>
 <div class="codehilite"><pre><span></span>ANSIBLE_CONFIG=&quot;do.cfg&quot; \
         ansible-playbook \
+        --vault-password-file=.vault_secret \
         --extra-vars &quot;machine_name=yoyo&quot; \
         base.yml
 </pre></div>
@@ -400,6 +402,7 @@ on a Vagrant machine.</p>
 and the vagrant hosts file:</p>
 <div class="codehilite"><pre><span></span>ANSIBLE_CONFIG=&quot;vagrant.cfg&quot; \
         ansible-playbook \
+        --vault-password-file=.vault_secret \
         podcharlesreid1.yml
 </pre></div>
 
@@ -407,6 +410,7 @@ and the vagrant hosts file:</p>
 <p>To set a custom hostname, use the <code>--extra-vars</code> flag as above:</p>
 <div class="codehilite"><pre><span></span>ANSIBLE_CONFIG=&quot;vagrant.cfg&quot; \
         ansible-playbook \
+        --vault-password-file=.vault_secret \
         --extra-vars &quot;machine_name=yoyo&quot; \
         podcharlesreid1.yml
 </pre></div>
@@ -416,6 +420,7 @@ and the vagrant hosts file:</p>
 to a Digital Ocean droplet.</p>
 <div class="codehilite"><pre><span></span>ANSIBLE_CONFIG=&quot;do.cfg&quot; \
         ansible-playbook \
+        --vault-password-file=.vault_secret \
         --extra-vars &quot;machine_name=yoyo&quot; \
         podcharlesreid1.yml
 </pre></div>
@@ -424,18 +429,22 @@ to a Digital Ocean droplet.</p>
 <h2 id="charlesreid1hooksyml-webhooks-server-docker-pod-play">charlesreid1hooks.yml: webhooks server docker pod play<a class="headerlink" href="#charlesreid1hooksyml-webhooks-server-docker-pod-play" title="Permanent link">&para;</a></h2>
 <p><strong>host: bluebear</strong></p>
 <p><strong>host: bluebeard</strong></p>
-<p>The webhooks server docker pod runs the following:
-- captain hook webhook server
-- hooks.charlesreid1.com domain
-- static site hosting for pages.charlesreid1.com
-- pages.charlesreid1.com domain</p>
+<p>The webhooks server docker pod runs the following:</p>
+<ul>
+<li>captain hook webhook server</li>
+<li>hooks.charlesreid1.com domain</li>
+<li>static site hosting for pages.charlesreid1.com</li>
+<li>pages.charlesreid1.com domain</li>
+</ul>
 <h2 id="charlesreid1botsyml-bots-docker-pod-play">charlesreid1bots.yml: bots docker pod play<a class="headerlink" href="#charlesreid1botsyml-bots-docker-pod-play" title="Permanent link">&para;</a></h2>
 <p><strong>host: bluebear</strong></p>
 <p>The bots docker pod runs several Python 
-scripts to keep some Twitter bots going.
-- Ginsberg bot flock
-- Milton bot flock
-- Apollo Space Junk bot flock</p>
+scripts to keep some Twitter bots going:</p>
+<ul>
+<li>Ginsberg bot flock</li>
+<li>Milton bot flock</li>
+<li>Apollo Space Junk bot flock</li>
+</ul>
 <h2 id="list-of-tags">List of Tags<a class="headerlink" href="#list-of-tags" title="Permanent link">&para;</a></h2>
 <p>(Incomplete)</p>
 <p>Each role has a tag associated with it, so you can
@@ -475,7 +484,7 @@ that cross roles:</p>
 <li><code>aws_tools</code> (aws command line tools and libraries only)</li>
 <li><code>aws_creds</code> (aws credentials only)</li>
 <li><code>pip</code> (all tasks installing packages using pip)</li>
-<li><code>apt</code> (" " " apt)</li>
+<li><code>apt</code> (all tasks installing packages using apt)</li>
 <li><code>docker-no-compose</code> (docker-only tasks)</li>
 <li><code>docker-compose</code>  (docker-compose-only tasks)</li>
 <li><code>root-ssh</code> (setup of ssh keys for root user)</li>
@@ -486,7 +495,7 @@ that cross roles:</p>
 playbook for charlesreid1.com. This is a single role.
 The entire role is run with the tag:</p>
 <ul>
-<li>`pod-charlesreid1</li>
+<li><code>pod-charlesreid1</code></li>
 </ul>
 <p>Subtasks are grouped as follows:</p>
 <ul>

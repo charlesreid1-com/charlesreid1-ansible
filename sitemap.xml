@@ -2,37 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
      <loc>https://charlesreid1-docker.github.io/charlesreid1-ansible/</loc>
-     <lastmod>2019-03-25</lastmod>
+     <lastmod>2019-07-12</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://charlesreid1-docker.github.io/charlesreid1-ansible/quickstart/</loc>
-     <lastmod>2019-03-25</lastmod>
+     <lastmod>2019-07-12</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://charlesreid1-docker.github.io/charlesreid1-ansible/ansible_vagrant/</loc>
-     <lastmod>2019-03-25</lastmod>
+     <lastmod>2019-07-12</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://charlesreid1-docker.github.io/charlesreid1-ansible/ansible_do/</loc>
-     <lastmod>2019-03-25</lastmod>
+     <lastmod>2019-07-12</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://charlesreid1-docker.github.io/charlesreid1-ansible/ansible_playbooks/</loc>
-     <lastmod>2019-03-25</lastmod>
+     <lastmod>2019-07-12</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://charlesreid1-docker.github.io/charlesreid1-ansible/ansible_vault/</loc>
-     <lastmod>2019-03-25</lastmod>
+     <lastmod>2019-07-12</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://charlesreid1-docker.github.io/charlesreid1-ansible/ansible_cowsay/</loc>
-     <lastmod>2019-03-25</lastmod>
+     <lastmod>2019-07-12</lastmod>
      <changefreq>daily</changefreq>
     </url>
 </urlset>

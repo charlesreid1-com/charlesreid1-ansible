@@ -380,6 +380,14 @@ and a provision playbook.</p>
 </thead>
 <tbody>
 <tr>
+<td><code>provision.yml</code></td>
+<td>(Vagrant-only) Playbook to provision new Ubuntu machines with <code>/usr/bin/python</code>.</td>
+</tr>
+<tr>
+<td><code>base.yml</code></td>
+<td>Base playbook run by all of the pod playbooks above.</td>
+</tr>
+<tr>
 <td><code>podcharlesreid1.yml</code></td>
 <td>Playbook to install and run the charlesreid1.com docker pod (<a href="https://git.charlesreid1.com/docker/pod-charlesreid1">https://git.charlesreid1.com/docker/pod-charlesreid1</a>)</td>
 </tr>
@@ -390,14 +398,6 @@ and a provision playbook.</p>
 <tr>
 <td><code>podbots.yml</code></td>
 <td>(TBA) Playbook to install and run the bot pod (<a href="https://git.charlesreid1.com/docker/pod-bots">https://git.charlesreid1.com/docker/pod-bots</a>)</td>
-</tr>
-<tr>
-<td><code>base.yml</code></td>
-<td>Base playbook run by all of the pod playbooks above.</td>
-</tr>
-<tr>
-<td><code>provision.yml</code></td>
-<td>Playbook to provision new Ubuntu machines with <code>/usr/bin/python</code>.</td>
 </tr>
 </tbody>
 </table>
@@ -545,21 +545,32 @@ ANSIBLE_CONFIG=&quot;do.cfg&quot; ansible-playbook -i dohosts main.yml
 <h3 id="running-select-tasks-with-tags">Running Select Tasks with Tags<a class="headerlink" href="#running-select-tasks-with-tags" title="Permanent link">&para;</a></h3>
 <p>To run a specific task, you can filter tasks using tags.
 Use the <code>--tags</code> flag with the <code>ansible-playbook</code> command:</p>
-<div class="codehilite"><pre><span></span>ANSIBLE_CONFIG=&quot;my_config.cfg&quot; ansible-playbook -i hosts main.yml --tags tag1
-ANSIBLE_CONFIG=&quot;my_config.cfg&quot; ansible-playbook -i hosts main.yml --tags tag1,tag2,tag3
+<div class="codehilite"><pre><span></span>ANSIBLE_CONFIG=&quot;my_config.cfg&quot; ansible-playbook \
+        -i hosts \
+        --vault-password-file=.vault_secret \
+        main.yml \
+        --tags tag1
 </pre></div>
 
 
-<p>Find a full list of tags at <a href="ansible_playbooks/">docs/ansible_playbooks.md</a>.</p>
+<div class="codehilite"><pre><span></span>ANSIBLE_CONFIG=&quot;my_config.cfg&quot; ansible-playbook \
+        -i hosts \
+        --vault-password-file=.vault_secret \
+        main.yml \
+        --tags tag1,tag2,tag3
+</pre></div>
+
+
+<p>Find a full list of tags at the <a href="ansible_playbooks/">Ansible Playbooks page</a>.</p>
 <h2 id="secrets-and-sensitive-information">Secrets and Sensitive Information<a class="headerlink" href="#secrets-and-sensitive-information" title="Permanent link">&para;</a></h2>
 <p>See <a href="ansible_vault/">Ansible Vault</a> for details about how to use
 the Ansible vault to view/edit secrets and sensitive information.</p>
-<p><strong>NOTE:</strong> THe vault and vault secret should be set up before 
+<p><strong>NOTE:</strong> The vault and vault secret should be set up before 
 running playbooks against either Vagrant or AWS machines.</p>
 <h2 id="vagrant-testing">Vagrant Testing<a class="headerlink" href="#vagrant-testing" title="Permanent link">&para;</a></h2>
-<p>See <a href="ansible_vagrant/">Ansible Vagrant</a> for instructions on how to set up
-a Vagrant virtual machine to run the Ansible playbook
-against, for testing purposes.</p>
+<p>See <a href="ansible_vagrant/">Ansible Vagrant</a> for instructions 
+on how to set up a Vagrant virtual machine to run the 
+Ansible playbook against, for testing purposes.</p>
 <h2 id="digitalocean-deployment">DigitalOcean Deployment<a class="headerlink" href="#digitalocean-deployment" title="Permanent link">&para;</a></h2>
 <p>See <a href="ansible_do/">Ansible Digital Ocean</a> for instructions on how to set up an DigitalOcean
 node to run the Ansible playbook against.</p>
