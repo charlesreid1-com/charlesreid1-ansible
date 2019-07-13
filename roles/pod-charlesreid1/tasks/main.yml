@@ -48,6 +48,29 @@
     - "not pod_charlesreid1_clone_check.stat.exists"
 
 
+# Pull it
+- name: Pull pod-charlesreid1
+  become: yes
+  become_user: "{{ username }}"
+  command: "git pull"
+  args:
+    chdir: "{{ pod_install_dir }}"
+  when:
+    - "pod_charlesreid1_clone_check.stat.exists"
+
+
+# Pull submodules
+- name: Pull pod-webhooks submodules
+  become: yes
+  become_user: "{{ username }}"
+  command: "git submodule update --remote"
+  args:
+    chdir: "{{ pod_install_dir }}"
+  when:
+    - "pod_charlesreid1_clone_check.stat.exists"
+
+
+
 # #####################################
 # BUILD DOCKER-COMPOSE FILE FROM TEMPLATE
 # 
@@ -72,6 +95,7 @@
     src: "/tmp/pod-charlesreid1-docker-compose.yml.j2"
     dest: "{{ pod_install_dir }}/docker-compose.yml"
     mode: 0640
+    force: yes
 
 
 # #####################################
@@ -163,6 +187,7 @@
   template:
     src: "/tmp/http.DOMAIN.conf.j2"
     dest: "{{ pod_install_dir }}/d-nginx-charlesreid1/conf.d/http.{{ server_name_default }}.conf"
+    force: yes
   tags:
     - pod-charlesreid1-nginx
 
@@ -187,6 +212,7 @@
   template:
     src: "/tmp/https.DOMAIN.conf.j2"
     dest: "{{ pod_install_dir }}/d-nginx-charlesreid1/conf.d/https.{{ server_name_default }}.conf"
+    force: yes
   tags:
     - pod-charlesreid1-nginx
 
@@ -212,6 +238,7 @@
   template:
     src: "/tmp/https.DOMAIN.subdomains.conf.j2"
     dest: "{{ pod_install_dir }}/d-nginx-charlesreid1/conf.d/https.{{ server_name_default }}.subdomains.conf"
+    force: yes
   tags:
     - pod-charlesreid1-nginx
 
