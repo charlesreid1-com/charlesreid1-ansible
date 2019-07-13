@@ -10,7 +10,11 @@ webhooks_install_dir: "/home/{{ username }}/pod-webhooks"
 # # (must be entered every time you create a webhook)
 captain_hook_secret: "{{ charlesreid1_captain_hook_secret }}"
 
-# any other config details,
-# secrets, tokens, pws, or 
-# api keys should go here.
+# ----------------
+# subpages nginx
+# configuration variables
+server_name_default: "{{ charlesreid1_server_name_default }}"
 
+# end nginx configuration variables
+# ----------------
+#
