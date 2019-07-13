@@ -11,27 +11,32 @@
 # multi-role variables
 
 nonroot_user: "charles"
+
+# unix username
 username: "{{ nonroot_user }}"
+
+# SSH key owner
+ssh_key_email: "charlesreid1@gmail.com"
 
 # admin email
 charlesreid1_admin_email: "charles@charlesreid1.com"
 
-# charlesreid1.com nginx 
-# configuration variables
-# 
-# the variable values prefixed with
-# charlesreid1_ are hard-coded default values.
-# to override, don't change them here.
-# instead, set the variable name 
-# (without the charlesreid1_ prefix)
-# in the relevant playbook.
-# 
-charlesreid1_server_name_default: "charlesreid1.com"
-charlesreid1_server_name_gitea: "git.charlesreid1.com"
-charlesreid1_server_name_files: "files.charlesreid1.com"
-charlesreid1_server_name_pages: "pages.charlesreid1.com"
-charlesreid1_server_name_hooks: "hooks.charlesreid1.com"
-charlesreid1_server_name_bots: "bots.charlesreid1.com"
+### # charlesreid1.com nginx 
+### # configuration variables
+### # 
+### # the variable values prefixed with
+### # charlesreid1_ are hard-coded default values.
+### # to override, don't change them here.
+### # instead, set the variable name 
+### # (without the charlesreid1_ prefix)
+### # in the relevant playbook.
+### # 
+### charlesreid1_server_name_default: "charlesreid1.com"
+### charlesreid1_server_name_gitea: "git.charlesreid1.com"
+### charlesreid1_server_name_files: "files.charlesreid1.com"
+### charlesreid1_server_name_pages: "pages.charlesreid1.com"
+### charlesreid1_server_name_hooks: "hooks.charlesreid1.com"
+### charlesreid1_server_name_bots: "bots.charlesreid1.com"
 
 charlesreid1_pod_webhooks_server: "localhost"
 
@@ -61,7 +66,12 @@ charlesreid1_system_password: "{{ vault_system_password }}"
 charlesreid1_aws_secret_access_key: "{{ vault_aws_secret_access_key }}"
 charlesreid1_aws_access_key_id: "{{ vault_aws_access_key_id }}"
 
-ssh_key_email: "charlesreid1@gmail.com"
+# d-nginx-subdomains whitelist IP
+# (if the d-nginx-charlesreid1 instance
+#  is different from the d-nginx-subdomains instance,
+#  add the IP below of the d-nginx-charlesreid1 instance
+#  to the whitelist of the d-nginx-subdomains instance)
+nginx_charlesreid1_ip: "{{ vault_nginx_charlesreid1_ip }}"
 
 # pod-charlesreid1 requires a mysql password
 charlesreid1_mysql_password: "{{ vault_mysql_password }}"
@@ -76,3 +86,4 @@ charlesreid1_mediawiki_secretkey: "{{ vault_mediawiki_secretkey }}"
 # pod-webhooks requires a secret to be sent
 # with the webhook.
 charlesreid1_captain_hook_secret: "{{ vault_captain_hook_secret }}"
+
