@@ -13,11 +13,6 @@ admin_email: "{{ charlesreid1_admin_email }}"
 # charlesreid1.com nginx 
 # configuration variables
 server_name_default: "{{ charlesreid1_server_name_default }}"
-server_name_gitea: "{{ charlesreid1_server_name_gitea }}"
-server_name_files: "{{ charlesreid1_server_name_files }}"
-server_name_pages: "{{ charlesreid1_server_name_pages }}"
-server_name_hooks: "{{ charlesreid1_server_name_hooks }}"
-server_name_bots: "{{ charlesreid1_server_name_bots }}"
 
 pod_webhooks_server: "{{ charlesreid1_pod_webhooks_server }}"
 
@@ -39,8 +34,8 @@ port_ssl_bots: "{{ charlesreid1_port_ssl_bots }}"
 # ----------------
 
 # gitea domain
-gitea_app_name: "{{ server_name_gitea }}"
-gitea_domain: "{{ server_name_gitea }}"
+gitea_app_name: "git.{{ server_name_default }}"
+gitea_domain: "git.{{ server_name_default }}"
 
 # gitea secrets should be set
 # using variable stored in vault

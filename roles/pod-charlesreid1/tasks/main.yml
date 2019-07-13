@@ -124,7 +124,7 @@
 
 
 # #####################################
-# NGIX PREP
+# NGIX CONFIG PREP
 #
 # prepare the config files for the 
 # charlesreid1.com nginx server:
@@ -355,6 +355,13 @@
     - pod-charlesreid1-gitea
 
 
+- name: Fix ownership of custom conf dir for app.ini
+  become: yes
+  command: "chown -R {{ username }}:{{ username }} {{pod_install_dir }}/d-gitea/custom"
+  tags:
+    - pod-charlesreid1-gitea
+
+
 
 # #####################################
 # CONSTRUCT THE POD
@@ -426,7 +433,7 @@
 #  tags:
 #    - letsencrypt
 #  stat:
-#    path: "/etc/letsencrypt/live/{{ server_name_files }}"
+#    path: "/etc/letsencrypt/live/files.{{ server_name_default }}"
 #  register: register_letsencrypt_livecert_files
 
 
