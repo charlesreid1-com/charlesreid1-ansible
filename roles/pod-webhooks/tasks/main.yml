@@ -95,7 +95,7 @@
 - name: Create the /www directory structure
   become: yes
   file:
-    path: "/www/{{ item }}"
+    path: "/www/{{ item }}.{{ server_name_default }}"
     state: directory
     owner: "{{ username }}"
     group: "{{ username }}"
@@ -150,43 +150,81 @@
 # the subdomain sites into /www.
 #
 - name: Run initial clone commands to set up pages at /www/pages.charlesreid1.com
-  command: "{{ webhooks_install_dir }}/scripts/pages_init_setup.py"
+  command: "python {{ webhooks_install_dir }}/scripts/pages_init_setup.py"
+  tags:
+    - pod-webhooks
 
 
 
 # #####################################
 # CAPTAIN HOOK SETUP
 
-# create/modify config file
+- name: Check if captain hook config file is present
+  stat:
+    path: "{{ webhooks_install_dir }}/b-captain-hook/config.json"
+  register: captain_hook_config_check
+  tags:
+    - captain-hook
+
+
+- name: Fetch the captain hook config file template
+  fetch:
+    src: "{{ webhooks_install_dir }}/b-captain-hook/config.json.j2"
+    dest: "/tmp/captain_hook_config.json.j2"
+    flat: yes
+    fail_on_missing: yes
+  when:
+    - "not captain_hook_config_check.stat.exists"
+  tags:
+    - captain-hook
+
+
+- name: Install the captain hook config file
+  become: yes
+  become_user: "{{ username }}"
+  template:
+    src: "/tmp/captain_hook_config.json.j2"
+    dest: "{{ webhooks_install_dir }}/b-captain-hook/config.json"
+    mode: 0755
+  when:
+    - "not captain_hook_config_check.stat.exists"
+  tags:
+    - captain-hook
 
 
 # #####################################
-# CAPTAIN HOOK CANARY SETUP
+# CAPTAIN HOOK CANARY SCRIPT SETUP
 #
-# Start with the canary script,
-# then do the canary service.
+# Start with the canary script first.
+#
+# The whole pod has to be built and the 
+# pod startup service installed
+# before the canary service can be
+# installed.
 
-# -------------------
-# Canary script first
-
-# First check to see if there
+# First check to see if it is there
 #
 - name: Check if captain hook canary script is present
   stat:
     path: "{{ webhooks_install_dir }}/scripts/captain_hook_canary.sh"
   register: canary_service_check
   tags:
-    - captain-hook-canary
+    - captain-hook
 
 # If not, well like, go for it,
 # use the template provided to make one
-- name: Fetch the captain hook canary script from the remote machine
+#
+- name: Fetch the captain hook canary script template from the remote machine
   run_once: true
   fetch:
     src: "{{ webhooks_install_dir }}/scripts/captain_hook_canary.sh.j2"
     dest: "/tmp/captain_hook_canary.sh.j2"
+    flat: yes
+    fail_on_missing: yes
+  when:
+    - "not canary_service_check.stat.exists"
   tags:
-    - captain-hook-canary
+    - captain-hook
 
 - name: Install the captain hook canary script
   become: yes
@@ -195,68 +233,10 @@
     src: "/tmp/captain_hook_canary.sh.j2"
     dest: "{{ webhooks_install_dir }}/scripts/captain_hook_canary.sh"
     mode: 0755
-  tags:
-    - captain-hook-canary
-
-
-
-# -------------------
-# Service second
-
-
-# Begin by checking to see if installed
-#
-- name: Check if the captain hook canary service is installed
-  stat:
-    path: "/etc/systemd/system/captain-hook-canary.service"
-  register: canary_service_check
-  tags:
-    - pod-webhooks-services
-    - captain-hook-canary
-
-# Fetch the captain hook canary startup service template onto local computer
-# #
-- name: Fetch the captain hook canary service template file from the remote machine
-  run_once: true
-  fetch:
-    src: "{{ webhooks_install_dir }}/scripts/captain-hook-canary.service.j2"
-    dest: "/tmp/captain-hook-canary.service"
-    flat: yes
-    fail_on_missing: yes
   when:
     - "not canary_service_check.stat.exists"
   tags:
-    - pod-webhooks-services
-    - captain-hook-canary
-
-
-# Apply the captain hook canary startup service template
-#
-- name: Install the captain hook canary startup service
-  become: yes
-  become_user: "{{ username }}"
-  template:
-    src: "/tmp/captain-hook-canary.service"
-    dest: "/etc/systemd/system/captain-hook-canary.service"
-    mode: 0774
-  when:
-    - "not canary_service_check.stat.exists"
-  tags:
-    - pod-webhooks-services
-    - captain-hook-canary
-
-
-# Now enable the captain hook canary startup service.
-#
-- name: Enable the captain hook canary startup service
-  become: yes
-  service:
-    name: captain-hook-canary
-    enabled: yes
-    state: restarted
-  tags:
-    - pod-webhooks-services
-    - captain-hook-canary
+    - captain-hook
 
 
 
@@ -293,7 +273,7 @@
 - name: Install pod-webhooks service
   become: yes
   template:
-    src: pod-webhooks.service.j2
+    src: "{{ webhooks_install_dir }}/scripts/pod-webhooks.service.j2"
     dest: "/etc/systemd/system/pod-webhooks.service"
     mode: 0774
   when:
@@ -315,4 +295,64 @@
     - "webhooks_register_docker_compose.stat.executable"
   tags:
     - pod-webhooks-services
+
+
+
+# #####################################
+# CAPTAIN HOOK CANARY SERVICE SETUP
+
+### # Begin by checking to see if installed
+### # Just kidding - always reinstall the canary service from the repo template
+### #
+### - name: Check if the captain hook canary service is installed
+###   stat:
+###     path: "/etc/systemd/system/captain-hook-canary.service"
+###   register: canary_service_check
+###   tags:
+###     - pod-webhooks-services
+###     - captain-hook
+
+# Fetch the captain hook canary startup service template onto local computer
+# #
+- name: Fetch the captain hook canary service template file from the remote machine
+  run_once: true
+  fetch:
+    src: "{{ webhooks_install_dir }}/scripts/captain-hook-canary.service.j2"
+    dest: "/tmp/captain-hook-canary.service"
+    flat: yes
+    fail_on_missing: yes
+  tags:
+    - pod-webhooks-services
+    - captain-hook
+
+
+# Apply the captain hook canary startup service template
+#
+- name: Install the captain hook canary startup service
+  become: yes
+  template:
+    src: "/tmp/captain-hook-canary.service"
+    dest: "/etc/systemd/system/captain-hook-canary.service"
+    mode: 0774
+  tags:
+    - pod-webhooks-services
+    - captain-hook
+
+
+# Now enable the captain hook canary startup service.
+#
+- name: Enable the captain hook canary startup service
+  become: yes
+  service:
+    name: captain-hook-canary
+    enabled: yes
+    state: restarted
+  tags:
+    - pod-webhooks-services
+    - captain-hook
+
+
+
+
+
 
