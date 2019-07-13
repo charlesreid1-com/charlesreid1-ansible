@@ -10,10 +10,21 @@ Table of Contents
 * [Roles](#roles)
 * [Getting Started with Playbooks](#getting-started-with-playbooks)
 * [Running Playbooks](#running-playbooks)
-  * [Running Select Tasks with Tags](#running-select-tasks-with-tags)
+    * [Running Select Tasks with Tags](#running-select-tasks-with-tags)
 * [Secrets and Sensitive Information](#secrets-and-sensitive-information)
 * [Vagrant Testing](#vagrant-testing)
 * [DigitalOcean Deployment](#digitalocean-deployment)
+
+
+## Master Checklist
+
+Before you get started:
+
+* Provision a compute node (vagrant or cloud provider)
+* Configure and enable SSH access
+* Run Ansible with the `base.yml` playbook
+* Run Ansible with the pod playbook of your choice
+* Configure DNS to point to compute node IP address
 
 
 ## Docker Pods
@@ -28,6 +39,7 @@ are ready to run these docker pods.
 | pod-webhooks     | <https://git.charlesreid1.com/docker/pod-webhooks>     |
 | pod-bots         | <https://git.charlesreid1.com/docker/pod-bots>         |
 
+
 ## Playbooks
 
 There is one playbook per docker pod, plus a base playbook
@@ -35,11 +47,11 @@ and a provision playbook.
 
 | Playbook               | Description                                                                                                          |
 |------------------------|----------------------------------------------------------------------------------------------------------------------|
-| `podcharlesreid1.yml`  | Playbook to install and run the charlesreid1.com docker pod (<https://git.charlesreid1.com/docker/pod-charlesreid1>) |
-| `podwebhooks.yml`      | (TBA) Playbook to install and run the webhooks pod (<https://git.charlesreid1.com/docker/pod-webhooks>)                    |
-| `podbots.yml`          | (TBA) Playbook to install and run the bot pod (<https://git.charlesreid1.com/docker/pod-bots>)                             |
+| `provision.yml`        | (Vagrant-only) Playbook to provision new Ubuntu machines with `/usr/bin/python`.                                     |
 | `base.yml`             | Base playbook run by all of the pod playbooks above.                                                                 |
-| `provision.yml`        | Playbook to provision new Ubuntu machines with `/usr/bin/python`.                                                    |
+| `podcharlesreid1.yml`  | Playbook to install and run the charlesreid1.com docker pod (<https://git.charlesreid1.com/docker/pod-charlesreid1>) |
+| `podwebhooks.yml`      | (TBA) Playbook to install and run the webhooks pod (<https://git.charlesreid1.com/docker/pod-webhooks>)              |
+| `podbots.yml`          | (TBA) Playbook to install and run the bot pod (<https://git.charlesreid1.com/docker/pod-bots>)                       |
 
 
 ## Roles
@@ -136,11 +148,22 @@ To run a specific task, you can filter tasks using tags.
 Use the `--tags` flag with the `ansible-playbook` command:
 
 ```plain
-ANSIBLE_CONFIG="my_config.cfg" ansible-playbook -i hosts main.yml --tags tag1
-ANSIBLE_CONFIG="my_config.cfg" ansible-playbook -i hosts main.yml --tags tag1,tag2,tag3
+ANSIBLE_CONFIG="my_config.cfg" ansible-playbook \
+        -i hosts \
+        --vault-password-file=.vault_secret \
+        main.yml \
+        --tags tag1
 ```
 
-Find a full list of tags at [docs/ansible_playbooks.md](ansible_playbooks.md).
+```
+ANSIBLE_CONFIG="my_config.cfg" ansible-playbook \
+        -i hosts \
+        --vault-password-file=.vault_secret \
+        main.yml \
+        --tags tag1,tag2,tag3
+```
+
+Find a full list of tags at the [Ansible Playbooks page](ansible_playbooks.md).
 
 
 ## Secrets and Sensitive Information
@@ -148,15 +171,15 @@ Find a full list of tags at [docs/ansible_playbooks.md](ansible_playbooks.md).
 See [Ansible Vault](ansible_vault.md) for details about how to use
 the Ansible vault to view/edit secrets and sensitive information.
 
-**NOTE:** THe vault and vault secret should be set up before 
+**NOTE:** The vault and vault secret should be set up before 
 running playbooks against either Vagrant or AWS machines.
 
 
 ## Vagrant Testing
 
-See [Ansible Vagrant](ansible_vagrant.md) for instructions on how to set up
-a Vagrant virtual machine to run the Ansible playbook
-against, for testing purposes.
+See [Ansible Vagrant](ansible_vagrant.md) for instructions 
+on how to set up a Vagrant virtual machine to run the 
+Ansible playbook against, for testing purposes.
 
 
 ## DigitalOcean Deployment
