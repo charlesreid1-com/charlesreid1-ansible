@@ -133,6 +133,45 @@
 
 
 # #####################################
+# NGIX CONFIG PREP
+#
+# prepare the config files for the 
+# subdomains nginx server:
+# - copy templates from remote machine
+# - clean conf.d directory
+# - copy rendered templates to remote machine
+
+- name: Clean d-nginx-subdomains conf.d directory
+  become: yes
+  become_user: "{{ username }}"
+  command: "python {{ webhooks_install_dir }}/d-nginx-subdomains/scripts/clean_config.py"
+  tags:
+    - pod-webhooks
+
+
+- name: Fetch d-nginx-subdomains configuration templates from remote machine
+  run_once: true
+  fetch:
+    src: "{{ webhooks_install_dir }}/d-nginx-subdomains/conf.d_templates/http.subdomains.conf.j2"
+    dest: "/tmp/http.subdomains.conf.j2"
+    flat: yes
+    fail_on_missing: yes
+  tags:
+    - pod-webhooks
+
+
+- name: Install the d-nginx-subdomains configuration templates
+  become: yes
+  become_user: "{{ username }}"
+  template:
+    src: "/tmp/http.subdomains.conf.j2"
+    dest: "{{ webhooks_install_dir }}/d-nginx-subdomains/conf.d/http.subdomains.conf"
+  tags:
+    - pod-webhooks
+
+
+
+# #####################################
 # SUBDOMAIN PAGES SETUP (ALL)
 
 - name: Run initial clone commands to set up bots/pages/hooks subdomains at /www/
