@@ -58,6 +58,28 @@
     - "not pod_webhooks_clone_check.stat.exists"
 
 
+# Pull it
+- name: Pull pod-webhooks
+  become: yes
+  become_user: "{{ username }}"
+  command: "git pull"
+  args:
+    chdir: "{{ webhooks_install_dir }}"
+  when:
+    - "pod_webhooks_clone_check.stat.exists"
+
+
+# Pull submodules
+- name: Pull pod-webhooks submodules
+  become: yes
+  become_user: "{{ username }}"
+  command: "git submodule update --remote"
+  args:
+    chdir: "{{ webhooks_install_dir }}"
+  when:
+    - "pod_webhooks_clone_check.stat.exists"
+
+
 
 # #####################################
 # BUILD DOCKER-COMPOSE FILE FROM TEMPLATE
@@ -78,6 +100,7 @@
     src: "/tmp/pod-webhooks-docker-compose.yml.j2"
     dest: "{{ webhooks_install_dir }}/docker-compose.yml"
     mode: 0640
+    force: yes
 
 
 
@@ -166,6 +189,7 @@
   template:
     src: "/tmp/http.subdomains.conf.j2"
     dest: "{{ webhooks_install_dir }}/d-nginx-subdomains/conf.d/http.subdomains.conf"
+    force: yes
   tags:
     - pod-webhooks
 
@@ -198,22 +222,12 @@
 # #####################################
 # CAPTAIN HOOK SETUP
 
-- name: Check if captain hook config file is present
-  stat:
-    path: "{{ webhooks_install_dir }}/b-captain-hook/config.json"
-  register: captain_hook_config_check
-  tags:
-    - captain-hook
-
-
 - name: Fetch the captain hook config file template
   fetch:
     src: "{{ webhooks_install_dir }}/b-captain-hook/config.json.j2"
     dest: "/tmp/captain_hook_config.json.j2"
     flat: yes
     fail_on_missing: yes
-  when:
-    - "not captain_hook_config_check.stat.exists"
   tags:
     - captain-hook
 
@@ -225,8 +239,7 @@
     src: "/tmp/captain_hook_config.json.j2"
     dest: "{{ webhooks_install_dir }}/b-captain-hook/config.json"
     mode: 0755
-  when:
-    - "not captain_hook_config_check.stat.exists"
+    force: yes
   tags:
     - captain-hook
 
