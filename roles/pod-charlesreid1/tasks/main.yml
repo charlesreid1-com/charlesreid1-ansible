@@ -142,15 +142,9 @@
 
 
 #- name: Install the d-nginx-charlesreid1 configuration templates
-#  become: yes
-#  become_user: "{{ username }}"
-#  template:
-#    src: "/tmp/{{ item.src_name }}"
-#    dest: "{{ pod_install_dir }}/{{ item.dest_name }}"
-#  with_items:
-#    - { "src_name": "http.DOMAIN.conf.j2", "dest_name": "http.{{ server_name_default }}.conf"}
-#    - { "src_name": "https.DOMAIN.conf.j2", "dest_name": "https.{{ server_name_default }}.conf"}
-#    - { "src_name": "https.DOMAIN.subdomains.conf.j2", "dest_name": "https.{{ server_name_default }}.subdomains.conf"}
+#
+# -------------
+# HTTP
 
 - name: Fetch d-nginx-charlesreid1 http configuration templates from remote machine
   run_once: true
@@ -162,6 +156,7 @@
   tags:
     - pod-charlesreid1-nginx
 
+
 - name: Install the d-nginx-charlesreid1 http configuration templates
   become: yes
   become_user: "{{ username }}"
@@ -172,6 +167,8 @@
     - pod-charlesreid1-nginx
 
 
+# -------------
+# HTTPS
 
 - name: Fetch d-nginx-charlesreid1 https configuration templates from remote machine
   run_once: true
@@ -183,6 +180,7 @@
   tags:
     - pod-charlesreid1-nginx
 
+
 - name: Install the d-nginx-charlesreid1 https configuration templates
   become: yes
   become_user: "{{ username }}"
@@ -193,6 +191,8 @@
     - pod-charlesreid1-nginx
 
 
+# -------------
+# HTTPS subdomains
 
 
 - name: Fetch d-nginx-charlesreid1 https subdomains configuration templates from remote machine
@@ -204,6 +204,7 @@
     fail_on_missing: yes
   tags:
     - pod-charlesreid1-nginx
+
 
 - name: Install the d-nginx-charlesreid1 https subdomains configuration templates
   become: yes
@@ -397,8 +398,13 @@
     - pod-charlesreid1-services
 
 
-# Make sure we called the LetsEncrypt role to install
-# certs (fake or real) for each of the domains/subdomains.
+
+# #####################################
+# CHECK SSL CERTIFICATES
+# 
+# LetsEncrypt role will install certs as needed,
+# but should probably check certs anyway.
+
 
 - name: Check if LetsEncrypt cert for default server name is present
   tags:
@@ -407,12 +413,14 @@
     path: "/etc/letsencrypt/live/{{ server_name_default }}"
   register: register_letsencrypt_livecert_default
 
+
 - name: Check if LetsEncrypt cert for gitea server name is present
   tags:
     - letsencrypt
   stat:
-    path: "/etc/letsencrypt/live/{{ server_name_gitea }}"
+    path: "/etc/letsencrypt/live/git.{{ server_name_default }}"
   register: register_letsencrypt_livecert_gitea
+
 
 #- name: Check if LetsEncrypt cert for files server name is present
 #  tags:
@@ -422,7 +430,31 @@
 #  register: register_letsencrypt_livecert_files
 
 
-# If certs are present, start/restart the
+- name: Check if LetsEncrypt cert for pages server name is present
+  tags:
+    - letsencrypt
+  stat:
+    path: "/etc/letsencrypt/live/pages.{{ server_name_default }}"
+  register: register_letsencrypt_livecert_pages
+
+
+- name: Check if LetsEncrypt cert for hooks server name is present
+  tags:
+    - letsencrypt
+  stat:
+    path: "/etc/letsencrypt/live/hooks.{{ server_name_default }}"
+  register: register_letsencrypt_livecert_hooks
+
+
+- name: Check if LetsEncrypt cert for bots server name is present
+  tags:
+    - letsencrypt
+  stat:
+    path: "/etc/letsencrypt/live/bots.{{ server_name_default }}"
+  register: register_letsencrypt_livecert_bots
+
+
+# If top level and subdomain certs are present, start/restart the
 # pod-charlesreid1 service.
 
 - name: Enable pod-charlesreid1 service
@@ -453,5 +485,4 @@
 # - database restore script: utils-mysql
 # - mediawiki image restore script: utils-mw
 # - gitea database and avatar: utils-gitea
-
 

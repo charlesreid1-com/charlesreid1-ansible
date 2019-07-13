@@ -38,6 +38,7 @@
 # #####################################
 # CLONE POD-WEBHOOKS
 
+
 # Check if we already cloned it
 - name: Check if pod-webhooks repo is cloned
   stat:
@@ -59,26 +60,38 @@
 
 
 # #####################################
+# BUILD DOCKER-COMPOSE FILE FROM TEMPLATE
+# 
+- name: Fetch the docker-compose template from the remote machine
+  run_once: true
+  fetch:
+    src: "{{ webhooks_install_dir }}/docker-compose.yml.j2"
+    dest: "/tmp/pod-webhooks-docker-compose.yml.j2"
+    flat: yes
+    fail_on_missing: yes
+
+
+- name: Install the docker-compose file
+  become: yes
+  become_user: "{{ username }}"
+  template:
+    src: "/tmp/pod-webhooks-docker-compose.yml.j2"
+    dest: "{{ webhooks_install_dir }}/docker-compose.yml"
+    mode: 0640
+
+
+
+# #####################################
 # SET UP /WWW DIRECTORY
 #
-# /www/pages.charlesreid1.com/
-#                 pages.charlesreid1.com-src/
-#                 git/
-#                 htdocs/
-#
-# /www/bots.charlesreid1.com/
-#                 bots.charlesreid1.com-src/
-#                 git/
-#                 htdocs/
-#
-# /www/hooks.charlesreid1.com/
-#                 hooks.charlesreid1.com-src/
+# /www/SUBDOM.charlesreid1.com/
+#                 SUBDOM.charlesreid1.com-src/
 #                 git/
 #                 htdocs/
 #
 
 # Create /www directories for 
-# pages, bots, and hooks subdomains
+# pages/hooks/bots subdomains
 - name: Create the /www directory structure
   become: yes
   file:
@@ -87,12 +100,9 @@
     owner: "{{ username }}"
     group: "{{ username }}"
   with_items:
-    - "pages.charlesreid1.com"
-    - "bots.charlesreid1.com"
-    - "hooks.charlesreid1.com"
-
-# TODO: Revisit /www dir structure for {pages,bots,hooks}.charlesreid1.com to add .blue and .red
-# TODO: Revisit /www dir structure so we only hard code the subdomain name and not the top level domain
+    - "pages"
+    - "hooks"
+    - "bots"
 
 
 
@@ -126,7 +136,9 @@
 # SUBDOMAIN PAGES SETUP (ALL)
 
 - name: Run initial clone commands to set up bots/pages/hooks subdomains at /www/
-  command: "{{ webhooks_install_dir }}/scripts/subdomains_init_setup.py"
+  command: "python {{ webhooks_install_dir }}/scripts/subdomains_init_setup.py"
+  tags:
+    - pod-webhooks
 
 
 
@@ -150,30 +162,101 @@
 
 # #####################################
 # CAPTAIN HOOK CANARY SETUP
+#
+# Start with the canary script,
+# then do the canary service.
 
-# Check if the captain hook canary service
-# is installed. If not, install it.
+# -------------------
+# Canary script first
 
-- name: Check if captain-hook-canary service is installed
+# First check to see if there
+#
+- name: Check if captain hook canary script is present
   stat:
-    path: /etc/systemd/system/captain-hook-canary.service
+    path: "{{ webhooks_install_dir }}/scripts/captain_hook_canary.sh"
   register: canary_service_check
+  tags:
+    - captain-hook-canary
 
-- name: Fetch the Captain Hook canary service template file from the remote machine
+# If not, well like, go for it,
+# use the template provided to make one
+- name: Fetch the captain hook canary script from the remote machine
   run_once: true
   fetch:
-    src: "{{ webhooks_install_dir }}/docker-compose.yml.j2"
-    dest: "/tmp/pod-webhooks-docker-compose.yml.j2"
-    flat: yes
-    fail_on_missing: yes
+    src: "{{ webhooks_install_dir }}/scripts/captain_hook_canary.sh.j2"
+    dest: "/tmp/captain_hook_canary.sh.j2"
+  tags:
+    - captain-hook-canary
 
-- name: Install the docker-compose file
+- name: Install the captain hook canary script
   become: yes
   become_user: "{{ username }}"
   template:
-    src: "/tmp/pod-webhooks-docker-compose.yml.j2"
-    dest: "{{ webhooks_install_dir }}/docker-compose.yml"
+    src: "/tmp/captain_hook_canary.sh.j2"
+    dest: "{{ webhooks_install_dir }}/scripts/captain_hook_canary.sh"
     mode: 0755
+  tags:
+    - captain-hook-canary
+
+
+
+# -------------------
+# Service second
+
+
+# Begin by checking to see if installed
+#
+- name: Check if the captain hook canary service is installed
+  stat:
+    path: "/etc/systemd/system/captain-hook-canary.service"
+  register: canary_service_check
+  tags:
+    - pod-webhooks-services
+    - captain-hook-canary
+
+# Fetch the captain hook canary startup service template onto local computer
+# #
+- name: Fetch the captain hook canary service template file from the remote machine
+  run_once: true
+  fetch:
+    src: "{{ webhooks_install_dir }}/scripts/captain-hook-canary.service.j2"
+    dest: "/tmp/captain-hook-canary.service"
+    flat: yes
+    fail_on_missing: yes
+  when:
+    - "not canary_service_check.stat.exists"
+  tags:
+    - pod-webhooks-services
+    - captain-hook-canary
+
+
+# Apply the captain hook canary startup service template
+#
+- name: Install the captain hook canary startup service
+  become: yes
+  become_user: "{{ username }}"
+  template:
+    src: "/tmp/captain-hook-canary.service"
+    dest: "/etc/systemd/system/captain-hook-canary.service"
+    mode: 0774
+  when:
+    - "not canary_service_check.stat.exists"
+  tags:
+    - pod-webhooks-services
+    - captain-hook-canary
+
+
+# Now enable the captain hook canary startup service.
+#
+- name: Enable the captain hook canary startup service
+  become: yes
+  service:
+    name: captain-hook-canary
+    enabled: yes
+    state: restarted
+  tags:
+    - pod-webhooks-services
+    - captain-hook-canary
 
 
 
@@ -201,7 +284,7 @@
 
 - name: Check if pod-webhooks service is installed
   stat:
-    path: /etc/systemd/system/pod-webhooks.service
+    path: "/etc/systemd/system/pod-webhooks.service"
   register: pod_webhooks_service_check
   tags:
     - pod-webhooks-services
@@ -211,20 +294,16 @@
   become: yes
   template:
     src: pod-webhooks.service.j2
-    dest: /etc/systemd/system/pod-webhooks.service
-    mode: 0777
+    dest: "/etc/systemd/system/pod-webhooks.service"
+    mode: 0774
   when:
     - "not pod_webhooks_service_check.stat.exists"
   tags:
     - pod-webhooks-services
 
 
-# LetsEncrypt role will install certs as needed,
-# but should probably check certs anyway.
-
-
-# If certs are present, start/restart the
-# pod-webhooks service.
+# Now enable the pod-webhooks service.
+# Don't worry about SSL cert checks, not our problem.
 
 - name: Enable pod-webhooks service
   become: yes
@@ -234,28 +313,6 @@
     state: restarted
   when:
     - "webhooks_register_docker_compose.stat.executable"
-    #- "register_letsencrypt_livecert.stat.exists"
   tags:
     - pod-webhooks-services
-
-
-########################################
-# Set up captain-hook-canary service
-########################################
-
-
-
-- name: Install captain-hook-canary service
-  template:
-    src: captain-hook-canary.service.j2
-    dest: /etc/systemd/system/captain-hook-canary.service
-    mode: 0777
-  when:
-    - "not canary_service_check.stat.exists"
-
-- name: Enable captain-hook-canary service
-  service:
-    name: captain-hook-canary
-    enabled: yes
-    state: restarted
 

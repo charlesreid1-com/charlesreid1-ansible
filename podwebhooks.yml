@@ -1,0 +1,22 @@
+---
+# main playbook for webhooks docker pod
+
+
+# SSL certs are all handled by the pod-charlesreid1 compute node
+
+- name: Install webhooks docker pod (pages.* and hooks.* subdomains)
+  hosts: servers
+  become: yes
+  roles:
+    - role: pod-webhooks
+      tags: pod-webhooks
+      captain_hook_secret: "{{ charlesreid1_captain_hook_secret }}"
+      server_name_default: "charlesreid1.red"
+
+
+      ### server_name_gitea: "git.charlesreid1.red"
+      ### server_name_files: "files.charlesreid1.red"
+      ### server_name_pages: "pages.charlesreid1.red"
+      ### server_name_hooks: "hooks.charlesreid1.red"
+      ### server_name_bots: "bots.charlesreid1.red"
+
