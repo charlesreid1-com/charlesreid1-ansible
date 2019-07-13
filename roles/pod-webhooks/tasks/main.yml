@@ -262,22 +262,38 @@
 # Check if the webhooks docker pod service
 # is installed. If not, install it.
 
-- name: Check if pod-webhooks service is installed
-  stat:
-    path: "/etc/systemd/system/pod-webhooks.service"
-  register: pod_webhooks_service_check
+### # Just kidding - don't bother.
+### # Always reinstall the startup service.
+### #
+### - name: Check if pod-webhooks service is installed
+###   stat:
+###     path: "/etc/systemd/system/pod-webhooks.service"
+###   register: pod_webhooks_service_check
+###   tags:
+###     - pod-webhooks-services
+
+
+# Fetch the pod-webhooks service template
+#
+- name: Fetch the pod-webhooks template from remote host machine
+  run_once: true
+  fetch:
+    src: "{{ webhooks_install_dir }}/scripts/pod-webhooks.service.j2"
+    dest: "/tmp/pod-webhooks.service.j2"
+    flat: yes
+    fail_on_missing: yes
   tags:
     - pod-webhooks-services
 
 
+# Apply the template and install it for goodness sake
+# 
 - name: Install pod-webhooks service
   become: yes
   template:
-    src: "{{ webhooks_install_dir }}/scripts/pod-webhooks.service.j2"
+    src: "/tmp/pod-webhooks.service.j2"
     dest: "/etc/systemd/system/pod-webhooks.service"
     mode: 0774
-  when:
-    - "not pod_webhooks_service_check.stat.exists"
   tags:
     - pod-webhooks-services
 
@@ -318,7 +334,7 @@
   run_once: true
   fetch:
     src: "{{ webhooks_install_dir }}/scripts/captain-hook-canary.service.j2"
-    dest: "/tmp/captain-hook-canary.service"
+    dest: "/tmp/captain-hook-canary.service.j2"
     flat: yes
     fail_on_missing: yes
   tags:
@@ -331,7 +347,7 @@
 - name: Install the captain hook canary startup service
   become: yes
   template:
-    src: "/tmp/captain-hook-canary.service"
+    src: "/tmp/captain-hook-canary.service.j2"
     dest: "/etc/systemd/system/captain-hook-canary.service"
     mode: 0774
   tags:
