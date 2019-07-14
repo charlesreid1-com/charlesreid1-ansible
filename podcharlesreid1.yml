@@ -26,12 +26,5 @@
   roles:
     - role: pod-charlesreid1
       tags: pod-charlesreid1
-      server_name_default: "charlesreid1.red"
-      pod_webhooks_server: "localhost"
-#
-#      server_name_gitea: "git.charlesreid1.red"
-#      server_name_files: "files.charlesreid1.red"
-#      server_name_pages: "pages.charlesreid1.red"
-#      server_name_hooks: "hooks.charlesreid1.red"
-#      server_name_bots: "bots.charlesreid1.red"
+      charlesreid1_server_name_default: "charlesreid1.red"
 
