@@ -14,7 +14,7 @@ admin_email: "{{ charlesreid1_admin_email }}"
 # configuration variables
 server_name_default: "{{ charlesreid1_server_name_default }}"
 
-pod_webhooks_server: "{{ charlesreid1_pod_webhooks_server }}"
+nginx_subdomains_ip: "{{ charlesreid1_nginx_subdomains_ip }}"
 
 port_default: "{{ charlesreid1_port_default }}"
 port_gitea: "{{ charlesreid1_port_gitea }}"
