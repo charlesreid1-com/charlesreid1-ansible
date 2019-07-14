@@ -10,6 +10,5 @@
   roles:
     - role: pod-webhooks
       tags: pod-webhooks
-      captain_hook_secret: "{{ charlesreid1_captain_hook_secret }}"
-      server_name_default: "charlesreid1.red"
+      charlesreid1_server_name_default: "charlesreid1.red"
 
