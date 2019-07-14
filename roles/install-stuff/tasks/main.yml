@@ -1,6 +1,11 @@
 ---
 # tasks file for install-stuff
 
+- name: Update aptitude
+  apt: update_cache=yes
+  tags:
+    - apt
+
 - name: Install packages
   become: yes
   apt:
