@@ -120,6 +120,7 @@
   file:
     path: "/www/{{ item }}.{{ server_name_default }}"
     state: directory
+    recurse: yes
     owner: "{{ username }}"
     group: "{{ username }}"
   with_items:
@@ -197,6 +198,33 @@
 
 # #####################################
 # SUBDOMAIN PAGES SETUP (ALL)
+# 
+# Initializes the /www folder structure for
+# /www/pages.*
+# /www/hooks.*
+# /www/bots.*
+
+- name: Fetch the initial subdomain clone commands script template
+  fetch:
+    src: "{{ webhooks_install_dir }}/scripts/subdomains_init_setup.py.j2"
+    dest: "/tmp/subdomains_init_setup.py.j2"
+    flat: yes
+    fail_on_missing: yes
+  tags:
+    - captain-hook
+
+
+- name: Install the initial subdomain clone commands script
+  become: yes
+  become_user: "{{ username }}"
+  template:
+    src: "/tmp/subdomains_init_setup.py.j2"
+    dest: "{{ webhooks_install_dir }}/scripts/subdomains_init_setup.py"
+    mode: 0755
+    force: yes
+  tags:
+    - captain-hook
+
 
 - name: Run initial clone commands to set up bots/pages/hooks subdomains at /www/
   command: "python {{ webhooks_install_dir }}/scripts/subdomains_init_setup.py"
@@ -207,11 +235,31 @@
 
 # #####################################
 # PAGES SETUP
+# 
+# Initializes the contents of /www/pages.*/*
 
-# Run the script (included in the pod-webhooks repo)
-# to do the initial clone of the gh-pages branch of
-# the subdomain sites into /www.
-#
+- name: Fetch the initial pages script
+  fetch:
+    src: "{{ webhooks_install_dir }}/scripts/pages_init_setup.py.j2"
+    dest: "/tmp/pages_init_setup.py.j2"
+    flat: yes
+    fail_on_missing: yes
+  tags:
+    - captain-hook
+
+
+- name: Install the pages init setup script
+  become: yes
+  become_user: "{{ username }}"
+  template:
+    src: "/tmp/pages_init_setup.py.j2"
+    dest: "{{ webhooks_install_dir }}/scripts/pages_init_setup.py"
+    mode: 0755
+    force: yes
+  tags:
+    - captain-hook
+
+
 - name: Run initial clone commands to set up pages at /www/pages.charlesreid1.com
   command: "python {{ webhooks_install_dir }}/scripts/pages_init_setup.py"
   tags:
@@ -254,17 +302,8 @@
 # before the canary service can be
 # installed.
 
-# First check to see if it is there
-#
-- name: Check if captain hook canary script is present
-  stat:
-    path: "{{ webhooks_install_dir }}/scripts/captain_hook_canary.sh"
-  register: canary_service_check
-  tags:
-    - captain-hook
-
-# If not, well like, go for it,
-# use the template provided to make one
+# Script 1 - canary script itself
+# Use the template provided to make it
 #
 - name: Fetch the captain hook canary script template from the remote machine
   run_once: true
@@ -273,11 +312,11 @@
     dest: "/tmp/captain_hook_canary.sh.j2"
     flat: yes
     fail_on_missing: yes
-  when:
-    - "not canary_service_check.stat.exists"
   tags:
     - captain-hook
 
+# Install the captain hook canary script
+#
 - name: Install the captain hook canary script
   become: yes
   become_user: "{{ username }}"
@@ -285,8 +324,36 @@
     src: "/tmp/captain_hook_canary.sh.j2"
     dest: "{{ webhooks_install_dir }}/scripts/captain_hook_canary.sh"
     mode: 0755
+    force: yes
+  tags:
+    - captain-hook
+
+
+# Script 2 - pull host script
+# Do it all again for the pull host script
+# Use the template provided to make it
+#
+- name: Fetch the captain hook pull host script template from the remote machine
+  run_once: true
+  fetch:
+    src: "{{ webhooks_install_dir }}/scripts/captain_hook_pull_host.sh.j2"
+    dest: "/tmp/captain_hook_pull_host.sh.j2"
+    flat: yes
+    fail_on_missing: yes
   when:
     - "not canary_service_check.stat.exists"
+  tags:
+    - captain-hook
+
+# Install the captain hook pull host script
+- name: Install the captain hook pull host script
+  become: yes
+  become_user: "{{ username }}"
+  template:
+    src: "/tmp/captain_hook_pull_host.sh.j2"
+    dest: "{{ webhooks_install_dir }}/scripts/captain_hook_pull_host.sh"
+    mode: 0755
+    force: yes
   tags:
     - captain-hook
 
@@ -402,6 +469,7 @@
     src: "/tmp/captain-hook-canary.service.j2"
     dest: "/etc/systemd/system/captain-hook-canary.service"
     mode: 0774
+    force: yes
   tags:
     - pod-webhooks-services
     - captain-hook
