@@ -44,6 +44,8 @@
   stat:
     path: "{{ webhooks_install_dir }}"
   register: pod_webhooks_clone_check
+  tags:
+    - pod-webhooks
 
 
 # Clone it
@@ -56,6 +58,8 @@
     recursive: yes
   when:
     - "not pod_webhooks_clone_check.stat.exists"
+  tags:
+    - pod-webhooks
 
 
 # Pull it
@@ -67,6 +71,8 @@
     chdir: "{{ webhooks_install_dir }}"
   when:
     - "pod_webhooks_clone_check.stat.exists"
+  tags:
+    - pod-webhooks
 
 
 # Pull submodules
@@ -78,6 +84,8 @@
     chdir: "{{ webhooks_install_dir }}"
   when:
     - "pod_webhooks_clone_check.stat.exists"
+  tags:
+    - pod-webhooks
 
 
 
@@ -91,6 +99,9 @@
     dest: "/tmp/pod-webhooks-docker-compose.yml.j2"
     flat: yes
     fail_on_missing: yes
+  tags:
+    - pod-webhooks
+    - pod-webhooks-docker
 
 
 - name: Install the docker-compose file
@@ -101,6 +112,9 @@
     dest: "{{ webhooks_install_dir }}/docker-compose.yml"
     mode: 0640
     force: yes
+  tags:
+    - pod-webhooks
+    - pod-webhooks-docker
 
 
 
@@ -187,7 +201,8 @@
     flat: yes
     fail_on_missing: yes
   tags:
-    - captain-hook
+    - pod-webhooks
+    - pod-webhooks-content
 
 
 - name: Install the pages init setup script
@@ -199,13 +214,15 @@
     mode: 0755
     force: yes
   tags:
-    - captain-hook
+    - pod-webhooks
+    - pod-webhooks-content
 
 
 - name: Run initial clone commands to set up pages at /www/pages.charlesreid1.com
   command: "python {{ webhooks_install_dir }}/scripts/pages_init_setup.py"
   tags:
     - pod-webhooks
+    - pod-webhooks-content
 
 
 
@@ -220,6 +237,9 @@
   stat:
     path: "/usr/local/bin/docker-compose"
   register: webhooks_register_docker_compose
+  tags:
+    - pod-webhooks
+    - pod-webhooks-docker
 
 
 # Also make sure the docker daemon is running
@@ -231,6 +251,8 @@
     enabled: yes
     state: restarted
   tags:
+    - pod-webhooks
+    - pod-webhooks-docker
     - pod-webhooks-services
 
 

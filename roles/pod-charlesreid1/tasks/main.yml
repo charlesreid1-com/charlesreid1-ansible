@@ -34,6 +34,8 @@
   stat:
     path: "{{ pod_install_dir }}"
   register: pod_charlesreid1_clone_check
+  tags:
+    - pod-charlesreid1
 
 
 # Clone it
@@ -46,6 +48,8 @@
     recursive: yes
   when:
     - "not pod_charlesreid1_clone_check.stat.exists"
+  tags:
+    - pod-charlesreid1
 
 
 # Pull it
@@ -57,6 +61,8 @@
     chdir: "{{ pod_install_dir }}"
   when:
     - "pod_charlesreid1_clone_check.stat.exists"
+  tags:
+    - pod-charlesreid1
 
 
 # Pull submodules
@@ -68,6 +74,8 @@
     chdir: "{{ pod_install_dir }}"
   when:
     - "pod_charlesreid1_clone_check.stat.exists"
+  tags:
+    - pod-charlesreid1
 
 
 
@@ -86,6 +94,9 @@
     dest: "/tmp/pod-charlesreid1-docker-compose.yml.j2"
     flat: yes
     fail_on_missing: yes
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-docker
 
 
 - name: Install the docker-compose file
@@ -96,6 +107,9 @@
     dest: "{{ pod_install_dir }}/docker-compose.yml"
     mode: 0640
     force: yes
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-docker
 
 
 # #####################################
@@ -126,7 +140,6 @@
 # MAIN DOMAIN PAGE SETUP (ALL)
 #
 # /www/<domain>/
-#                 charlesreid1.com-src/   <-- clone of charlesreid1.com repo, src branch
 #                 git/            <-- .git dir for charlesreid1.com repo gh-pages branch
 #                 git.data/       <-- .git dir for charlesreid1-data
 #                 htdocs/         <-- clone of charlesreid1.com repo gh-pages branch
@@ -210,6 +223,9 @@
   stat:
     path: "/usr/local/bin/docker-compose"
   register: pod_register_docker_compose
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-docker
 
 
 # Also make sure the docker daemon is running
@@ -221,6 +237,8 @@
     enabled: yes
     state: restarted
   tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-docker
     - pod-charlesreid1-services
 
 
@@ -241,6 +259,7 @@
   become_user: "{{ username }}"
   command: "python {{ pod_install_dir }}/d-nginx-charlesreid1/scripts/clean_config.py"
   tags:
+    - pod-charlesreid1
     - pod-charlesreid1-nginx
 
 
@@ -257,6 +276,7 @@
     flat: yes
     fail_on_missing: yes
   tags:
+    - pod-charlesreid1
     - pod-charlesreid1-nginx
 
 
@@ -268,6 +288,7 @@
     dest: "{{ pod_install_dir }}/d-nginx-charlesreid1/conf.d/http.{{ server_name_default }}.conf"
     force: yes
   tags:
+    - pod-charlesreid1
     - pod-charlesreid1-nginx
 
 
@@ -282,6 +303,7 @@
     flat: yes
     fail_on_missing: yes
   tags:
+    - pod-charlesreid1
     - pod-charlesreid1-nginx
 
 
@@ -293,6 +315,7 @@
     dest: "{{ pod_install_dir }}/d-nginx-charlesreid1/conf.d/https.{{ server_name_default }}.conf"
     force: yes
   tags:
+    - pod-charlesreid1
     - pod-charlesreid1-nginx
 
 
@@ -308,6 +331,7 @@
     flat: yes
     fail_on_missing: yes
   tags:
+    - pod-charlesreid1
     - pod-charlesreid1-nginx
 
 
@@ -319,6 +343,7 @@
     dest: "{{ pod_install_dir }}/d-nginx-charlesreid1/conf.d/https.{{ server_name_default }}.subdomains.conf"
     force: yes
   tags:
+    - pod-charlesreid1
     - pod-charlesreid1-nginx
 
 
@@ -337,6 +362,7 @@
     path: "{{ pod_install_dir }}/d-mediawiki/charlesreid1-config/mediawiki/extensions"
   register: extensions_dir_exists
   tags:
+    - pod-charlesreid1
     - pod-charlesreid1-mw
 
 
@@ -349,6 +375,7 @@
   when:
     - "not extensions_dir_exists.stat.exists"
   tags:
+    - pod-charlesreid1
     - pod-charlesreid1-mw
 
 
@@ -361,6 +388,7 @@
   when:
     - "not extensions_dir_exists.stat.exists"
   tags:
+    - pod-charlesreid1
     - pod-charlesreid1-mw
 
 
@@ -376,6 +404,7 @@
     flat: yes
     fail_on_missing: yes
   tags:
+    - pod-charlesreid1
     - pod-charlesreid1-mw
 
 
@@ -389,6 +418,7 @@
     group: "{{ username }}"
     mode: 0640
   tags:
+    - pod-charlesreid1
     - pod-charlesreid1-mw
 
 
@@ -400,6 +430,7 @@
     flat: yes
     fail_on_missing: yes
   tags:
+    - pod-charlesreid1
     - pod-charlesreid1-mw
 
 
@@ -413,6 +444,7 @@
     group: "{{ username }}"
     mode: 0640
   tags:
+    - pod-charlesreid1
     - pod-charlesreid1-mw
 
 
@@ -432,6 +464,7 @@
     flat: yes
     fail_on_missing: yes
   tags:
+    - pod-charlesreid1
     - pod-charlesreid1-gitea
 
 
@@ -445,6 +478,7 @@
     owner: "{{ username }}"
     group: "{{ username }}"
   tags:
+    - pod-charlesreid1
     - pod-charlesreid1-gitea
 
 
@@ -458,6 +492,7 @@
     group: "{{ username }}"
     mode: 0640
   tags:
+    - pod-charlesreid1
     - pod-charlesreid1-gitea
 
 
@@ -465,6 +500,7 @@
   become: yes
   command: "chown -R {{ username }}:{{ username }} {{pod_install_dir }}/d-gitea/custom"
   tags:
+    - pod-charlesreid1
     - pod-charlesreid1-gitea
 
 
@@ -482,6 +518,9 @@
     chdir: "{{ pod_install_dir }}"
   when:
     - "pod_register_docker_compose.stat.exists"
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-docker
 
 
 
@@ -497,6 +536,9 @@
   register: pod_charlesreid1_service_check
   tags:
     - pod-charlesreid1-services
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-services
 
 
 - name: Install pod-charlesreid1 service
@@ -508,6 +550,7 @@
   when:
     - "not pod_charlesreid1_service_check.stat.exists"
   tags:
+    - pod-charlesreid1
     - pod-charlesreid1-services
 
 
@@ -525,6 +568,9 @@
   stat:
     path: "/etc/letsencrypt/live/{{ server_name_default }}"
   register: register_letsencrypt_livecert_default
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-certs
 
 
 - name: Check if LetsEncrypt cert for gitea server name is present
@@ -533,6 +579,9 @@
   stat:
     path: "/etc/letsencrypt/live/git.{{ server_name_default }}"
   register: register_letsencrypt_livecert_gitea
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-certs
 
 
 #- name: Check if LetsEncrypt cert for files server name is present
@@ -541,6 +590,9 @@
 #  stat:
 #    path: "/etc/letsencrypt/live/files.{{ server_name_default }}"
 #  register: register_letsencrypt_livecert_files
+#  tags:
+#    - pod-charlesreid1
+#    - pod-charlesreid1-certs
 
 
 - name: Check if LetsEncrypt cert for pages server name is present
@@ -549,6 +601,9 @@
   stat:
     path: "/etc/letsencrypt/live/pages.{{ server_name_default }}"
   register: register_letsencrypt_livecert_pages
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-certs
 
 
 - name: Check if LetsEncrypt cert for hooks server name is present
@@ -557,6 +612,9 @@
   stat:
     path: "/etc/letsencrypt/live/hooks.{{ server_name_default }}"
   register: register_letsencrypt_livecert_hooks
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-certs
 
 
 - name: Check if LetsEncrypt cert for bots server name is present
@@ -565,6 +623,9 @@
   stat:
     path: "/etc/letsencrypt/live/bots.{{ server_name_default }}"
   register: register_letsencrypt_livecert_bots
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-certs
 
 
 # If top level and subdomain certs are present, start/restart the
@@ -581,6 +642,8 @@
     - "register_letsencrypt_livecert_default.stat.exists"
     - "register_letsencrypt_livecert_gitea.stat.exists"
   tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-certs
     - pod-charlesreid1-services
 
 
