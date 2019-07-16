@@ -101,22 +101,64 @@
 # #####################################
 # SET UP /WWW DIRECTORY
 #
+#
+# Create /www directory
+# for main domain content
+- name: Create the /www directory
+  become: yes
+  file:
+    path: "/www"
+    state: directory
+    recurse: yes
+    owner: "{{ username }}"
+    group: "{{ username }}"
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-content
+
+# Template scripts to populate /www 
+# with content is done in the
+# rules below...
+
+
+
+# #####################################
+# MAIN DOMAIN PAGE SETUP (ALL)
+#
 # /www/<domain>/
 #                 charlesreid1.com-src/   <-- clone of charlesreid1.com repo, src branch
 #                 git/            <-- .git dir for charlesreid1.com repo gh-pages branch
 #                 git.data/       <-- .git dir for charlesreid1-data
 #                 htdocs/         <-- clone of charlesreid1.com repo gh-pages branch
 #                     data/       <-- clone of charlesreid1-data
-#
 
+- name: "Fetch the initial charlesreid1.com clone script template"
+  fetch:
+    src: "{{ webhooks_install_dir }}/scripts/git_clone_www.py.j2"
+    dest: "/tmp/git_clone_www.py.j2"
+    flat: yes
+    fail_on_missing: yes
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-content
 
-# Run the script (included in the pod-webhooks repo)
-# to do the initial clone of the gh-pages branch
-# into /www. The script checks if it already exists
-# so we don't have to.
+- name: "Install the initial charlesreid1.com clone script"
+  become: yes
+  become_user: "{{ username }}"
+  template:
+    src: "/tmp/git_clone_www.py.j2"
+    dest: "{{ webhooks_install_dir }}/scripts/git_clone_www.py"
+    mode: 0755
+    force: yes
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-content
 
-- name: "Run initial clone commands to set up htdocs at /www/{{ server_name_default }}"
-  command: "{{ pod_install_dir }}/scripts/git_clone_www.sh {{ server_name_default }}"
+- name: "Run the initial charlesreid1.com clone script to set up {{ server_name_default }}"
+  command: "python {{ webhooks_install_dir }}/scripts/git_clone_www.py"
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-content
 
 
 
@@ -165,7 +207,7 @@
     - pod-charlesreid1-nginx
 
 
-#- name: Install the d-nginx-charlesreid1 configuration templates
+# Install the d-nginx-charlesreid1 configuration templates
 #
 # -------------
 # HTTP
