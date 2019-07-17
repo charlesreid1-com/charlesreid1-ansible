@@ -66,7 +66,7 @@
 
 
 # Pull submodules
-- name: Pull pod-webhooks submodules
+- name: Pull pod-charlesreid1 submodules
   become: yes
   become_user: "{{ username }}"
   command: "git submodule update --remote"
@@ -150,7 +150,7 @@
 
 - name: "Fetch the charlesreid1.com clone www script template"
   fetch:
-    src: "{{ webhooks_install_dir }}/scripts/git_clone_www.py.j2"
+    src: "{{ pod_install_dir }}/scripts/git_clone_www.py.j2"
     dest: "/tmp/git_clone_www.py.j2"
     flat: yes
     fail_on_missing: yes
@@ -163,7 +163,7 @@
   become_user: "{{ username }}"
   template:
     src: "/tmp/git_clone_www.py.j2"
-    dest: "{{ webhooks_install_dir }}/scripts/git_clone_www.py"
+    dest: "{{ pod_install_dir }}/scripts/git_clone_www.py"
     mode: 0755
     force: yes
   tags:
@@ -171,19 +171,20 @@
     - pod-charlesreid1-content
 
 - name: "Run the charlesreid1.com clone www script to set up {{ server_name_default }}"
-  command: "python {{ webhooks_install_dir }}/scripts/git_clone_www.py"
+  command: "python {{ pod_install_dir }}/scripts/git_clone_www.py"
   become: yes
+  become_user: "{{ username }}"
   tags:
     - pod-charlesreid1
     - pod-charlesreid1-content
 
 
 # ------------------
-# Install (do not run) the pull www script
+# Install and run the pull www script
 
 - name: "Fetch the charlesreid1.com pull www script template"
   fetch:
-    src: "{{ webhooks_install_dir }}/scripts/git_pull_www.py.j2"
+    src: "{{ pod_install_dir }}/scripts/git_pull_www.py.j2"
     dest: "/tmp/git_pull_www.py.j2"
     flat: yes
     fail_on_missing: yes
@@ -196,7 +197,7 @@
   become_user: "{{ username }}"
   template:
     src: "/tmp/git_pull_www.py.j2"
-    dest: "{{ webhooks_install_dir }}/scripts/git_pull_www.py"
+    dest: "{{ pod_install_dir }}/scripts/git_pull_www.py"
     mode: 0755
     force: yes
   tags:
@@ -204,8 +205,9 @@
     - pod-charlesreid1-content
 
 - name: "Run the charlesreid1.com pull www script to update {{ server_name_default }}"
-  command: "python {{ webhooks_install_dir }}/scripts/git_pull_www.py"
+  command: "python {{ pod_install_dir }}/scripts/git_pull_www.py"
   become: yes
+  become_user: "{{ username }}"
   tags:
     - pod-charlesreid1
     - pod-charlesreid1-content
@@ -535,8 +537,6 @@
     path: /etc/systemd/system/pod-charlesreid1.service
   register: pod_charlesreid1_service_check
   tags:
-    - pod-charlesreid1-services
-  tags:
     - pod-charlesreid1
     - pod-charlesreid1-services
 
@@ -564,68 +564,62 @@
 
 - name: Check if LetsEncrypt cert for default server name is present
   tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-certs
     - letsencrypt
   stat:
     path: "/etc/letsencrypt/live/{{ server_name_default }}"
   register: register_letsencrypt_livecert_default
-  tags:
-    - pod-charlesreid1
-    - pod-charlesreid1-certs
 
 
 - name: Check if LetsEncrypt cert for gitea server name is present
   tags:
     - letsencrypt
+    - pod-charlesreid1
+    - pod-charlesreid1-certs
   stat:
     path: "/etc/letsencrypt/live/git.{{ server_name_default }}"
   register: register_letsencrypt_livecert_gitea
-  tags:
-    - pod-charlesreid1
-    - pod-charlesreid1-certs
 
 
 #- name: Check if LetsEncrypt cert for files server name is present
 #  tags:
 #    - letsencrypt
+#    - pod-charlesreid1
+#    - pod-charlesreid1-certs
 #  stat:
 #    path: "/etc/letsencrypt/live/files.{{ server_name_default }}"
 #  register: register_letsencrypt_livecert_files
-#  tags:
-#    - pod-charlesreid1
-#    - pod-charlesreid1-certs
 
 
 - name: Check if LetsEncrypt cert for pages server name is present
   tags:
     - letsencrypt
+    - pod-charlesreid1
+    - pod-charlesreid1-certs
   stat:
     path: "/etc/letsencrypt/live/pages.{{ server_name_default }}"
   register: register_letsencrypt_livecert_pages
-  tags:
-    - pod-charlesreid1
-    - pod-charlesreid1-certs
 
 
 - name: Check if LetsEncrypt cert for hooks server name is present
   tags:
     - letsencrypt
+    - pod-charlesreid1
+    - pod-charlesreid1-certs
   stat:
     path: "/etc/letsencrypt/live/hooks.{{ server_name_default }}"
   register: register_letsencrypt_livecert_hooks
-  tags:
-    - pod-charlesreid1
-    - pod-charlesreid1-certs
 
 
 - name: Check if LetsEncrypt cert for bots server name is present
   tags:
     - letsencrypt
+    - pod-charlesreid1
+    - pod-charlesreid1-certs
   stat:
     path: "/etc/letsencrypt/live/bots.{{ server_name_default }}"
   register: register_letsencrypt_livecert_bots
-  tags:
-    - pod-charlesreid1
-    - pod-charlesreid1-certs
 
 
 # If top level and subdomain certs are present, start/restart the
