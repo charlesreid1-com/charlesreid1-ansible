@@ -1,0 +1,5 @@
+[servers:children]
+linodeservers
+
+[linodeservers]
+linode ansible_host=50.116.7.163 ansible_port=22 ansible_python_interpreter=/usr/bin/python3 
