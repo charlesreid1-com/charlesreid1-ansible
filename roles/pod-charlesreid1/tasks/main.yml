@@ -411,13 +411,34 @@
 
 - name: Install the LocalSettings.php file
   become: yes
-  become_user: "{{ username }}"
   template:
     src: "/tmp/LocalSettings.php.j2"
     dest: "{{ pod_install_dir }}/d-mediawiki/charlesreid1-config/mediawiki/LocalSettings.php"
-    owner: "www-data"
-    group: "www-data"
+    owner: "{{ username }}"
+    group: "{{ username }}"
     mode: 0640
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-mw
+
+
+- name: Run fix_LocalSettings.sh script
+  become: yes
+  become_user: "{{ username }}"
+  command: "./fix_LocalSettings.sh"
+  args:
+    chdir: "{{ pod_install_dir }}/d-mediawiki"
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-mw
+
+
+- name: Run fix_skins.sh script
+  become: yes
+  become_user: "{{ username }}"
+  command: "./fix_skins.sh"
+  args:
+    chdir: "{{ pod_install_dir }}/d-mediawiki"
   tags:
     - pod-charlesreid1
     - pod-charlesreid1-mw
@@ -436,12 +457,11 @@
 
 - name: Install the Apache config file
   become: yes
-  become_user: "{{ username }}"
   template:
     src: "/tmp/charlesreid1.wiki.conf.j2"
     dest: "{{ pod_install_dir }}/d-mediawiki/charlesreid1-config/apache/charlesreid1.wiki.conf"
-    owner: "www-data"
-    group: "www-data"
+    owner: "{{ username }}"
+    group: "{{ username }}"
     mode: 0640
   tags:
     - pod-charlesreid1
