@@ -399,7 +399,6 @@
 # - Apache config file
 
 - name: Fetch the LocalSettings.php jinja template
-  run_once: true
   fetch:
     src: "{{ pod_install_dir }}/d-mediawiki/charlesreid1-config/mediawiki/LocalSettings.php.j2"
     dest: "/tmp/LocalSettings.php.j2"
@@ -416,8 +415,8 @@
   template:
     src: "/tmp/LocalSettings.php.j2"
     dest: "{{ pod_install_dir }}/d-mediawiki/charlesreid1-config/mediawiki/LocalSettings.php"
-    owner: "{{ username }}"
-    group: "{{ username }}"
+    owner: "www-data"
+    group: "www-data"
     mode: 0640
   tags:
     - pod-charlesreid1
@@ -425,7 +424,6 @@
 
 
 - name: Fetch the Apache config jinja template
-  run_once: true
   fetch:
     src: "{{ pod_install_dir }}/d-mediawiki/charlesreid1-config/apache/charlesreid1.wiki.conf.j2"
     dest: "/tmp/charlesreid1.wiki.conf.j2"
@@ -442,8 +440,8 @@
   template:
     src: "/tmp/charlesreid1.wiki.conf.j2"
     dest: "{{ pod_install_dir }}/d-mediawiki/charlesreid1-config/apache/charlesreid1.wiki.conf"
-    owner: "{{ username }}"
-    group: "{{ username }}"
+    owner: "www-data"
+    group: "www-data"
     mode: 0640
   tags:
     - pod-charlesreid1
