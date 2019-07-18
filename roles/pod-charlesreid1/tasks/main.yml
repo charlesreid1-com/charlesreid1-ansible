@@ -425,7 +425,7 @@
 - name: Run fix_LocalSettings.sh script
   become: yes
   become_user: "{{ username }}"
-  command: "./fix_LocalSettings.sh"
+  command: "bash {{ pod_install_dir }}/d-mediawiki/fix_LocalSettings.sh"
   args:
     chdir: "{{ pod_install_dir }}/d-mediawiki"
   tags:
@@ -436,7 +436,7 @@
 - name: Run fix_skins.sh script
   become: yes
   become_user: "{{ username }}"
-  command: "./fix_skins.sh"
+  command: "bash {{ pod_install_dir }}/d-mediawiki/fix_skins.sh"
   args:
     chdir: "{{ pod_install_dir }}/d-mediawiki"
   tags:
