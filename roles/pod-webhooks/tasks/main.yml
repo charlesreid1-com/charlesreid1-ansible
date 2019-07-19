@@ -368,12 +368,10 @@
 - name: Fetch the captain hook pull host script template from the remote machine
   run_once: true
   fetch:
-    src: "{{ webhooks_install_dir }}/scripts/captain_hook_pull_host.sh.j2"
-    dest: "/tmp/captain_hook_pull_host.sh.j2"
+    src: "{{ webhooks_install_dir }}/scripts/captain_hook_pull_host.py.j2"
+    dest: "/tmp/captain_hook_pull_host.py.j2"
     flat: yes
     fail_on_missing: yes
-  when:
-    - "not canary_service_check.stat.exists"
   tags:
     - captain-hook
 
@@ -382,8 +380,8 @@
   become: yes
   become_user: "{{ username }}"
   template:
-    src: "/tmp/captain_hook_pull_host.sh.j2"
-    dest: "{{ webhooks_install_dir }}/scripts/captain_hook_pull_host.sh"
+    src: "/tmp/captain_hook_pull_host.py.j2"
+    dest: "{{ webhooks_install_dir }}/scripts/captain_hook_pull_host.py"
     mode: 0755
     force: yes
   tags:
