@@ -455,9 +455,8 @@
 # repository
 
 - name: Fetch the app.ini jinja template
-  run_once: true
   fetch:
-    src: "{{ pod_install_dir }}/d-gitea/app.ini.j2"
+    src: "{{ pod_install_dir }}/d-gitea/custom/conf/app.ini.j2"
     dest: "/tmp/app.ini.j2"
     flat: yes
     fail_on_missing: yes
@@ -466,18 +465,6 @@
     - pod-charlesreid1-gitea
 
 
-- name: Make the custom conf dir for app.ini
-  become: yes
-  file:
-    dest: "{{ pod_install_dir }}/d-gitea/custom/conf"
-    mode: "u+x"
-    state: directory
-    recurse: yes
-    owner: "{{ username }}"
-    group: "{{ username }}"
-  tags:
-    - pod-charlesreid1
-    - pod-charlesreid1-gitea
 
 
 - name: Install the app.ini file
@@ -494,7 +481,7 @@
     - pod-charlesreid1-gitea
 
 
-- name: Fix ownership of custom conf dir for app.ini
+- name: Fix ownership of all custom dirs for gitea
   become: yes
   command: "chown -R {{ username }}:{{ username }} {{pod_install_dir }}/d-gitea/custom"
   tags:
