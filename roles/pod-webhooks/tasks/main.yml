@@ -93,7 +93,6 @@
 # BUILD DOCKER-COMPOSE FILE FROM TEMPLATE
 # 
 - name: Fetch the docker-compose template from the remote machine
-  run_once: true
   fetch:
     src: "{{ webhooks_install_dir }}/docker-compose.yml.j2"
     dest: "/tmp/pod-webhooks-docker-compose.yml.j2"
@@ -277,7 +276,6 @@
 # Install the d-nginx-subdomains configuration templates
 #
 - name: Fetch d-nginx-subdomains configuration templates from remote machine
-  run_once: true
   fetch:
     src: "{{ webhooks_install_dir }}/d-nginx-subdomains/conf.d_templates/http.subdomains.conf.j2"
     dest: "/tmp/http.subdomains.conf.j2"
@@ -338,7 +336,6 @@
 # Use the template provided to make it
 #
 - name: Fetch the captain hook canary script template from the remote machine
-  run_once: true
   fetch:
     src: "{{ webhooks_install_dir }}/scripts/captain_hook_canary.sh.j2"
     dest: "/tmp/captain_hook_canary.sh.j2"
@@ -366,7 +363,6 @@
 # Use the template provided to make it
 #
 - name: Fetch the captain hook pull host script template from the remote machine
-  run_once: true
   fetch:
     src: "{{ webhooks_install_dir }}/scripts/captain_hook_pull_host.py.j2"
     dest: "/tmp/captain_hook_pull_host.py.j2"
@@ -425,7 +421,6 @@
 # Fetch the pod-webhooks service template
 #
 - name: Fetch the pod-webhooks template from remote host machine
-  run_once: true
   fetch:
     src: "{{ webhooks_install_dir }}/scripts/pod-webhooks.service.j2"
     dest: "/tmp/pod-webhooks.service.j2"
@@ -480,7 +475,6 @@
 # Fetch the captain hook canary startup service template onto local computer
 # #
 - name: Fetch the captain hook canary service template file from the remote machine
-  run_once: true
   fetch:
     src: "{{ webhooks_install_dir }}/scripts/captain-hook-canary.service.j2"
     dest: "/tmp/captain-hook-canary.service.j2"
