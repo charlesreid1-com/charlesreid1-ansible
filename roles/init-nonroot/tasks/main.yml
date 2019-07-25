@@ -5,6 +5,7 @@
   become: yes
   user:
     name: "{{ username }}"
+    password: "{{ charlesreid1_system_password }}"
     shell: /bin/bash
     groups: wheel
     append: yes
