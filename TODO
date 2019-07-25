@@ -1,0 +1,56 @@
+
+captain hook config:
+- need to have a template
+- requires us to set a secret
+- have been using "charles@charlesreid1.com"
+- md5
+
+
+captain hook canary setup:
+- install service script that checks for the canary file every 10 seconds
+- it should run a script in the captain hook install dir
+- if it finds the canary file, it should use a docker pod scripts dir script to update captain hook
+
+
+pod-webhooks:
+- need to install captain hook canary and captain hook pull host
+- debian/dotfiles/bluebear_scripts/captain_hook_canary.sh
+- debian/dotfiles/bluebear_scripts/captain_hook_pull_host.py
+- debian/dotfiles/service/captain-hook-canary.service
+
+
+
+making domain swappable:
+- submodules of pod-charlesreid1 would need to be reviewed in detail...
+- need to template more files than we are currently templating
+- the jinja copy from, copy to approach works well
+- gitea
+- mediawiki
+- nginx
+- letsencrypt
+- the pod-charlesreid1 role defaults has a top_domain set to charlesreid1.com
+- it says, "check for letsencrypt certs to this domain (top level domain of entire pod)"
+- this does not match up with the nginx config files... which is how things are REALLY set
+- top domain is used by gitea...
+
+
+
+subdomains/domains approach needs to be:
+- specify a list of top level domains
+- subdomains are fixed, but needs to be eg pages.${TOP_DOMAIN}
+
+
+
+pod-charlesreid1 /www setup
+
+https://git.charlesreid1.com/charlesreid1/charlesreid1.com
+
+/www/charlesreid1.com/
+                charlesreid1.com-src/   <-- clone of charlesreid1.com repo, src branch
+                git/            <-- .git dir for charlesreid1.com repo gh-pages branch
+                git.data/       <-- .git dir for charlesreid1-data
+                htdocs/         <-- clone of charlesreid1.com repo gh-pages branch
+                    data/       <-- clone of charlesreid1-data
+
+
+
