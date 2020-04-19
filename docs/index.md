@@ -20,11 +20,24 @@ Table of Contents
 
 Before you get started:
 
-* Provision a compute node (vagrant or cloud provider)
+* Provision a compute node (Vagrant or cloud provider)
+    * If using Vagrant, see the [Ansible Vagrant](ansible_vagrant.md) page for
+      instructions on how to provision virtual machines.
+    * If using a cloud provider, follow the instructions provided by your
+      cloud provider.
+
 * Configure and enable SSH access
-* Run Ansible with the `base.yml` playbook
-* Run Ansible with the pod playbook of your choice
-* Configure DNS to point to compute node IP address
+    * If using Vagrant, see the [Ansible Vagrant](ansible_vagrant.md) page for
+      instructions on how to get SSH key information from Vagrant virtual machines.
+    * If using a cloud provider, you should be provided with an SSH key or
+      SSH access instructions by your cloud provider.
+
+* Run Ansible with the `base.yml` playbook - see [base\.yml](ansible_playbooks.md#baseyml-the-base-plays)
+  for information and details about this playbook.
+
+* Run Ansible with pod-charlesreid1 playbook
+
+* Configure DNS to point to the IP address of the compute node
 
 
 ## Docker Pods
@@ -36,6 +49,11 @@ are ready to run these docker pods.
 | Pod              | Link                                                   |
 |------------------|--------------------------------------------------------|
 | pod-charlesreid1 | <https://git.charlesreid1.com/docker/pod-charlesreid1> |
+
+The following pods **HAVE BEEN DEACTIVATED:**
+
+| Pod              | Link                                                   |
+|------------------|--------------------------------------------------------|
 | pod-webhooks     | <https://git.charlesreid1.com/docker/pod-webhooks>     |
 | pod-bots         | <https://git.charlesreid1.com/docker/pod-bots>         |
 
@@ -45,14 +63,11 @@ are ready to run these docker pods.
 There is one playbook per docker pod, plus a base playbook
 and a provision playbook.
 
-| Playbook               | Description                                                                                                          |
-|------------------------|----------------------------------------------------------------------------------------------------------------------|
-| `provision.yml`        | (Vagrant-only) Playbook to provision new Ubuntu machines with `/usr/bin/python`.                                     |
-| `base.yml`             | Base playbook run by all of the pod playbooks above.                                                                 |
-| `podcharlesreid1.yml`  | Playbook to install and run the charlesreid1.com docker pod (<https://git.charlesreid1.com/docker/pod-charlesreid1>) |
-| `podwebhooks.yml`      | (TBA) Playbook to install and run the webhooks pod (<https://git.charlesreid1.com/docker/pod-webhooks>)              |
-| `podbots.yml`          | (TBA) Playbook to install and run the bot pod (<https://git.charlesreid1.com/docker/pod-bots>)                       |
-
+| Playbook               | Description                                                                                                          | Link           |
+|------------------------|----------------------------------------------------------------------------------------------------------------------|----------------|
+| `provision.yml`        | (Vagrant-only) Playbook to provision new Ubuntu machines with `/usr/bin/python`. | [link](ansible_playbooks.md#provisionyml-provision-your-remote-node) |
+| `base.yml`             | Base playbook run by all of the pod playbooks above.                             | [link](ansible_playbooks.md#baseyml-the-base-plays) |
+| `podcharlesreid1.yml`  | Playbook to install and run the charlesreid1.com docker pod                      | [link](https://git.charlesreid1.com/docker/pod-charlesreid1) |
 
 ## Roles
 
@@ -82,8 +97,6 @@ respective docker pod.
 | Role Name             | Description                                                  |
 |-----------------------|--------------------------------------------------------------|
 | pod-charlesreid1      | Role specific to the charlesreid1.com docker pod             |
-| pod-webhooks          | Role specific to \{hooks,pages\}.charlesreid1.com docker pod |
-| pod-bots              | Role specific to bots docker pod                             |
 
 
 ## Getting Started with Playbooks
@@ -92,6 +105,7 @@ respective docker pod.
 |-----------------------------------------------|-----------------------------------------------------------------|
 | [docs/index.md](index.md)                     | Documentation index                                             |
 | [docs/quickstart.md](quickstart.md)           | Quick start for the impatient (uses Vagrant)                    |
+| [docs/ansible_linode.md](ansible_linode.md)   | Guide for running charlesreid1.com playbooks on Linode          |
 | [docs/ansible_do.md](ansible_do.md)           | Guide for running charlesreid1.com playbooks on Digital Ocean   |
 | [docs/ansible_vagrant.md](ansible_vagrant.md) | Guide for running charlesreid1.com playbooks on Vagrant         |
 
@@ -182,8 +196,14 @@ on how to set up a Vagrant virtual machine to run the
 Ansible playbook against, for testing purposes.
 
 
-## DigitalOcean Deployment
+## Linode Deployment
 
-See [Ansible Digital Ocean](ansible_do.md) for instructions on how to set up an DigitalOcean
+See [Ansible Linode](ansible_linode.md) for instructions on how to set up a Linode node
+to run the Ansible playbook against.
+
+
+## Digital Ocean Deployment
+
+See [Ansible Digital Ocean](ansible_do.md) for instructions on how to set up an Digital Ocean
 node to run the Ansible playbook against.
 
