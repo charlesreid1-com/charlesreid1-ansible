@@ -249,6 +249,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../ansible_linode/" title="Ansible on Linode" class="md-nav__link">
+      Ansible on Linode
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="../ansible_do/" title="Ansible on DigitalOcean" class="md-nav__link">
       Ansible on DigitalOcean
     </a>
@@ -375,8 +387,16 @@ be defined manually. To do that, use the <code>--extra-vars</code> flag:</p>
 </pre></div>
 
 
-<p>To run on Digital Ocean, use the same command
-but specify the corrsponding config file:</p>
+<p>To run on Linode, specify the config file:</p>
+<div class="codehilite"><pre><span></span>ANSIBLE_CONFIG=&quot;linode.cfg&quot; \
+        ansible-playbook \
+        --vault-password-file=.vault_secret \
+        --extra-vars &quot;machine_name=yoyo&quot; \
+        base.yml
+</pre></div>
+
+
+<p>To run on Digital Ocean, specify the config file:</p>
 <div class="codehilite"><pre><span></span>ANSIBLE_CONFIG=&quot;do.cfg&quot; \
         ansible-playbook \
         --vault-password-file=.vault_secret \
@@ -386,8 +406,6 @@ but specify the corrsponding config file:</p>
 
 
 <h2 id="podcharlesreid1yml-charlesreid1-docker-pod-play">podcharlesreid1.yml: charlesreid1 docker pod play<a class="headerlink" href="#podcharlesreid1yml-charlesreid1-docker-pod-play" title="Permanent link">&para;</a></h2>
-<p><strong>host: krash</strong></p>
-<p><strong>host: redbeard</strong></p>
 <p>The charlesreid1 docker pod runs the following:</p>
 <ul>
 <li>nginx</li>
@@ -416,8 +434,16 @@ and the vagrant hosts file:</p>
 </pre></div>
 
 
-<p><strong>Example:</strong> Deploy the charlesreid1 docker pod play
-to a Digital Ocean droplet.</p>
+<p><strong>Linode Example:</strong></p>
+<div class="codehilite"><pre><span></span>ANSIBLE_CONFIG=&quot;linode.cfg&quot; \
+        ansible-playbook \
+        --vault-password-file=.vault_secret \
+        --extra-vars &quot;machine_name=yoyo&quot; \
+        podcharlesreid1.yml
+</pre></div>
+
+
+<p><strong>Digital Ocean Example:</strong></p>
 <div class="codehilite"><pre><span></span>ANSIBLE_CONFIG=&quot;do.cfg&quot; \
         ansible-playbook \
         --vault-password-file=.vault_secret \
@@ -426,18 +452,8 @@ to a Digital Ocean droplet.</p>
 </pre></div>
 
 
-<h2 id="charlesreid1hooksyml-webhooks-server-docker-pod-play">charlesreid1hooks.yml: webhooks server docker pod play<a class="headerlink" href="#charlesreid1hooksyml-webhooks-server-docker-pod-play" title="Permanent link">&para;</a></h2>
-<p><strong>host: bluebear</strong></p>
-<p><strong>host: bluebeard</strong></p>
-<p>The webhooks server docker pod runs the following:</p>
-<ul>
-<li>captain hook webhook server</li>
-<li>hooks.charlesreid1.com domain</li>
-<li>static site hosting for pages.charlesreid1.com</li>
-<li>pages.charlesreid1.com domain</li>
-</ul>
 <h2 id="charlesreid1botsyml-bots-docker-pod-play">charlesreid1bots.yml: bots docker pod play<a class="headerlink" href="#charlesreid1botsyml-bots-docker-pod-play" title="Permanent link">&para;</a></h2>
-<p><strong>host: bluebear</strong></p>
+<p>(Incomplete)</p>
 <p>The bots docker pod runs several Python 
 scripts to keep some Twitter bots going:</p>
 <ul>

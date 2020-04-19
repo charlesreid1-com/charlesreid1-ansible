@@ -258,6 +258,18 @@
 
 
   <li class="md-nav__item">
+    <a href="ansible_linode/" title="Ansible on Linode" class="md-nav__link">
+      Ansible on Linode
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="ansible_do/" title="Ansible on DigitalOcean" class="md-nav__link">
       Ansible on DigitalOcean
     </a>
@@ -336,11 +348,45 @@
 <li><a href="#playbooks">Playbooks</a></li>
 <li><a href="#roles">Roles</a></li>
 <li><a href="#getting-started-with-playbooks">Getting Started with Playbooks</a></li>
-<li><a href="#running-playbooks">Running Playbooks</a></li>
+<li><a href="#running-playbooks">Running Playbooks</a><ul>
 <li><a href="#running-select-tasks-with-tags">Running Select Tasks with Tags</a></li>
+</ul>
+</li>
 <li><a href="#secrets-and-sensitive-information">Secrets and Sensitive Information</a></li>
 <li><a href="#vagrant-testing">Vagrant Testing</a></li>
 <li><a href="#digitalocean-deployment">DigitalOcean Deployment</a></li>
+</ul>
+<h2 id="master-checklist">Master Checklist<a class="headerlink" href="#master-checklist" title="Permanent link">&para;</a></h2>
+<p>Before you get started:</p>
+<ul>
+<li>
+<p>Provision a compute node (Vagrant or cloud provider)</p>
+<ul>
+<li>If using Vagrant, see the <a href="ansible_vagrant/">Ansible Vagrant</a> page for
+  instructions on how to provision virtual machines.</li>
+<li>If using a cloud provider, follow the instructions provided by your
+  cloud provider.</li>
+</ul>
+</li>
+<li>
+<p>Configure and enable SSH access</p>
+<ul>
+<li>If using Vagrant, see the <a href="ansible_vagrant/">Ansible Vagrant</a> page for
+  instructions on how to get SSH key information from Vagrant virtual machines.</li>
+<li>If using a cloud provider, you should be provided with an SSH key or
+  SSH access instructions by your cloud provider.</li>
+</ul>
+</li>
+<li>
+<p>Run Ansible with the <code>base.yml</code> playbook - see <a href="ansible_playbooks/#baseyml-the-base-plays">base.yml</a>
+  for information and details about this playbook.</p>
+</li>
+<li>
+<p>Run Ansible with pod-charlesreid1 playbook</p>
+</li>
+<li>
+<p>Configure DNS to point to the IP address of the compute node</p>
+</li>
 </ul>
 <h2 id="docker-pods">Docker Pods<a class="headerlink" href="#docker-pods" title="Permanent link">&para;</a></h2>
 <p>These docker pods are collections of related charlesreid1.com
@@ -358,6 +404,17 @@ are ready to run these docker pods.</p>
 <td>pod-charlesreid1</td>
 <td><a href="https://git.charlesreid1.com/docker/pod-charlesreid1">https://git.charlesreid1.com/docker/pod-charlesreid1</a></td>
 </tr>
+</tbody>
+</table>
+<p>The following pods <strong>HAVE BEEN DEACTIVATED:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Pod</th>
+<th>Link</th>
+</tr>
+</thead>
+<tbody>
 <tr>
 <td>pod-webhooks</td>
 <td><a href="https://git.charlesreid1.com/docker/pod-webhooks">https://git.charlesreid1.com/docker/pod-webhooks</a></td>
@@ -376,28 +433,24 @@ and a provision playbook.</p>
 <tr>
 <th>Playbook</th>
 <th>Description</th>
+<th>Link</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>provision.yml</code></td>
 <td>(Vagrant-only) Playbook to provision new Ubuntu machines with <code>/usr/bin/python</code>.</td>
+<td><a href="ansible_playbooks/#provisionyml-provision-your-remote-node">link</a></td>
 </tr>
 <tr>
 <td><code>base.yml</code></td>
 <td>Base playbook run by all of the pod playbooks above.</td>
+<td><a href="ansible_playbooks/#baseyml-the-base-plays">link</a></td>
 </tr>
 <tr>
 <td><code>podcharlesreid1.yml</code></td>
-<td>Playbook to install and run the charlesreid1.com docker pod (<a href="https://git.charlesreid1.com/docker/pod-charlesreid1">https://git.charlesreid1.com/docker/pod-charlesreid1</a>)</td>
-</tr>
-<tr>
-<td><code>podwebhooks.yml</code></td>
-<td>(TBA) Playbook to install and run the webhooks pod (<a href="https://git.charlesreid1.com/docker/pod-webhooks">https://git.charlesreid1.com/docker/pod-webhooks</a>)</td>
-</tr>
-<tr>
-<td><code>podbots.yml</code></td>
-<td>(TBA) Playbook to install and run the bot pod (<a href="https://git.charlesreid1.com/docker/pod-bots">https://git.charlesreid1.com/docker/pod-bots</a>)</td>
+<td>Playbook to install and run the charlesreid1.com docker pod</td>
+<td><a href="https://git.charlesreid1.com/docker/pod-charlesreid1">link</a></td>
 </tr>
 </tbody>
 </table>
@@ -462,14 +515,6 @@ respective docker pod.</p>
 <td>pod-charlesreid1</td>
 <td>Role specific to the charlesreid1.com docker pod</td>
 </tr>
-<tr>
-<td>pod-webhooks</td>
-<td>Role specific to {hooks,pages}.charlesreid1.com docker pod</td>
-</tr>
-<tr>
-<td>pod-bots</td>
-<td>Role specific to bots docker pod</td>
-</tr>
 </tbody>
 </table>
 <h2 id="getting-started-with-playbooks">Getting Started with Playbooks<a class="headerlink" href="#getting-started-with-playbooks" title="Permanent link">&para;</a></h2>
@@ -488,6 +533,10 @@ respective docker pod.</p>
 <tr>
 <td><a href="quickstart/">docs/quickstart.md</a></td>
 <td>Quick start for the impatient (uses Vagrant)</td>
+</tr>
+<tr>
+<td><a href="ansible_linode/">docs/ansible_linode.md</a></td>
+<td>Guide for running charlesreid1.com playbooks on Linode</td>
 </tr>
 <tr>
 <td><a href="ansible_do/">docs/ansible_do.md</a></td>
@@ -571,8 +620,11 @@ running playbooks against either Vagrant or AWS machines.</p>
 <p>See <a href="ansible_vagrant/">Ansible Vagrant</a> for instructions 
 on how to set up a Vagrant virtual machine to run the 
 Ansible playbook against, for testing purposes.</p>
-<h2 id="digitalocean-deployment">DigitalOcean Deployment<a class="headerlink" href="#digitalocean-deployment" title="Permanent link">&para;</a></h2>
-<p>See <a href="ansible_do/">Ansible Digital Ocean</a> for instructions on how to set up an DigitalOcean
+<h2 id="linode-deployment">Linode Deployment<a class="headerlink" href="#linode-deployment" title="Permanent link">&para;</a></h2>
+<p>See <a href="ansible_linode/">Ansible Linode</a> for instructions on how to set up a Linode node
+to run the Ansible playbook against.</p>
+<h2 id="digital-ocean-deployment">Digital Ocean Deployment<a class="headerlink" href="#digital-ocean-deployment" title="Permanent link">&para;</a></h2>
+<p>See <a href="ansible_do/">Ansible Digital Ocean</a> for instructions on how to set up an Digital Ocean
 node to run the Ansible playbook against.</p>
                 
                   

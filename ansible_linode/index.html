@@ -11,7 +11,7 @@
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
       
-        <link rel="canonical" href="https://charlesreid1-docker.github.io/charlesreid1-ansible/ansible_vault/">
+        <link rel="canonical" href="https://charlesreid1-docker.github.io/charlesreid1-ansible/ansible_linode/">
       
       
       
@@ -38,7 +38,7 @@
     
     
       
-        <title>Ansible Vault - charlesreid1-ansible</title>
+        <title>Ansible on Linode - charlesreid1-ansible</title>
       
     
     
@@ -83,7 +83,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="../#ansible-vault" tabindex="1" class="md-skip">
+      <a href="../#linode-quickstart" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -109,7 +109,7 @@
                 charlesreid1-ansible
               </span>
               <span class="md-header-nav__topic">
-                Ansible Vault
+                Ansible on Linode
               </span>
             
           
@@ -247,11 +247,20 @@
       
       
 
+  
 
-  <li class="md-nav__item">
-    <a href="../ansible_linode/" title="Ansible on Linode" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+    <a href="./" title="Ansible on Linode" class="md-nav__link md-nav__link--active">
       Ansible on Linode
     </a>
+    
   </li>
 
     
@@ -283,20 +292,11 @@
       
       
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-    
-      
-    
-    
-    <a href="./" title="Ansible Vault" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../ansible_vault/" title="Ansible Vault" class="md-nav__link">
       Ansible Vault
     </a>
-    
   </li>
 
     
@@ -340,127 +340,71 @@
               
                 
                 
-                <h1 id="ansible-vault">Ansible Vault<a class="headerlink" href="#ansible-vault" title="Permanent link">&para;</a></h1>
-<p>This page contains instructions for using the Ansible vault.</p>
-<p>Link: <a href="https://docs.ansible.com/ansible/2.4/vault.html#creating-encrypted-files">Ansible vault documentation</a></p>
+                <h1 id="linode-quickstart">Linode Quickstart<a class="headerlink" href="#linode-quickstart" title="Permanent link">&para;</a></h1>
+<p>This quickstart walks through the process
+of setting up a Linode node
+using these Ansible playbooks.</p>
 <h1 id="table-of-contents">Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h1>
 <ul>
-<li><a href="#what-is-ansible-vault">What is Ansible Vault?</a></li>
-<li><a href="#where-is-the-vault-file">Where is the vault file?</a></li>
-<li><a href="#how-to-view-the-vault-file">How to view the vault file?</a></li>
-<li><a href="#how-to-create-a-vault-file">How to create a vault file?</a></li>
-<li><a href="#how-to-edit-the-vault-file">How to edit the vault file?</a></li>
-<li><a href="#how-to-use-the-vault-file">How to use the vault file?</a></li>
-<li><a href="#adding-new-secret-variables">Adding new secret variables</a></li>
+<li><a href="#node-setup">Node setup</a></li>
+<li><a href="#run-provision-and-base-playbooks">Run provision and base playbooks</a></li>
+<li><a href="#run-pod-playbooks">Run pod playbooks</a></li>
 </ul>
-<h2 id="what-is-ansible-vault">What is Ansible Vault?<a class="headerlink" href="#what-is-ansible-vault" title="Permanent link">&para;</a></h2>
-<p>Ansible provides a "vault" function that allows sensitive data
-(passwords, sensitive info, or certificate files) to be encrypted,
-so it can be stored in a repository with the rest of the playbook.</p>
-<p>The vault is an ordinary YAML file that defines variables, except
-that the variables it defines are sensitive. These variables can
-be used elsewhere in the playbook.</p>
-<p>Ansible provides an <code>ansible-vault</code> command to interact with 
-vault files.</p>
-<h2 id="where-is-the-vault-file">Where is the vault file?<a class="headerlink" href="#where-is-the-vault-file" title="Permanent link">&para;</a></h2>
-<p>There is currently one vault file that applies to all servers.
-It is located in the repository at <code>group_vars/all/vault</code>.</p>
-<h2 id="how-to-view-the-vault-file">How to view the vault file?<a class="headerlink" href="#how-to-view-the-vault-file" title="Permanent link">&para;</a></h2>
-<p>To view the contents of the vault file, use the view action:</p>
-<div class="codehilite"><pre><span></span>ansible-vault edit my_vault_file
+<h2 id="node-setup">Node setup<a class="headerlink" href="#node-setup" title="Permanent link">&para;</a></h2>
+<p>Start by logging in to your Linode account
+and creating a new node. You should be able to 
+create or specify an SSH key. </p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>You must modify the path to the SSH private
+key, specified in <code>linode.cfg</code> (the Linode
+Ansible config file), to match the SSH key that
+you added to the droplet at its creation.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Once you create your droplet and it is connected
+to the internet via a public IP, you must update
+the file <code>linodehosts</code> (the Linode Ansible
+inventory file) to point to the correct IP address
+for the node.</p>
+</div>
+<h2 id="run-provision-and-base-playbooks">Run provision and base playbooks<a class="headerlink" href="#run-provision-and-base-playbooks" title="Permanent link">&para;</a></h2>
+<p>Once you have the correct SSH key in <code>linode.cfg</code>
+and the correct droplet IP address in <code>linodehosts</code>,
+you are ready to run the Ansible playbooks.</p>
+<p>Run the provision playbook to prepare the droplet for Ansible:</p>
+<div class="codehilite"><pre><span></span>ANSIBLE_CONFIG=&quot;linode.cfg&quot; \
+        ansible-playbook \
+        provision.yml
 </pre></div>
 
 
-<h2 id="how-to-create-a-vault-file">How to create a vault file?<a class="headerlink" href="#how-to-create-a-vault-file" title="Permanent link">&para;</a></h2>
-<p>No new vault files should be needed for this repository, but to create
-a new vault file called <code>my_vault_file</code>, use the create action:</p>
-<div class="codehilite"><pre><span></span>ansible-vault create my_vault_file
+<p>Now you can run the base playbook.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>You must provide a <code>machine_name</code> parameter to
+the base playbook. This variable is <strong><em>not</em></strong>
+defined by default. Define it using the 
+<code>--extra-vars</code> flag.</p>
+</div>
+<p>Specifying a machine name using the <code>--extra-vars</code> flag:</p>
+<div class="codehilite"><pre><span></span>ANSIBLE_CONFIG=&quot;linode.cfg&quot; \
+        ansible-playbook \
+        --extra-vars &quot;machine_name=redbeard&quot; \
+        base.yml
 </pre></div>
 
 
-<h2 id="how-to-edit-the-vault-file">How to edit the vault file?<a class="headerlink" href="#how-to-edit-the-vault-file" title="Permanent link">&para;</a></h2>
-<p>To edit the contents of the vualt file, use the edit action</p>
-<div class="codehilite"><pre><span></span>EDITOR=&quot;vim&quot; ansible-vault edit my_vault_file
-</pre></div>
-
-
-<h2 id="how-to-use-the-vault-file">How to use the vault file?<a class="headerlink" href="#how-to-use-the-vault-file" title="Permanent link">&para;</a></h2>
-<p>Vault files are used by ansible in the process of running playbooks.
-The user can provide Ansible with the vault password either on the
-command line (via an interactive prompt), or the user can put the
-vault password into a file, and point Ansible to the vault password
-file when it is run.</p>
-<p>We do that latter, putting the vault password in the file <code>.vault_secret</code>.</p>
-<p>To tell ansible wehre to find the vault password, we set <code>vault_password_file</code>
-in the configuration file. In both configuration files, we have:</p>
-<div class="codehilite"><pre><span></span>vault_password_file = .vault_secret
-</pre></div>
-
-
-<p>Put your password into the file <code>.vault_secret</code> and use this
-configuration file (by pointing to it with the <code>ANSIBLE_CONFIG</code>
-environment variable when running ansible).</p>
-<h2 id="adding-new-secret-variables">Adding new secret variables<a class="headerlink" href="#adding-new-secret-variables" title="Permanent link">&para;</a></h2>
-<p>Suppose we have a role that utilizes a variable that is sensitive
-and should remain secret. To do this, we set up a series of
-variable definitions that allow the secret defined in the vault
-to be used for different roles.</p>
-<p>Suppose we have a role that uses an API key in a command. The role
-utilizes a variable <code>{{ api_key }}</code> like so:</p>
-<p><code>roles/my-role/tasks/main.yml</code>:</p>
-<div class="codehilite"><pre><span></span><span class="nn">---</span>
-<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">A simple example task using a secret variable</span>
-  <span class="nt">command</span><span class="p">:</span> <span class="s">&quot;python</span><span class="nv"> </span><span class="s">script.py</span><span class="nv"> </span><span class="s">--api-key={{</span><span class="nv"> </span><span class="s">api_key</span><span class="nv"> </span><span class="s">}}&quot;</span>
-</pre></div>
-
-
-<p>If the variable <code>api_key</code> is defined in the task default variable 
-values, this command will be run but with an invalid API key.
-If the above command should <em>only</em> be run with a valid API key,
-you can leave <code>api_key</code> out of the default variable values.</p>
-<p>Here is what that would look like, if you defined the API key 
-to be an empty string by default:</p>
-<p><code>roles/my-role/defaults/main.yml</code>:</p>
-<div class="codehilite"><pre><span></span><span class="nn">---</span>
-<span class="nt">api_key</span><span class="p">:</span> <span class="s">&quot;&quot;</span>
-</pre></div>
-
-
-<p>To set the real <code>api_key</code> value, override the default variable
-value in the playbook(s) that run that role. For example, if
-the role <code>my-role</code> is called from a playbook <code>main.yml</code>,</p>
-<p><code>main.yml</code>:</p>
-<div class="codehilite"><pre><span></span><span class="nn">---</span>
-<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Run my-role</span>
-  <span class="nt">roles</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="nt">role</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">my-role</span>
-      <span class="nt">api_key</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">charlesreid1_api_key</span><span class="nv"> </span><span class="s">}}&quot;</span>
-</pre></div>
-
-
-<p>This specifies that the <code>api_key</code> variable should be set to the 
-value of the variable <code>charlesreid1_api_key</code>.</p>
-<p>The prefix <code>charlesreid1</code> indicates a site-specific variable setting.
-Those variables are contained in <code>group_vars/all/main.yml</code>.
-The variable is defined there, but it is also defining the variable
-to be set to another variable value:</p>
-<p><code>group_vars/all/main.yml</code>:</p>
-<div class="codehilite"><pre><span></span><span class="nn">---</span>
-<span class="nt">charlesreid1_api_key</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">vault_api_key</span><span class="nv"> </span><span class="s">}}&quot;</span>
-</pre></div>
-
-
-<p>The last step is to define the variable in the vault.
-This is where we use the <code>ansible-vault</code> command to edit
-the vault file:</p>
-<div class="codehilite"><pre><span></span>ANSIBLE_CONFIG=&quot;my_config.cfg&quot; ansible-vault edit group_vars/all/vault
-</pre></div>
-
-
-<p>This is where you put the real API key:</p>
-<p><code>group_vars/all/vault</code>:</p>
-<div class="codehilite"><pre><span></span><span class="nn">---</span>
-<span class="nt">vault_api_key</span><span class="p">:</span> <span class="s">&quot;ABCXYZ123456&quot;</span>
+<h2 id="run-pod-playbooks">Run pod playbooks<a class="headerlink" href="#run-pod-playbooks" title="Permanent link">&para;</a></h2>
+<p>Once you've run the base playbook, you can install the
+docker pod with the corresponding playbook by specifying
+<code>ANSIBLE_CONFIG</code> and pointing to the Linode config file.</p>
+<p>pod-charlesreid1:</p>
+<div class="codehilite"><pre><span></span>ANSIBLE_CONFIG=&quot;linode.cfg&quot; \
+        ansible-playbook \
+        --extra-vars &quot;machine_name=redbeard&quot; \
+        podcharlesreid1.yml
 </pre></div>
                 
                   
@@ -482,7 +426,7 @@ the vault file:</p>
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../ansible_playbooks/" title="Ansible Playbooks" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../ansible_vagrant/" title="Ansible on Vagrant" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -491,19 +435,19 @@ the vault file:</p>
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Ansible Playbooks
+                Ansible on Vagrant
               </span>
             </div>
           </a>
         
         
-          <a href="../ansible_cowsay/" title="Ansible Cowsay" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../ansible_do/" title="Ansible on DigitalOcean" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Ansible Cowsay
+                Ansible on DigitalOcean
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

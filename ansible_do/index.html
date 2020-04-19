@@ -247,6 +247,18 @@
       
       
 
+
+  <li class="md-nav__item">
+    <a href="../ansible_linode/" title="Ansible on Linode" class="md-nav__link">
+      Ansible on Linode
+    </a>
+  </li>
+
+    
+      
+      
+      
+
   
 
 
@@ -339,7 +351,7 @@ using these Ansible playbooks.</p>
 <li><a href="#run-pod-playbooks">Run pod playbooks</a></li>
 </ul>
 <h2 id="droplet-setup">Droplet setup<a class="headerlink" href="#droplet-setup" title="Permanent link">&para;</a></h2>
-<p>Start by logging in to your digital ocean account
+<p>Start by logging in to your Digital Ocean account
 and creating a droplet. You should be able to 
 create or specify an SSH key. </p>
 <div class="admonition warning">
@@ -376,6 +388,7 @@ the base playbook. This variable is <strong><em>not</em></strong>
 defined by default. Define it using the 
 <code>--extra-vars</code> flag.</p>
 </div>
+<p>Specifying a machine name using the <code>--extra-vars</code> flag:</p>
 <div class="codehilite"><pre><span></span>ANSIBLE_CONFIG=&quot;do.cfg&quot; \
         ansible-playbook \
         --extra-vars &quot;machine_name=redbeard&quot; \
@@ -385,7 +398,8 @@ defined by default. Define it using the
 
 <h2 id="run-pod-playbooks">Run pod playbooks<a class="headerlink" href="#run-pod-playbooks" title="Permanent link">&para;</a></h2>
 <p>Once you've run the base playbook, you can install the
-docker pod with the corresponding playbook.</p>
+docker pod with the corresponding playbook by specifying
+<code>ANSIBLE_CONFIG</code> and pointing to the Digital Ocean config file.</p>
 <p>pod-charlesreid1:</p>
 <div class="codehilite"><pre><span></span>ANSIBLE_CONFIG=&quot;do.cfg&quot; \
         ansible-playbook \
@@ -412,7 +426,7 @@ docker pod with the corresponding playbook.</p>
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../ansible_vagrant/" title="Ansible on Vagrant" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../ansible_linode/" title="Ansible on Linode" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -421,7 +435,7 @@ docker pod with the corresponding playbook.</p>
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Ansible on Vagrant
+                Ansible on Linode
               </span>
             </div>
           </a>
