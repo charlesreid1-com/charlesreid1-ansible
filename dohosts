@@ -1,5 +1,0 @@
-[servers:children]
-doservers
-
-[doservers]
-do ansible_host=142.93.27.95 ansible_port=22 ansible_python_interpreter=/usr/bin/python3 
