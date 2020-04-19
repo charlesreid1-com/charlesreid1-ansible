@@ -25,6 +25,7 @@ nav:
   - 'Index': 'index.md'
   - 'Quickstart': 'quickstart.md'
   - 'Ansible on Vagrant': 'ansible_vagrant.md'
+  - 'Ansible on Linode': 'ansible_linode.md'
   - 'Ansible on DigitalOcean': 'ansible_do.md'
   - 'Ansible Playbooks': 'ansible_playbooks.md'
   - 'Ansible Vault': 'ansible_vault.md'
