@@ -27,11 +27,15 @@ step installs `/usr/bin/python`.
 ANSIBLE_CONFIG="vagrant.cfg" vagrant provision
 ```
 
-Running plays against a Digital Ocean node requires
+Running plays against a Linode/Digital Ocean node requires
 the provision playbook to be run explicitly with the
 command:
 
 ```plain
+# Linode
+ANSIBLE_CONFIG="linode.cfg" ansible-playbook provision.yml
+
+# Digital Ocean
 ANSIBLE_CONFIG="do.cfg" ansible-playbook provision.yml
 ```
 
@@ -58,7 +62,7 @@ ANSIBLE_CONFIG="vagrant.cfg" \
         base.yml
 ```
 
-To run on Linode, specify the config file:
+To run on Linode:
 
 ```plain
 ANSIBLE_CONFIG="linode.cfg" \
@@ -68,7 +72,7 @@ ANSIBLE_CONFIG="linode.cfg" \
         base.yml
 ```
 
-To run on Digital Ocean, specify the config file:
+To run on Digital Ocean:
 
 ```plain
 ANSIBLE_CONFIG="do.cfg" \
@@ -87,7 +91,6 @@ The charlesreid1 docker pod runs the following:
 - letsencrypt/certs
 - mediawiki
 - gitea
-- files/etc
 
 **Example:** Deploy the charlesreid1 docker pod play
 on a Vagrant machine.
@@ -131,18 +134,6 @@ ANSIBLE_CONFIG="do.cfg" \
         --extra-vars "machine_name=yoyo" \
         podcharlesreid1.yml
 ```
-
-
-## charlesreid1bots.yml: bots docker pod play
-
-(Incomplete)
-
-The bots docker pod runs several Python 
-scripts to keep some Twitter bots going:
-
-- Ginsberg bot flock
-- Milton bot flock
-- Apollo Space Junk bot flock
 
 
 ## List of Tags

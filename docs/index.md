@@ -32,10 +32,10 @@ Before you get started:
     * If using a cloud provider, you should be provided with an SSH key or
       SSH access instructions by your cloud provider.
 
-* Run Ansible with the `base.yml` playbook - see [base\.yml](ansible_playbooks.md#baseyml-the-base-plays)
-  for information and details about this playbook.
+* Run Ansible with the `base.yml` playbook - see [Ansible Playbooks](ansible_playbooks.md#baseyml-the-base-plays)
+  and `base.yml` for information and details about this playbook.
 
-* Run Ansible with pod-charlesreid1 playbook
+* Run Ansible with the pod-charlesreid1 playbook `pod-charlesreid1.yml`
 
 * Configure DNS to point to the IP address of the compute node
 
