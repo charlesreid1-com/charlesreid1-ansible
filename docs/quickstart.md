@@ -13,7 +13,6 @@ Table of Contents
     * [Provision Vagrant Machines](#provision-vagrant-machines)
     * [Configure Ansible-Vagrant SSH Info](#configure-ansible-vagrant-ssh-info)
 * [Cloud Node Setup](#cloud-node-setup)
-    * [Installing SSH Keys](#installing-ssh-keys)
 * [Run Ansible](#run-ansible)
     * [Set Up Vault Secret](#set-up-vault-secret)
     * [Run the Base Playbook](#run-the-base-playbook)
