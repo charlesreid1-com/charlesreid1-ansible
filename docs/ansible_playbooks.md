@@ -58,8 +58,17 @@ ANSIBLE_CONFIG="vagrant.cfg" \
         base.yml
 ```
 
-To run on Digital Ocean, use the same command
-but specify the corrsponding config file:
+To run on Linode, specify the config file:
+
+```plain
+ANSIBLE_CONFIG="linode.cfg" \
+        ansible-playbook \
+        --vault-password-file=.vault_secret \
+        --extra-vars "machine_name=yoyo" \
+        base.yml
+```
+
+To run on Digital Ocean, specify the config file:
 
 ```plain
 ANSIBLE_CONFIG="do.cfg" \
@@ -71,10 +80,6 @@ ANSIBLE_CONFIG="do.cfg" \
 
 
 ## podcharlesreid1.yml: charlesreid1 docker pod play
-
-**host: krash**
-
-**host: redbeard**
 
 The charlesreid1 docker pod runs the following:
 
@@ -107,8 +112,17 @@ ANSIBLE_CONFIG="vagrant.cfg" \
         podcharlesreid1.yml
 ```
 
-**Example:** Deploy the charlesreid1 docker pod play
-to a Digital Ocean droplet.
+**Linode Example:**
+
+```plain
+ANSIBLE_CONFIG="linode.cfg" \
+        ansible-playbook \
+        --vault-password-file=.vault_secret \
+        --extra-vars "machine_name=yoyo" \
+        podcharlesreid1.yml
+```
+
+**Digital Ocean Example:**
 
 ```plain
 ANSIBLE_CONFIG="do.cfg" \
@@ -119,23 +133,9 @@ ANSIBLE_CONFIG="do.cfg" \
 ```
 
 
-## charlesreid1hooks.yml: webhooks server docker pod play
-
-**host: bluebear**
-
-**host: bluebeard**
-
-The webhooks server docker pod runs the following:
-
-- captain hook webhook server
-- hooks.charlesreid1.com domain
-- static site hosting for pages.charlesreid1.com
-- pages.charlesreid1.com domain
-
-
 ## charlesreid1bots.yml: bots docker pod play
 
-**host: bluebear**
+(Incomplete)
 
 The bots docker pod runs several Python 
 scripts to keep some Twitter bots going:
