@@ -11,7 +11,7 @@
 # clone pod contents
 #
 # /www setup
-#   server-name_default top level domain clone
+#   server_name_default top level domain clone
 # docker and docker compose checks
 # mediawiki prep
 # gitea prep
@@ -140,9 +140,7 @@
 #
 # /www/<domain>/
 #                 git/            <-- .git dir for charlesreid1.com repo gh-pages branch
-#                 git.data/       <-- .git dir for charlesreid1-data
 #                 htdocs/         <-- clone of charlesreid1.com repo gh-pages branch
-#                     data/       <-- clone of charlesreid1-data
 
 # -------------
 # Install and run the clone www script
@@ -241,7 +239,6 @@
     - pod-charlesreid1
     - pod-charlesreid1-docker
     - pod-charlesreid1-services
-
 
 
 

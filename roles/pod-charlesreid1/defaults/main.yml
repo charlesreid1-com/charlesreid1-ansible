@@ -18,17 +18,9 @@ nginx_subdomains_ip: "{{ charlesreid1_nginx_subdomains_ip }}"
 
 port_default: "{{ charlesreid1_port_default }}"
 port_gitea: "{{ charlesreid1_port_gitea }}"
-port_files: "{{ charlesreid1_port_files }}"
-port_pages: "{{ charlesreid1_port_pages }}"
-port_hooks: "{{ charlesreid1_port_hooks }}"
-port_bots: "{{ charlesreid1_port_bots }}"
 
 port_ssl_default: "{{ charlesreid1_port_ssl_default }}"
 port_ssl_gitea: "{{ charlesreid1_port_ssl_gitea }}"
-port_ssl_files: "{{ charlesreid1_port_ssl_files }}"
-port_ssl_pages: "{{ charlesreid1_port_ssl_pages }}"
-port_ssl_hooks: "{{ charlesreid1_port_ssl_hooks }}"
-port_ssl_bots: "{{ charlesreid1_port_ssl_bots }}"
 
 # end nginx configuration variables
 # ----------------
