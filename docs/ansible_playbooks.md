@@ -10,8 +10,6 @@ Table of Contents
 * [provision\.yml: Provision Your Remote Node](#provisionyml-provision-your-remote-node)
 * [base\.yml: the base plays](#baseyml-the-base-plays)
 * [podcharlesreid1\.yml: charlesreid1 docker pod play](#podcharlesreid1yml-charlesreid1-docker-pod-play)
-* [charlesreid1hooks\.yml: webhooks server docker pod play](#charlesreid1hooksyml-webhooks-server-docker-pod-play)
-* [charlesreid1bots\.yml: bots docker pod play](#charlesreid1botsyml-bots-docker-pod-play)
 * [List of Tags](#list-of-tags)
 
 
