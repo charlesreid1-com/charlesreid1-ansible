@@ -124,3 +124,12 @@
     - nonroot-ssh
 
 
+##################################
+# nonroot: automatically accept new keys
+
+- name: Automatically accept new SSH keys
+  become: yes
+  become_user: "{{ username }}"
+  command: "echo 'StrictHostKeyChecking=accept-new' > ~/.ssh/config"
+  tags:
+    - nonroot-ssh
