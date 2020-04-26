@@ -79,7 +79,7 @@
 - name: "Install /etc/letsencrypt/ssl-dhparams.conf"
   become: yes
   get_url:
-    url: "https://raw.githubusercontent.com/certbot/certbot/master/certbot/ssl-dhparams.pem"
+    url: "https://raw.githubusercontent.com/certbot/certbot/master/certbot/certbot/ssl-dhparams.pem"
     dest: /etc/letsencrypt/ssl-dhparams.pem
   when:
   - not dhparams_installed.stat.exists
