@@ -25,17 +25,9 @@ charlesreid1_admin_email: "charles@charlesreid1.com"
 
 charlesreid1_port_default: "80"
 charlesreid1_port_gitea: "80"
-charlesreid1_port_files: "80"
-charlesreid1_port_pages: "80"
-charlesreid1_port_hooks: "80"
-charlesreid1_port_bots: "80"
 
 charlesreid1_port_ssl_default: "443"
 charlesreid1_port_ssl_gitea: "443"
-charlesreid1_port_ssl_files: "443"
-charlesreid1_port_ssl_pages: "443"
-charlesreid1_port_ssl_hooks: "443"
-charlesreid1_port_ssl_bots: "443"
 
 
 
