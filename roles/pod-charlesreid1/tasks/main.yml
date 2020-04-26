@@ -65,6 +65,19 @@
     - pod-charlesreid1
 
 
+# Init submodules
+- name: Initialize pod-charlesreid1 submodules
+  become: yes
+  become_user: "{{ username }}"
+  command: "git submodule update --init"
+  args:
+    chdir: "{{ pod_install_dir }}"
+  when:
+    - "pod_charlesreid1_clone_check.stat.exists"
+  tags:
+    - pod-charlesreid1
+
+
 # Pull submodules
 - name: Pull pod-charlesreid1 submodules
   become: yes
@@ -556,46 +569,6 @@
   stat:
     path: "/etc/letsencrypt/live/git.{{ server_name_default }}"
   register: register_letsencrypt_livecert_gitea
-
-
-#- name: Check if LetsEncrypt cert for files server name is present
-#  tags:
-#    - letsencrypt
-#    - pod-charlesreid1
-#    - pod-charlesreid1-certs
-#  stat:
-#    path: "/etc/letsencrypt/live/files.{{ server_name_default }}"
-#  register: register_letsencrypt_livecert_files
-
-
-- name: Check if LetsEncrypt cert for pages server name is present
-  tags:
-    - letsencrypt
-    - pod-charlesreid1
-    - pod-charlesreid1-certs
-  stat:
-    path: "/etc/letsencrypt/live/pages.{{ server_name_default }}"
-  register: register_letsencrypt_livecert_pages
-
-
-- name: Check if LetsEncrypt cert for hooks server name is present
-  tags:
-    - letsencrypt
-    - pod-charlesreid1
-    - pod-charlesreid1-certs
-  stat:
-    path: "/etc/letsencrypt/live/hooks.{{ server_name_default }}"
-  register: register_letsencrypt_livecert_hooks
-
-
-- name: Check if LetsEncrypt cert for bots server name is present
-  tags:
-    - letsencrypt
-    - pod-charlesreid1
-    - pod-charlesreid1-certs
-  stat:
-    path: "/etc/letsencrypt/live/bots.{{ server_name_default }}"
-  register: register_letsencrypt_livecert_bots
 
 
 # If top level and subdomain certs are present, start/restart the
