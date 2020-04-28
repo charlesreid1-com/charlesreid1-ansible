@@ -11,9 +11,9 @@
       tags: letsencrypt
       site_email: "charles@charlesreid1.com"
       domains:
-        - "charlesreid1.red"
-        - "www.charlesreid1.red"
-        - "git.charlesreid1.red"
+        - "charlesreid1.com"
+        - "www.charlesreid1.com"
+        - "git.charlesreid1.com"
 
 
 
@@ -23,5 +23,5 @@
   roles:
     - role: pod-charlesreid1
       tags: pod-charlesreid1
-      charlesreid1_server_name_default: "charlesreid1.red"
+      charlesreid1_server_name_default: "charlesreid1.com"
 
