@@ -1,0 +1,18 @@
+---
+# #####################################
+# CONSTRUCT THE POD
+#
+# This task is very time-consuming.
+
+- name: Build pod-charlesreid1 from scratch
+  become: yes
+  become_user: "{{ username }}"
+  command: "/usr/local/bin/docker-compose build --no-cache"
+  args:
+    chdir: "{{ pod_install_dir }}"
+  when:
+    - "pod_register_docker_compose.stat.exists"
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-docker
+

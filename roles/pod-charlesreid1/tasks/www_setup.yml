@@ -1,0 +1,101 @@
+---
+# #####################################
+# SET UP /WWW DIRECTORY
+#
+#
+# Create /www directory
+# for main domain content
+- name: Create the /www directory
+  become: yes
+  file:
+    path: "/www"
+    state: directory
+    recurse: yes
+    owner: "{{ username }}"
+    group: "{{ username }}"
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-content
+
+# Template scripts to populate /www 
+# with content is done in the
+# rules below...
+
+
+
+# #####################################
+# MAIN DOMAIN PAGE SETUP (ALL)
+#
+# /www/<domain>/
+#                 git/            <-- .git dir for charlesreid1.com repo gh-pages branch
+#                 htdocs/         <-- clone of charlesreid1.com repo gh-pages branch
+
+# -------------
+# Install and run the clone www script
+
+- name: "Fetch the charlesreid1.com clone www script template"
+  fetch:
+    src: "{{ pod_install_dir }}/scripts/git_clone_www.py.j2"
+    dest: "/tmp/git_clone_www.py.j2"
+    flat: yes
+    fail_on_missing: yes
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-content
+
+- name: "Install the charlesreid1.com clone www script"
+  become: yes
+  become_user: "{{ username }}"
+  template:
+    src: "/tmp/git_clone_www.py.j2"
+    dest: "{{ pod_install_dir }}/scripts/git_clone_www.py"
+    mode: 0755
+    force: yes
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-content
+
+- name: "Run the charlesreid1.com clone www script to set up {{ server_name_default }}"
+  command: "python {{ pod_install_dir }}/scripts/git_clone_www.py"
+  become: yes
+  become_user: "{{ username }}"
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-content
+
+
+# ------------------
+# Install and run the pull www script
+
+- name: "Fetch the charlesreid1.com pull www script template"
+  fetch:
+    src: "{{ pod_install_dir }}/scripts/git_pull_www.py.j2"
+    dest: "/tmp/git_pull_www.py.j2"
+    flat: yes
+    fail_on_missing: yes
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-content
+
+- name: "Install the charlesreid1.com pull www script"
+  become: yes
+  become_user: "{{ username }}"
+  template:
+    src: "/tmp/git_pull_www.py.j2"
+    dest: "{{ pod_install_dir }}/scripts/git_pull_www.py"
+    mode: 0755
+    force: yes
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-content
+
+- name: "Run the charlesreid1.com pull www script to update {{ server_name_default }}"
+  command: "python {{ pod_install_dir }}/scripts/git_pull_www.py"
+  become: yes
+  become_user: "{{ username }}"
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-content
+
+
+

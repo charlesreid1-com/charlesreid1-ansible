@@ -1,0 +1,28 @@
+---
+# #####################################
+# INSTALL STARTUP SERVICE
+# 
+# Check if the charlesreid1 docker pod service
+# is installed. If not, install it.
+
+- name: Check if pod-charlesreid1 service is installed
+  stat:
+    path: /etc/systemd/system/pod-charlesreid1.service
+  register: pod_charlesreid1_service_check
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-services
+
+
+- name: Install pod-charlesreid1 service
+  become: yes
+  template:
+    src: pod-charlesreid1.service.j2
+    dest: /etc/systemd/system/pod-charlesreid1.service
+    mode: 0774
+  when:
+    - "not pod_charlesreid1_service_check.stat.exists"
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-services
+

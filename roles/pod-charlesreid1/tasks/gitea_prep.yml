@@ -1,0 +1,44 @@
+---
+# #####################################
+# GITEA PREP
+#
+# We have to create an app.ini file,
+# use a jinja template in the pod-charlesreid1 
+# repository
+
+- name: Fetch the app.ini jinja template
+  fetch:
+    src: "{{ pod_install_dir }}/d-gitea/custom/conf/app.ini.j2"
+    dest: "/tmp/app.ini.j2"
+    flat: yes
+    fail_on_missing: yes
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-gitea
+
+
+
+
+- name: Install the app.ini file
+  become: yes
+  become_user: "{{ username }}"
+  template:
+    src: "/tmp/app.ini.j2"
+    dest: "{{ pod_install_dir }}/d-gitea/custom/conf/app.ini"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: 0640
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-gitea
+
+
+- name: Fix ownership of all custom dirs for gitea
+  become: yes
+  command: "chown -R {{ username }}:{{ username }} {{pod_install_dir }}/d-gitea/custom"
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-gitea
+
+
+

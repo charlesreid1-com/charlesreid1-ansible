@@ -1,0 +1,99 @@
+---
+# #####################################
+# MEDIAWIKI PREP
+#
+# We have to build the extensions dir for the MediaWiki container
+# /pod-charlesreid1/d-mediawiki/charlesreid1-config/mediawiki/build_extensions_dir.sh 
+#
+# Then we have to use the LocalSettings.php and
+# Apache config file templates to configure
+# the mediawiki container to run correctly.
+
+- name: Check if extensions dir already exists
+  stat:
+    path: "{{ pod_install_dir }}/d-mediawiki/charlesreid1-config/mediawiki/extensions"
+  register: extensions_dir_exists
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-mw
+
+
+- name: Make mediawiki extensions dir build script executable
+  become: yes
+  become_user: "{{ username }}"
+  file:
+    path: "{{ pod_install_dir }}/d-mediawiki/charlesreid1-config/mediawiki/build_extensions_dir.sh"
+    mode: "u+x"
+  when:
+    - "not extensions_dir_exists.stat.exists"
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-mw
+
+
+- name: Build the mediawiki extensions dir
+  become: yes
+  become_user: "{{ username }}"
+  command: "{{ pod_install_dir }}/d-mediawiki/charlesreid1-config/mediawiki/build_extensions_dir.sh"
+  args:
+    chdir: "{{ pod_install_dir }}/d-mediawiki/charlesreid1-config/mediawiki"
+  when:
+    - "not extensions_dir_exists.stat.exists"
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-mw
+
+
+# Deal with MediaWiki configuration templates:
+# - LocalSettings.php
+# - Apache config file
+
+- name: Fetch the LocalSettings.php jinja template
+  fetch:
+    src: "{{ pod_install_dir }}/d-mediawiki/charlesreid1-config/mediawiki/LocalSettings.php.j2"
+    dest: "/tmp/LocalSettings.php.j2"
+    flat: yes
+    fail_on_missing: yes
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-mw
+
+
+- name: Install the LocalSettings.php file
+  become: yes
+  template:
+    src: "/tmp/LocalSettings.php.j2"
+    dest: "{{ pod_install_dir }}/d-mediawiki/charlesreid1-config/mediawiki/LocalSettings.php"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: 0640
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-mw
+
+
+- name: Fetch the Apache config jinja template
+  fetch:
+    src: "{{ pod_install_dir }}/d-mediawiki/charlesreid1-config/apache/charlesreid1.wiki.conf.j2"
+    dest: "/tmp/charlesreid1.wiki.conf.j2"
+    flat: yes
+    fail_on_missing: yes
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-mw
+
+
+- name: Install the Apache config file
+  become: yes
+  template:
+    src: "/tmp/charlesreid1.wiki.conf.j2"
+    dest: "{{ pod_install_dir }}/d-mediawiki/charlesreid1-config/apache/charlesreid1.wiki.conf"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: 0640
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-mw
+
+
+

@@ -1,0 +1,100 @@
+---
+# #####################################
+# CLONE POD-CHARLESREID1
+
+
+# Check if we already cloned it
+- name: Check if pod-charlesreid1 repo is already cloned
+  stat:
+    path: "{{ pod_install_dir }}"
+  register: pod_charlesreid1_clone_check
+  tags:
+    - pod-charlesreid1
+
+
+# Clone it
+- name: Clone pod-charlesreid1
+  become: yes
+  become_user: "{{ username }}"
+  git:
+    repo: 'https://github.com/charlesreid1-docker/pod-charlesreid1.git'
+    dest: "{{ pod_install_dir }}"
+    recursive: yes
+  when:
+    - "not pod_charlesreid1_clone_check.stat.exists"
+  tags:
+    - pod-charlesreid1
+
+
+# Pull it
+- name: Pull pod-charlesreid1
+  become: yes
+  become_user: "{{ username }}"
+  command: "git pull"
+  args:
+    chdir: "{{ pod_install_dir }}"
+  when:
+    - "pod_charlesreid1_clone_check.stat.exists"
+  tags:
+    - pod-charlesreid1
+
+
+# Init submodules
+- name: Initialize pod-charlesreid1 submodules
+  become: yes
+  become_user: "{{ username }}"
+  command: "git submodule update --init"
+  args:
+    chdir: "{{ pod_install_dir }}"
+  when:
+    - "pod_charlesreid1_clone_check.stat.exists"
+  tags:
+    - pod-charlesreid1
+
+
+# Pull submodules
+- name: Pull pod-charlesreid1 submodules
+  become: yes
+  become_user: "{{ username }}"
+  command: "git submodule update --remote"
+  args:
+    chdir: "{{ pod_install_dir }}"
+  when:
+    - "pod_charlesreid1_clone_check.stat.exists"
+  tags:
+    - pod-charlesreid1
+
+
+
+# #####################################
+# BUILD DOCKER-COMPOSE FILE FROM TEMPLATE
+# 
+# Note: Don't use sed to replace the MySQL password placeholder.
+# Use the fetch module to copy the template from the remote machine
+# (i.e., the one in the git repo) to the local directory.
+# Then use the template module to use the template.
+
+- name: Fetch the docker-compose template from the remote machine
+  fetch:
+    src: "{{ pod_install_dir }}/docker-compose.yml.j2"
+    dest: "/tmp/pod-charlesreid1-docker-compose.yml.j2"
+    flat: yes
+    fail_on_missing: yes
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-docker
+
+
+- name: Install the docker-compose file
+  become: yes
+  become_user: "{{ username }}"
+  template:
+    src: "/tmp/pod-charlesreid1-docker-compose.yml.j2"
+    dest: "{{ pod_install_dir }}/docker-compose.yml"
+    mode: 0640
+    force: yes
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-docker
+
+

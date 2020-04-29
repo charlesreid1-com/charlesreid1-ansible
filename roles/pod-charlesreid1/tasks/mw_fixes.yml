@@ -1,0 +1,29 @@
+---
+# #####################################
+# MEDIAWIKI FIXES
+# 
+# Install and set up the Mediawiki skin,
+# LocalSettings.php file, etc.
+
+- name: Wait for 10 seconds
+  command: "sleep 15"
+
+- name: Run fix_skins.sh script
+  become: yes
+  become_user: "{{ username }}"
+  command: "bash {{ pod_install_dir }}/d-mediawiki/fix_skins.sh"
+  args:
+    chdir: "{{ pod_install_dir }}/d-mediawiki"
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-mw
+
+- name: Run fix_LocalSettings.sh script
+  become: yes
+  become_user: "{{ username }}"
+  command: "bash {{ pod_install_dir }}/d-mediawiki/fix_LocalSettings.sh"
+  args:
+    chdir: "{{ pod_install_dir }}/d-mediawiki"
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-mw

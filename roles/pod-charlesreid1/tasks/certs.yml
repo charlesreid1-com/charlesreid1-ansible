@@ -1,0 +1,45 @@
+---
+# #####################################
+# CHECK SSL CERTIFICATES
+# 
+# LetsEncrypt role will install certs as needed,
+# but should probably check certs anyway.
+
+
+- name: Check if LetsEncrypt cert for default server name is present
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-certs
+    - letsencrypt
+  stat:
+    path: "/etc/letsencrypt/live/{{ server_name_default }}"
+  register: register_letsencrypt_livecert_default
+
+
+- name: Check if LetsEncrypt cert for gitea server name is present
+  tags:
+    - letsencrypt
+    - pod-charlesreid1
+    - pod-charlesreid1-certs
+  stat:
+    path: "/etc/letsencrypt/live/git.{{ server_name_default }}"
+  register: register_letsencrypt_livecert_gitea
+
+
+# If top level and subdomain certs are present, start/restart the
+# pod-charlesreid1 service.
+
+- name: Enable pod-charlesreid1 service
+  become: yes
+  service:
+    name: pod-charlesreid1
+    enabled: yes
+    state: restarted
+  when:
+    - "pod_register_docker_compose.stat.executable"
+    - "register_letsencrypt_livecert_default.stat.exists"
+    - "register_letsencrypt_livecert_gitea.stat.exists"
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-certs
+    - pod-charlesreid1-services
