@@ -1,6 +1,28 @@
 ---
 # #####################################
-# INSTALL STARTUP SERVICE
+# DSIABLE STARTUP SERVICES
+#
+# Disable annoying services like nginx.
+
+- name: Disable nginx service (annoying)
+  become: yes
+  command: "systemctl disable nginx"
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-services
+
+
+- name: Stop nginx service
+  become: yes
+  command: "systemctl stop nginx"
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-services
+
+
+
+# #####################################
+# INSTALL STARTUP SERVICES
 # 
 # Check if the charlesreid1 docker pod service
 # is installed. If not, install it.
@@ -33,4 +55,3 @@
   tags:
     - pod-charlesreid1
     - pod-charlesreid1-services
-
