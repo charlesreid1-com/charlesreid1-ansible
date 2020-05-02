@@ -21,8 +21,6 @@ are ready to run these docker pods.
 | Pod              | Link                                                 |
 |------------------|------------------------------------------------------|
 | pod-charlesreid1 | <https://git.charlesreid1.com/docker/pod-charlesreid1> |
-| pod-webhooks     | <https://git.charlesreid1.com/docker/pod-webhooks>     |
-| pod-bots         | <https://git.charlesreid1.com/docker/pod-bots>         |
 
 ## Playbooks
 
@@ -32,8 +30,6 @@ and a provision playbook.
 | Playbook               | Description                                                                                                          |
 |------------------------|----------------------------------------------------------------------------------------------------------------------|
 | `podcharlesreid1.yml`  | Playbook to install and run the charlesreid1.com docker pod (<https://git.charlesreid1.com/docker/pod-charlesreid1>) |
-| `podwebhooks.yml`      | (TBA) Playbook to install and run the webhooks pod (<https://git.charlesreid1.com/docker/pod-webhooks>)                    |
-| `podbots.yml`          | (TBA) Playbook to install and run the bot pod (<https://git.charlesreid1.com/docker/pod-bots>)                             |
 | `base.yml`             | Base playbook run by all of the pod playbooks above.                                                                 |
 | `provision.yml`        | Playbook to provision new Ubuntu machines with `/usr/bin/python`.                                                    |
 
@@ -66,8 +62,6 @@ respective docker pod.
 | Role Name             | Description                                                  |
 |-----------------------|--------------------------------------------------------------|
 | pod-charlesreid1      | Role specific to the charlesreid1.com docker pod             |
-| pod-webhooks          | Role specific to \{hooks,pages\}.charlesreid1.com docker pod |
-| pod-bots              | Role specific to bots docker pod                             |
 
 
 ## Getting Started with Playbooks
