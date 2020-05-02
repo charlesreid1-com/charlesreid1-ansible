@@ -26,3 +26,11 @@
     - pod-charlesreid1
     - pod-charlesreid1-services
 
+
+- name: Enable pod-charlesreid1 service
+  become: yes
+  command: "systemctl enable pod-charlesreid1"
+  tags:
+    - pod-charlesreid1
+    - pod-charlesreid1-services
+
