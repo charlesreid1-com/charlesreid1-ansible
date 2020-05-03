@@ -1,6 +1,9 @@
 ---
 # tasks file for init-charles
 
+###################
+# Make the user
+
 - name: "Add the user {{ username }}"
   become: yes
   user:
@@ -11,4 +14,17 @@
     append: yes
     state: present
     createhome: yes
+
+
+###################
+# Make temp dir
+
+- name: Make ~/tmp dir
+  become: yes
+  file:
+    path: "/home/{{ nonroot_user }}/temp"
+    state: directory
+    owner: "{{ nonroot_user }}"
+    group: "{{ nonroot_user }}"
+    mode: 0700
 

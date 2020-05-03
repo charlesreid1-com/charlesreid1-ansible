@@ -52,8 +52,6 @@
     state: present
 
 
-
-
 ############
 # System
 
@@ -71,4 +69,3 @@
     path: /temp
     state: directory
     mode: 0777
-
