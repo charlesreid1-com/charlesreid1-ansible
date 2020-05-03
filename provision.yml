@@ -10,6 +10,8 @@
   gather_facts: no
   remote_user: root
   pre_tasks:
+    - name: "Update aptitude"
+      raw: sudo apt-get -y update
     - name: "Install python2"
       raw: sudo apt-get -y install python
     - name: Add the non-root user
