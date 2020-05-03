@@ -62,21 +62,21 @@
       become: yes
 
 
-- name: Install goenv
-  hosts: servers
-  roles:
-    - role: goenv
-      tags: goenv
-      become: yes
+#- name: Install goenv
+#  hosts: servers
+#  roles:
+#    - role: goenv
+#      tags: goenv
+#      become: yes
 
 
 
-      #- name: Install AWS credentials and tools
-      #  hosts: servers
-      #  roles:
-      #    - role: aws
-      #      tags: aws
-      #      aws_secret_access_key: "{{ charlesreid1_aws_secret_access_key }}"
-      #      aws_access_key_id: "{{ charlesreid1_aws_access_key_id }}"
+#- name: Install AWS credentials and tools
+#  hosts: servers
+#  roles:
+#    - role: aws
+#      tags: aws
+#      aws_secret_access_key: "{{ charlesreid1_aws_secret_access_key }}"
+#      aws_access_key_id: "{{ charlesreid1_aws_access_key_id }}"
 
 
