@@ -35,20 +35,11 @@ charlesreid1_port_ssl_gitea: "443"
 # vault variables
 
 # unix system password
-charlesreid1_system_password: "{{ vault_system_password }}"
+base_system_password: "{{ vault_system_password }}"
 
 # AWS credentials:
 charlesreid1_aws_secret_access_key: "{{ vault_aws_secret_access_key }}"
 charlesreid1_aws_access_key_id: "{{ vault_aws_access_key_id }}"
-
-
-# set the IP address of our two servers
-#
-# pod-charlesreid
-charlesreid1_nginx_charlesreid1_ip: "{{ vault_nginx_charlesreid1_ip }}"
-# 
-# pod-webhooks
-charlesreid1_nginx_subdomains_ip: "{{ vault_nginx_subdomains_ip }}"
 
 
 # Secrets and stuff
@@ -62,8 +53,3 @@ charlesreid1_gitea_internal_token: "{{ vault_gitea_internal_token }}"
 
 # mediawiki secret key for web sessions
 charlesreid1_mediawiki_secretkey: "{{ vault_mediawiki_secretkey }}"
-
-# pod-webhooks requires a secret to be sent
-# with the webhook.
-charlesreid1_captain_hook_secret: "{{ vault_captain_hook_secret }}"
-
