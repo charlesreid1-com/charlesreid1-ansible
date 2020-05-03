@@ -2,3 +2,4 @@
 # variables for init-nonroot
 
 username: "{{ nonroot_user }}"
+system_password: "{{ base_system_password }}"

@@ -4,7 +4,7 @@
 
 - name: Install python versions
   become: yes
-  become_user: "{{ nonroot_user }}"
+  become_user: "{{ username }}"
   command: "{{ pyenv_root }}/bin/pyenv install -s {{ item }}"
   args:
     creates: "{{ pyenv_root }}/versions/{{ item }}"
@@ -17,7 +17,7 @@
 
 - name: Set global python version
   become: yes
-  become_user: "{{ nonroot_user }}"
+  become_user: "{{ username }}"
   lineinfile:
     path: "{{ pyenv_root }}/version"
     regexp: "^{{ pyenv_global_version }}"

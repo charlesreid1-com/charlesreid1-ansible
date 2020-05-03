@@ -17,6 +17,7 @@
     - build-essential
     - curl
     - wget
+    - unzip
     - graphviz
     - openssh-server
     - ncdu

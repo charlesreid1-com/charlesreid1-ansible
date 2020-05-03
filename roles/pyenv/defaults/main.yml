@@ -1,7 +1,8 @@
 ---
 # defaults file for pyenv
 
-pyenv_root: "/home/{{ nonroot_user }}/.pyenv"
+username: "{{ nonroot_user }}"
+pyenv_root: "/home/{{ username }}/.pyenv"
 
 pyenv_versions:
   - miniconda3-4.3.30

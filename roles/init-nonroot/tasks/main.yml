@@ -8,7 +8,7 @@
   become: yes
   user:
     name: "{{ username }}"
-    password: "{{ charlesreid1_system_password }}"
+    password: "{{ system_password }}"
     shell: /bin/bash
     groups: wheel
     append: yes
@@ -22,9 +22,9 @@
 - name: Make ~/tmp dir
   become: yes
   file:
-    path: "/home/{{ nonroot_user }}/temp"
+    path: "/home/{{ username }}/temp"
     state: directory
-    owner: "{{ nonroot_user }}"
-    group: "{{ nonroot_user }}"
+    owner: "{{ username }}"
+    group: "{{ username }}"
     mode: 0700
 
