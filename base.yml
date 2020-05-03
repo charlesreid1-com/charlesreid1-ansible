@@ -1,6 +1,6 @@
 ---
 # main playbook for 
-# all charlesreid1 nodes
+# all nodes
 
 
 - name: Initial setup root
@@ -19,18 +19,18 @@
       become: yes
 
 
-- name: Install docker and docker-compose
-  hosts: servers
-  roles:
-    - role: docker
-      become: yes
-
-
 - name: Initial setup non-root
   hosts: servers
   roles:
     - role: init-nonroot
       tags: init-nonroot
+
+
+- name: Install docker and docker-compose
+  hosts: servers
+  roles:
+    - role: docker
+      become: yes
 
 
 - name: Set up SSH keys
