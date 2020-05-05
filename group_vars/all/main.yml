@@ -54,12 +54,14 @@ base_system_password: "{{ vault_system_password }}"
 # dorylus vault vars
 
 # uptime details
+dorylus_uptime_user: "{{ username }}"
 dorylus_uptime_gmail_email: "{{ vault_uptime_gmail_email }}"
 dorylus_uptime_gmail_password: "{{ vault_uptime_gmail_password }}"
 dorylus_uptime_recipient_name: "{{ vault_uptime_recipient_name }}"
 dorylus_uptime_recipient_email: "{{ vault_uptime_recipient_email }}"
 dorylus_uptime_slack_apikey: "{{ vault_uptime_slack_apikey }}"
 dorylus_uptime_slack_channel: "{{ vault_uptime_slack_channel }}"
+
 
 ####################
 # charlesreid1 vault vars
