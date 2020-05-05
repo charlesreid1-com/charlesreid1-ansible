@@ -2,4 +2,11 @@
 linodeservers
 
 [linodeservers]
-linode ansible_host=50.116.7.163 ansible_port=22 ansible_python_interpreter=/usr/bin/python3 
+dorky
+bear
+
+[bear]
+linode_bear ansible_host=300.300.300.300 ansible_port=22 ansible_python_interpreter=/usr/bin/python3 
+
+[dorky]
+linode_dorky ansible_host=400.400.400.400 ansible_port=22 ansible_python_interpreter=/usr/bin/python3 
