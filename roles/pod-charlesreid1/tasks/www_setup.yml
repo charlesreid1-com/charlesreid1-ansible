@@ -56,7 +56,7 @@
     - pod-charlesreid1-content
 
 - name: "Run the charlesreid1.com clone www script to set up {{ server_name_default }}"
-  command: "python {{ pod_install_dir }}/scripts/git_clone_www.py"
+  command: "{{ pyenv_python }} {{ pod_install_dir }}/scripts/git_clone_www.py"
   become: yes
   become_user: "{{ username }}"
   tags:
@@ -90,7 +90,7 @@
     - pod-charlesreid1-content
 
 - name: "Run the charlesreid1.com pull www script to update {{ server_name_default }}"
-  command: "python {{ pod_install_dir }}/scripts/git_pull_www.py"
+  command: "{{ pyenv_python }} {{ pod_install_dir }}/scripts/git_pull_www.py"
   become: yes
   become_user: "{{ username }}"
   tags:
