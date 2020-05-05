@@ -4,7 +4,7 @@
 
 
 - name: Install SSL certificates for charlesreid1 docker pod
-  hosts: servers
+  hosts: bear
   become: yes
   roles:
     - role: letsencrypt
@@ -18,7 +18,7 @@
 
 
 - name: Install charlesreid1 docker pod
-  hosts: servers
+  hosts: bear
   become: yes
   roles:
     - role: pod-charlesreid1
