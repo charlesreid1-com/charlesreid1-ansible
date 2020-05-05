@@ -22,12 +22,20 @@ ssh_key_email: "charlesreid1@gmail.com"
 charlesreid1_admin_email: "charles@charlesreid1.com"
 
 # nginx variables
-
 charlesreid1_port_default: "80"
 charlesreid1_port_gitea: "80"
-
 charlesreid1_port_ssl_default: "443"
 charlesreid1_port_ssl_gitea: "443"
+
+# pyenv variables
+pyenv_root: "/home/{{ username }}/.pyenv"
+pyenv_versions:
+  - miniconda3-4.3.30
+#  - 3.7.5
+#  - 3.8.0
+pyenv_global_version: miniconda3-4.3.30
+pyenv_python: "{{ pyenv_root }}/versions/{{ pyenv_global_version }}/bin/python"
+pyenv_pip: "{{ pyenv_root }}/versions/{{ pyenv_global_version }}/bin/pip"
 
 
 
