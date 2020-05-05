@@ -1,0 +1,13 @@
+
+---
+- name: Install postfix
+  hosts: dorylus
+  roles:
+    - postfix
+  vars:
+    postfix_raw_options:
+      - |
+        append_dot_mydomain = yes
+        myorigin = /etc/mailname
+    postfix_hostname: "dorylus.cc"
+    postfix_mailname: "dorylus.cc"
