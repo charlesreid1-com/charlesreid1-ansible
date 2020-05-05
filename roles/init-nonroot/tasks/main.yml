@@ -8,7 +8,7 @@
   become: yes
   user:
     name: "{{ username }}"
-    password: "{{ system_password }}"
+    password: "{{ system_password | password_hash('sha512') }}"
     shell: /bin/bash
     groups: wheel
     append: yes
