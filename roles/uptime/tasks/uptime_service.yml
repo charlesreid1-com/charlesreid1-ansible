@@ -18,8 +18,8 @@
 
 - name: Fetch uptime service template
   become: yes
-  template:
-    src: "{{ uptime_install_dir }}/service/uptime.service.j2"
+  fetch:
+    src: "{{ uptime_path }}/service/uptime.service.j2"
     dest: "/tmp/uptime.service.j2"
     flat: yes
     fail_on_missing: yes

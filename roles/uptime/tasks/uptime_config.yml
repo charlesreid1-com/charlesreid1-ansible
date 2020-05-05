@@ -8,7 +8,7 @@
 
 - name: Fetch the uptime config template from the remote machine
   fetch:
-    src: "{{ uptime_install_dir }}/uptime.conf.j2"
+    src: "{{ uptime_path }}/uptime.conf.j2"
     dest: "/tmp/uptime.conf.j2"
     flat: yes
     fail_on_missing: yes

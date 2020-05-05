@@ -5,7 +5,7 @@
 # Check if we already cloned the repo
 - name: Check if charlesreid1-bots/uptime repo is already cloned
   stat:
-    path: "{{ uptime_install_dir }}"
+    path: "{{ uptime_path }}"
   register: uptime_clone_check
   tags:
     - uptime
@@ -17,7 +17,7 @@
   become_user: "{{ username }}"
   git:
     repo: 'https://github.com/charlesreid1-bots/uptime'
-    dest: "{{ uptime_install_dir }}"
+    dest: "{{ uptime_path }}"
     recursive: yes
   when:
     - "not uptime_clone_check.stat.exists"
@@ -31,7 +31,7 @@
   become_user: "{{ username }}"
   command: "git pull"
   args:
-    chdir: "{{ uptime_install_dir }}"
+    chdir: "{{ uptime_path }}"
   when:
     - "uptime_clone_check.stat.exists"
   tags:

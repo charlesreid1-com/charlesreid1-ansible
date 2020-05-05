@@ -4,7 +4,7 @@
 username: "{{ nonroot_user }"
 
 # where uptime is installed
-uptime_install_dir: "/home/{{ username }}/uptime"
+uptime_path: "/home/{{ username }}/uptime"
 
 # uptime details
 uptime_gmail_email: "{{ dorylus_uptime_gmail_email }}"
