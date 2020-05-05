@@ -1,0 +1,16 @@
+---
+# defaults file for uptime
+
+username: "{{ nonroot_user }"
+
+# where uptime is installed
+uptime_install_dir: "/home/{{ username }}/uptime"
+
+# uptime details
+uptime_gmail_email: "{{ dorylus_uptime_gmail_email }}"
+uptime_gmail_password: "{{ dorylus_uptime_gmail_password }}"
+uptime_recipient_name: "{{ dorylus_uptime_recipient_name }}"
+uptime_recipient_email: "{{ dorylus_uptime_recipient_email }}"
+uptime_slack_apikey: "{{ dorylus_uptime_slack_apikey }}"
+uptime_slack_channel: "{{ dorylus_uptime_slack_channel }}"
+
