@@ -1,0 +1,34 @@
+---
+# Set up a virtual environment to run uptime as a service
+
+# Procedure:
+# - install virtualenv package
+# - create the virtual env dir
+# - source the activate script
+# - pip install requirements.txt
+
+- name: Install virtualenv
+  become: yes
+  become_user: "{{ username }}"
+  command: pip3 install virtualenv
+  tags:
+    - uptime
+    - uptime-virtualenv
+
+
+- name: Create a Python virtual environment
+  become: yes
+  become_user: "{{ username }}"
+  command: "virtualenv -p python3.6 {{ uptime_path }}/vp"
+  tags:
+    - uptime
+    - uptime-virtualenv
+
+
+- name: Pip install uptime requirements.txt
+  become: yes
+  become_user: "{{ username }}"
+  command: "{{ uptime_path }}/vp/bin/pip install -r {{ uptime_path }}/requirements.txt"
+  tags:
+    - uptime
+    - uptime-virtualenv

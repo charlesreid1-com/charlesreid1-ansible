@@ -9,6 +9,7 @@
   register: uptime_clone_check
   tags:
     - uptime
+    - uptime-clone
 
 
 # Clone it
@@ -23,6 +24,7 @@
     - "not uptime_clone_check.stat.exists"
   tags:
     - uptime
+    - uptime-clone
 
 
 # Pull it
@@ -36,3 +38,4 @@
     - "uptime_clone_check.stat.exists"
   tags:
     - uptime
+    - uptime-clone

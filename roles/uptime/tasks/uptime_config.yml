@@ -13,7 +13,8 @@
     flat: yes
     fail_on_missing: yes
   tags:
-   - uptime
+    - uptime
+    - uptime-config
 
 
 - name: Make uptime config directory
@@ -23,6 +24,9 @@
     recurse: yes
     owner: "{{ username }}"
     group: "{{ username }}"
+  tags:
+    - uptime
+    - uptime-config
 
 
 - name: Install the uptime config file
@@ -34,4 +38,5 @@
     mode: 0600
     force: yes
   tags:
-   - uptime
+    - uptime
+    - uptime-config

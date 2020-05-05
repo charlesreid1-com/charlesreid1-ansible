@@ -14,6 +14,7 @@
   register: uptime_service_check
   tags:
     - uptime
+    - uptime-service
 
 
 - name: Fetch uptime service template
@@ -28,11 +29,11 @@
     - "not uptime_service_check.stat.exists"
   tags:
     - uptime
+    - uptime-service
 
 
-- name: Install the uptime configuration template
+- name: Install the uptime service template
   become: yes
-  become_user: "{{ username }}"
   template:
     src: "/tmp/uptime.service.j2"
     dest: "/etc/systemd/system/uptime.service"
@@ -41,6 +42,7 @@
     - "not uptime_service_check.stat.exists"
   tags:
     - uptime
+    - uptime-service
 
 
 - name: Enable uptime service
@@ -48,3 +50,4 @@
   command: "systemctl enable uptime"
   tags:
     - uptime
+    - uptime-service

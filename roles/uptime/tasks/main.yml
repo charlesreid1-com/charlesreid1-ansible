@@ -5,5 +5,7 @@
 
 - include: uptime_config.yml
 
+- include: uptime_virtualenv.yml
+
 - include: uptime_service.yml
 
