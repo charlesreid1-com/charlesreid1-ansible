@@ -37,7 +37,7 @@
   template:
     src: "/tmp/uptime.service.j2"
     dest: "/etc/systemd/system/uptime.service"
-    mode: 0774
+    mode: 0664
   when:
     - "not uptime_service_check.stat.exists"
   tags:
