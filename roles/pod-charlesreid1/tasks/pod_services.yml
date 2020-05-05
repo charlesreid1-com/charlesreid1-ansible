@@ -1,6 +1,8 @@
 ---
-# #####################################
-# DSIABLE STARTUP SERVICES
+# Services related to pod-charlesreid
+
+#######################################
+# DISABLE STARTUP SERVICES
 #
 # Disable annoying services like nginx.
 
