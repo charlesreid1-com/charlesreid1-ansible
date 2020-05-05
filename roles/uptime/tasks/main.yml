@@ -1,0 +1,9 @@
+---
+# tasks file for installing uptime and associated service
+
+- include: uptime_clone.yml
+
+- include: uptime_config.yml
+
+- include: uptime_service.yml
+

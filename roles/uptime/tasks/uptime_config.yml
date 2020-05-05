@@ -1,0 +1,37 @@
+---
+# Configuration file from template
+
+
+# Building from templates requires two steps:
+# First, use fetch module to copy template from remote machine to local machine.
+# Second, use template module to use the template.
+
+- name: Fetch the uptime config template from the remote machine
+  fetch:
+    src: "{{ uptime_install_dir }}/uptime.conf.j2"
+    dest: "/tmp/uptime.conf.j2"
+    flat: yes
+    fail_on_missing: yes
+  tags:
+   - uptime
+
+
+- name: Make uptime config directory
+  file:
+    path: "/home/{{ username }}/.config/uptime"
+    state: directory
+    recurse: yes
+    owner: "{{ username }}"
+    group: "{{ username }}"
+
+
+- name: Install the uptime config file
+  become: yes
+  become_user: "{{ username }}"
+  template:
+    src: "/tmp/uptime.conf.j2"
+    dest: "/home/{{ username }}/.config/uptime/uptime.conf"
+    mode: 0600
+    force: yes
+  tags:
+   - uptime

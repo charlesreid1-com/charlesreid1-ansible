@@ -1,0 +1,50 @@
+---
+# Install the uptime startup service
+
+# Check if the uptime service is installed already.
+# If not, install it.
+#
+# The strategy we use is a little convoluted, but has two steps:
+# step 1: fetch the template file from remote machine to local machine
+# step 2: apply the template from local machine and copy it to remote machine
+
+- name: Check if uptime service is installed
+  stat:
+    path: /etc/systemd/system/uptime.service
+  register: uptime_service_check
+  tags:
+    - uptime
+
+
+- name: Fetch uptime service template
+  become: yes
+  template:
+    src: "{{ uptime_install_dir }}/service/uptime.service.j2"
+    dest: "/tmp/uptime.service.j2"
+    flat: yes
+    fail_on_missing: yes
+  when:
+    - "uptime_clone_check.stat.exists"
+    - "not uptime_service_check.stat.exists"
+  tags:
+    - uptime
+
+
+- name: Install the uptime configuration template
+  become: yes
+  become_user: "{{ username }}"
+  template:
+    src: "/tmp/uptime.service.j2"
+    dest: "/etc/systemd/system/uptime.service"
+    mode: 0774
+  when:
+    - "not uptime_service_check.stat.exists"
+  tags:
+    - uptime
+
+
+- name: Enable uptime service
+  become: yes
+  command: "systemctl enable uptime"
+  tags:
+    - uptime

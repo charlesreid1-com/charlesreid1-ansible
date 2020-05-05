@@ -1,0 +1,38 @@
+---
+# Clone the uptime repo/script/package
+
+
+# Check if we already cloned the repo
+- name: Check if charlesreid1-bots/uptime repo is already cloned
+  stat:
+    path: "{{ uptime_install_dir }}"
+  register: uptime_clone_check
+  tags:
+    - uptime
+
+
+# Clone it
+- name: Clone charlesreid1-bots/uptime
+  become: yes
+  become_user: "{{ username }}"
+  git:
+    repo: 'https://github.com/charlesreid1-bots/uptime'
+    dest: "{{ uptime_install_dir }}"
+    recursive: yes
+  when:
+    - "not uptime_clone_check.stat.exists"
+  tags:
+    - uptime
+
+
+# Pull it
+- name: Pull charlesreid1-bots/uptime
+  become: yes
+  become_user: "{{ username }}"
+  command: "git pull"
+  args:
+    chdir: "{{ uptime_install_dir }}"
+  when:
+    - "uptime_clone_check.stat.exists"
+  tags:
+    - uptime
