@@ -8,11 +8,20 @@
 - name: Set machine name with hostname command
   become: yes
   command: "hostname {{ machine_name }}"
+  tags:
+    - machine-name
 
 
 - name: Create new /etc/hostname
   become: yes
-  command: "echo {{ machine_name }} > /etc/hostname"
+  copy:
+    dest: /etc/hostname
+    content: "{{ machine_name }}"
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+  tags:
+    - machine-name
 
 
 - name: Set hostname entry to 127.0.0.1 in /etc/hosts
@@ -22,6 +31,8 @@
     regexp: "^127.0.0.1"
     line: "127.0.0.1 {{ machine_name }}"
     create: yes
+  tags:
+    - machine-name
 
 
 ############
