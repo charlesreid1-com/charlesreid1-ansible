@@ -7,25 +7,25 @@
 # - source the activate script
 # - pip install requirements.txt
 
-- name: Install virtualenv
+- name: Pip install virtualenv
   become: yes
   become_user: "{{ username }}"
-  command: pip3 install virtualenv
+  command: "/home/{{ username }}/.pyenv/shims/pip install virtualenv"
   tags:
     - uptime
     - uptime-virtualenv
 
 
-- name: Create a Python virtual environment
+- name: Create an uptime virtual environment
   become: yes
   become_user: "{{ username }}"
-  command: "virtualenv -p python3.6 {{ uptime_path }}/vp"
+  command: "{{ pyenv_python }} -m virtualenv -p python3.6 {{ uptime_path }}/vp"
   tags:
     - uptime
     - uptime-virtualenv
 
 
-- name: Pip install uptime requirements.txt
+- name: Pip install uptime requirements.txt into the uptime virtual environment
   become: yes
   become_user: "{{ username }}"
   command: "{{ uptime_path }}/vp/bin/pip install -r {{ uptime_path }}/requirements.txt"
