@@ -1,0 +1,12 @@
+---
+# variables for installing bots
+
+apollo_user: "{{ nonroot_user }}"
+apollo_path: "/home/{{ apollo_user }}/apollo-space-junk"
+
+ginsberg_user: "{{ nonroot_user }}"
+ginsberg_path: "/home/{{ apollo_user }}/ginsberg-bot-flock"
+
+milton_user: "{{ nonroot_user }}"
+milton_path: "/home/{{ milton_user }}/milton-bot-flock"
+

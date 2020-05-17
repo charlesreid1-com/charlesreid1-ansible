@@ -1,0 +1,33 @@
+---
+# milton bot flock
+# 
+# Process:
+# - install api keys
+# - install bot keys
+# - install startup service
+# - enable startup service
+# - start startup service
+
+- name: "Install API keys"
+  copy: 
+    content: "apikey.json"
+    dest: "{{ milton_path }}/bot/apikeys.json"
+    
+- name: "Install Milton Twitter keys"
+  copy:
+    src: "{{ item }}.json"
+    dest: "{{ milton_path }}/bot/keys/{{ item }}.json"
+  with_items:
+    - milton_book1
+    - milton_book2
+    - milton_book3
+    - milton_book4
+    - milton_book5
+    - milton_book6
+    - milton_book7
+    - milton_book8
+    - milton_book9
+    - milton_book10
+    - milton_book11
+    - milton_book12
+

@@ -1,0 +1,40 @@
+---
+# ginsberg bot flock
+# 
+# Process:
+# - install api keys
+# - install bot keys
+# - install startup service
+# - enable startup service
+# - start startup service
+
+- name: "Install API keys"
+  copy: 
+    content: "apikey.json"
+    dest: "{{ ginsberg_path }}/bot/apikeys.json"
+    
+- name: "Install Ginsberg Twitter keys"
+  copy:
+    src: "{{ item }}.json"
+    dest: "{{ ginsberg_path }}/bot/keys/{{ item }}.json"
+  with_items:
+    - gbf_america
+    - gbf_auntrose
+    - gbf_chicago
+    - gbf_cosmo
+    - gbf_dc
+    - gbf_deathfame
+    - gbf_deathfronts
+    - gbf_ecologue
+    - gbf_elegy
+    - gbf_fiveam
+    - gbf_greyhound
+    - gbf_hospital
+    - gbf_howl
+    - gbf_kaddish
+    - gbf_lion
+    - gbf_money
+    - gbf_organ
+    - gbf_sunflower
+    - gbf_supermarket
+

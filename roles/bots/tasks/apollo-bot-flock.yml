@@ -1,0 +1,28 @@
+---
+# apollo bot flock
+# 
+# Process:
+# - install api keys
+# - install bot keys
+# - install startup service
+# - enable startup service
+# - start startup service
+
+- name: "Install API keys"
+  copy: 
+    content: "apikey.json"
+    dest: "{{ apollo_path }}/bot/apikeys.json"
+    
+- name: "Install Apollo Twitter keys"
+  copy:
+    src: "{{ item }}.json"
+    dest: "{{ apollo_path }}/bot/keys/{{ item }}.json"
+  with_items:
+    - "apollo_11"
+    - "apollo_12"
+    - "apollo_13"
+    - "apollo_14"
+    - "apollo_15"
+    - "apollo_16"
+    - "apollo_17"
+
