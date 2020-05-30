@@ -4,7 +4,7 @@
 
 
 - name: Initial setup root
-  hosts: "{{ target }}"
+  hosts: "{{ machine_name }}"
   roles:
     - role: init-root
       tags: init-root
@@ -12,7 +12,7 @@
 
 
 - name: Install packages with aptitude
-  hosts: "{{ target }}"
+  hosts: "{{ machine_name }}"
   roles:
     - role: install-stuff
       tags: install-stuff
@@ -20,42 +20,42 @@
 
 
 - name: Initial setup non-root
-  hosts: "{{ target }}"
+  hosts: "{{ machine_name }}"
   roles:
     - role: init-nonroot
       tags: init-nonroot
 
 
 - name: Install docker and docker-compose
-  hosts: "{{ target }}"
+  hosts: "{{ machine_name }}"
   roles:
     - role: docker
       become: yes
 
 
 - name: Set up SSH keys
-  hosts: "{{ target }}"
+  hosts: "{{ machine_name }}"
   roles:
     - role: sshkeys
       tags: sshkeys
 
 
 - name: Set up dotfiles
-  hosts: "{{ target }}"
+  hosts: "{{ machine_name }}"
   roles:
     - role: dotfiles
       tags: dotfiles
 
 
 - name: Set up vim
-  hosts: "{{ target }}"
+  hosts: "{{ machine_name }}"
   roles:
     - role: vim
       tags: vim
 
 
 - name: Install pyenv
-  hosts: "{{ target }}"
+  hosts: "{{ machine_name }}"
   roles:
     - role: pyenv
       tags: pyenv
