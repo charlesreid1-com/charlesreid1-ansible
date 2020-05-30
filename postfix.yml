@@ -1,6 +1,5 @@
 ---
-# main playbook for dorylus cron server
-
+# Playbook for postfix server
 
 
 - name: Install postfix
@@ -14,13 +13,3 @@
         myorigin = /etc/mailname
     postfix_hostname: "dorylus.cc"
     postfix_mailname: "dorylus.cc"
-
-
-- name: Install uptime bot
-  hosts: dorky
-  become: yes
-  roles:
-    - role: uptime
-      tags: uptime
-      dorylus_server_name_default: "dorylus.cc"
-
