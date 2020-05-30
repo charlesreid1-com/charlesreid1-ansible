@@ -1,0 +1,11 @@
+---
+# main playbook for installing bot flock
+
+
+
+- name: Install bot flock
+  hosts: dorky
+  become: yes
+  roles:
+    - role: bots
+
