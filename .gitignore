@@ -3,3 +3,6 @@
 *.log
 *.retry
 site/
+
+secrets/*
+!secrets/*.enc
