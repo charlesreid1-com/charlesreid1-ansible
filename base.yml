@@ -4,7 +4,7 @@
 
 
 - name: Initial setup root
-  hosts: servers
+  hosts: "{{ target }}"
   roles:
     - role: init-root
       tags: init-root
@@ -12,7 +12,7 @@
 
 
 - name: Install packages with aptitude
-  hosts: servers
+  hosts: "{{ target }}"
   roles:
     - role: install-stuff
       tags: install-stuff
@@ -20,42 +20,42 @@
 
 
 - name: Initial setup non-root
-  hosts: servers
+  hosts: "{{ target }}"
   roles:
     - role: init-nonroot
       tags: init-nonroot
 
 
 - name: Install docker and docker-compose
-  hosts: servers
+  hosts: "{{ target }}"
   roles:
     - role: docker
       become: yes
 
 
 - name: Set up SSH keys
-  hosts: servers
+  hosts: "{{ target }}"
   roles:
     - role: sshkeys
       tags: sshkeys
 
 
 - name: Set up dotfiles
-  hosts: servers
+  hosts: "{{ target }}"
   roles:
     - role: dotfiles
       tags: dotfiles
 
 
 - name: Set up vim
-  hosts: servers
+  hosts: "{{ target }}"
   roles:
     - role: vim
       tags: vim
 
 
 - name: Install pyenv
-  hosts: servers
+  hosts: "{{ target }}"
   roles:
     - role: pyenv
       tags: pyenv
@@ -70,7 +70,6 @@
 #      become: yes
 
 
-
 #- name: Install AWS credentials and tools
 #  hosts: servers
 #  roles:
@@ -78,5 +77,3 @@
 #      tags: aws
 #      aws_secret_access_key: "{{ charlesreid1_aws_secret_access_key }}"
 #      aws_access_key_id: "{{ charlesreid1_aws_access_key_id }}"
-
-
