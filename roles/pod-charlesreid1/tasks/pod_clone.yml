@@ -9,6 +9,7 @@
     path: "{{ pod_install_dir }}"
   register: pod_charlesreid1_clone_check
   tags:
+    - git
     - pod-charlesreid1
 
 
@@ -23,6 +24,7 @@
   when:
     - "not pod_charlesreid1_clone_check.stat.exists"
   tags:
+    - git
     - pod-charlesreid1
 
 
@@ -36,6 +38,7 @@
   when:
     - "pod_charlesreid1_clone_check.stat.exists"
   tags:
+    - git
     - pod-charlesreid1
 
 
@@ -49,6 +52,7 @@
   when:
     - "pod_charlesreid1_clone_check.stat.exists"
   tags:
+    - git
     - pod-charlesreid1
 
 
@@ -62,6 +66,7 @@
   when:
     - "pod_charlesreid1_clone_check.stat.exists"
   tags:
+    - git
     - pod-charlesreid1
 
 
