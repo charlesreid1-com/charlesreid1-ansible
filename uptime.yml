@@ -1,0 +1,10 @@
+---
+# Playbook for installing uptime bot
+
+
+- name: Install uptime bot
+  hosts: dorky
+  become: yes
+  roles:
+    - role: uptime
+      tags: uptime
