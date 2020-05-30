@@ -1,0 +1,137 @@
+---
+# apollo bot flock
+# 
+# Process:
+# - clone apollo repo
+# - install api keys
+# - install bot keys
+# - install startup service
+# - enable startup service
+# - start startup service
+
+
+# #####################################
+# CLONE APOLLO SPACE JUNK
+
+
+- name: Check if apollo-space-junk repo is already cloned
+  stat:
+    path: "{{ apollo_dir }}"
+  register: apollo_clone_check
+  tags:
+    - bots
+    - apollo
+    - git
+
+
+- name: Clone apollo-space-junk repo
+  become: yes
+  become_user: "{{ username }}"
+  git:
+    repo: "https://github.com/charlesreid1-bots/apollo-space-junk.git"
+    dest: "{{ apollo_dir }}"
+    recursive: yes
+  when:
+    - "not apollo_clone_check.stat.exists"
+  tags:
+    - bots
+    - apollo
+    - git
+
+
+- name: Pull apollo-space-junk
+  become: yes
+  become_user: "{{ username }}"
+  command: "git pull"
+  args:
+    chdir: "{{ pod_install_dir }}"
+  when:
+    - "apollo_clone_check.stat.exists"
+  tags:
+    - bots
+    - apollo
+    - git
+
+
+# #####################################
+# SET UP BOT KEYS
+
+- name: "Install API keys"
+  copy: 
+    src: "apikey.json.enc"
+    dest: "{{ apollo_path }}/bot/apikeys.json"
+    decrypt: yes
+  tags:
+    - bots
+    - apollo
+    - keys
+
+- name: "Install zipped Apollo Twitter keys"
+  copy:
+    src: "apollo_keys.zip.enc"
+    dest: "{{ apollo_path }}/bot/apollo_keys.zip"
+    decrypt: yes
+  tags:
+    - bots
+    - apollo
+    - keys
+    
+- name: "Unzip Apollo Twitter keys"
+  command: "unzip {{ apollo_path }}/bot/apollo_keys.zip -d {{ apollo_path }}/bot"
+  tags:
+    - bots
+    - apollo
+    - keys
+
+
+# #####################################
+# INSTALL STARTUP SERVICES
+# 
+# Check if bot startup service is installed.
+# If not, install it.
+
+- name: Check if apollo space junk service is installed
+  stat:
+    path: /etc/systemd/system/apollo.service
+  register: apollo_bot_service_check
+  tags:
+    - bots
+    - apollo
+    - bot-services
+
+
+- name: Fetch the apollo startup service jinja template
+  fetch:
+    src: "{{ apollo_dir }}/service/apollo.service.j2"
+    dest: "/tmp/apollo.service.j2"
+    flat: yes
+    fail_on_missing: yes
+  tags:
+    - bots
+    - apollo
+    - bot-services
+
+
+- name: Install the apollo startup service file
+  become: yes
+  template:
+    src: "/tmp/apollo.service.j2"
+    dest: "/etc/systemd/system/apollo.service"
+    mode: 0774
+  when:
+    - "not apollo_service_check.stat.exists"
+  tags:
+    - bots
+    - apollo
+    - bot-services
+
+
+- name: Enable apollo startup service
+  become: yes
+  command: "systemctl enable apollo"
+  when:
+    - "apollo_service_check.stat.exists"
+  tags:
+    - bots
+    - apollo
+    - bot-services
