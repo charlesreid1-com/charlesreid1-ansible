@@ -1,0 +1,7 @@
+changes:
+- base uses machine name
+- postfix is separate playbook
+- uptime is separate playbook
+- bots playbook
+- pod charlesreid1 playbook
+
