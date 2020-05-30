@@ -1,6 +1,5 @@
 ---
-# main playbook for installing bot flock
-
+# Playbook for installing bot flocks
 
 
 - name: Install bot flock
