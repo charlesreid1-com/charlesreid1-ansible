@@ -1,33 +1,139 @@
 ---
 # milton bot flock
-# 
+#
 # Process:
+# - clone repo
 # - install api keys
 # - install bot keys
 # - install startup service
 # - enable startup service
 # - start startup service
 
+
+# #####################################
+# CLONE MILTON BOT FLOCK
+
+
+- name: Check if milton repo is already cloned
+  stat:
+    path: "{{ milton_dir }}"
+  register: milton_clone_check
+  tags:
+    - bots
+    - milton
+    - git
+
+
+- name: Clone milton repo
+  become: yes
+  become_user: "{{ username }}"
+  git:
+    repo: "https://github.com/charlesreid1-bots/milton-bot-flock.git"
+    dest: "{{ milton_dir }}"
+    recursive: yes
+  when:
+    - "not milton_clone_check.stat.exists"
+  tags:
+    - bots
+    - milton
+    - git
+
+
+- name: Pull milton
+  become: yes
+  become_user: "{{ username }}"
+  command: "git pull"
+  args:
+    chdir: "{{ pod_install_dir }}"
+  when:
+    - "milton_clone_check.stat.exists"
+  tags:
+    - bots
+    - milton
+    - git
+
+
+# #####################################
+# SET UP BOT KEYS
+
+
 - name: "Install API keys"
   copy: 
-    content: "apikey.json"
+    src: "apikey.json.enc"
     dest: "{{ milton_path }}/bot/apikeys.json"
-    
-- name: "Install Milton Twitter keys"
-  copy:
-    src: "{{ item }}.json"
-    dest: "{{ milton_path }}/bot/keys/{{ item }}.json"
-  with_items:
-    - milton_book1
-    - milton_book2
-    - milton_book3
-    - milton_book4
-    - milton_book5
-    - milton_book6
-    - milton_book7
-    - milton_book8
-    - milton_book9
-    - milton_book10
-    - milton_book11
-    - milton_book12
+    decrypt: yes
+  tags:
+    - bots
+    - milton
+    - keys
 
+- name: "Install zipped milton Twitter keys"
+  copy:
+    src: "milton_keys.zip.enc"
+    dest: "{{ milton_path }}/bot/milton_keys.zip"
+    decrypt: yes
+  tags:
+    - bots
+    - milton
+    - keys
+    
+- name: "Unzip milton Twitter keys"
+  command: "unzip {{ milton_path }}/bot/milton_keys.zip -d {{ milton_path }}/bot"
+  tags:
+    - bots
+    - milton
+    - keys
+
+
+# #####################################
+# INSTALL STARTUP SERVICES
+# 
+# Check if bot startup service is installed.
+# If not, install it.
+
+- name: Check if milton startup service is installed
+  stat:
+    path: /etc/systemd/system/milton.service
+  register: milton_bot_service_check
+  tags:
+    - bots
+    - milton
+    - bot-services
+
+
+- name: Fetch the milton startup service jinja template
+  fetch:
+    src: "{{ milton_dir }}/service/milton.service.j2"
+    dest: "/tmp/milton.service.j2"
+    flat: yes
+    fail_on_missing: yes
+  tags:
+    - bots
+    - milton
+    - bot-services
+
+
+- name: Install the milton startup service file
+  become: yes
+  template:
+    src: "/tmp/milton.service.j2"
+    dest: "/etc/systemd/system/milton.service"
+    mode: 0774
+  when:
+    - "not milton_service_check.stat.exists"
+  tags:
+    - bots
+    - milton
+    - bot-services
+
+
+- name: Enable milton startup service
+  become: yes
+  command: "systemctl enable milton"
+  when:
+    - "milton_service_check.stat.exists"
+  tags:
+    - bots
+    - milton
+    - bot-services
+# 

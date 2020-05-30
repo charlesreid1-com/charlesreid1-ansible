@@ -2,7 +2,7 @@
 # apollo bot flock
 # 
 # Process:
-# - clone apollo repo
+# - clone repo
 # - install api keys
 # - install bot keys
 # - install startup service
@@ -14,7 +14,7 @@
 # CLONE APOLLO SPACE JUNK
 
 
-- name: Check if apollo-space-junk repo is already cloned
+- name: Check if apollo repo is already cloned
   stat:
     path: "{{ apollo_dir }}"
   register: apollo_clone_check
@@ -24,7 +24,7 @@
     - git
 
 
-- name: Clone apollo-space-junk repo
+- name: Clone apollo repo
   become: yes
   become_user: "{{ username }}"
   git:
@@ -39,7 +39,7 @@
     - git
 
 
-- name: Pull apollo-space-junk
+- name: Pull apollo
   become: yes
   become_user: "{{ username }}"
   command: "git pull"
@@ -55,6 +55,7 @@
 
 # #####################################
 # SET UP BOT KEYS
+
 
 - name: "Install API keys"
   copy: 
@@ -90,7 +91,7 @@
 # Check if bot startup service is installed.
 # If not, install it.
 
-- name: Check if apollo space junk service is installed
+- name: Check if apollo startup service is installed
   stat:
     path: /etc/systemd/system/apollo.service
   register: apollo_bot_service_check

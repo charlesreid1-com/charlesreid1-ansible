@@ -2,39 +2,137 @@
 # ginsberg bot flock
 # 
 # Process:
+# - clone repo
 # - install api keys
 # - install bot keys
 # - install startup service
 # - enable startup service
 # - start startup service
 
+
+# #####################################
+# CLONE GINSBERG BOT FLOCK
+
+
+- name: Check if ginsberg repo is already cloned
+  stat:
+    path: "{{ ginsberg_dir }}"
+  register: ginsberg_clone_check
+  tags:
+    - bots
+    - ginsberg
+    - git
+
+
+- name: Clone ginsberg repo
+  become: yes
+  become_user: "{{ username }}"
+  git:
+    repo: "https://github.com/charlesreid1-bots/ginsberg-bot-flock.git"
+    dest: "{{ ginsberg_dir }}"
+    recursive: yes
+  when:
+    - "not ginsberg_clone_check.stat.exists"
+  tags:
+    - bots
+    - ginsberg
+    - git
+
+
+- name: Pull ginsberg
+  become: yes
+  become_user: "{{ username }}"
+  command: "git pull"
+  args:
+    chdir: "{{ pod_install_dir }}"
+  when:
+    - "ginsberg_clone_check.stat.exists"
+  tags:
+    - bots
+    - ginsberg
+    - git
+
+
+# #####################################
+# SET UP BOT KEYS
+
+
 - name: "Install API keys"
   copy: 
-    content: "apikey.json"
+    src: "apikey.json.enc"
     dest: "{{ ginsberg_path }}/bot/apikeys.json"
-    
-- name: "Install Ginsberg Twitter keys"
-  copy:
-    src: "{{ item }}.json"
-    dest: "{{ ginsberg_path }}/bot/keys/{{ item }}.json"
-  with_items:
-    - gbf_america
-    - gbf_auntrose
-    - gbf_chicago
-    - gbf_cosmo
-    - gbf_dc
-    - gbf_deathfame
-    - gbf_deathfronts
-    - gbf_ecologue
-    - gbf_elegy
-    - gbf_fiveam
-    - gbf_greyhound
-    - gbf_hospital
-    - gbf_howl
-    - gbf_kaddish
-    - gbf_lion
-    - gbf_money
-    - gbf_organ
-    - gbf_sunflower
-    - gbf_supermarket
+    decrypt: yes
+  tags:
+    - bots
+    - ginsberg
+    - keys
 
+- name: "Install zipped ginsberg Twitter keys"
+  copy:
+    src: "ginsberg_keys.zip.enc"
+    dest: "{{ ginsberg_path }}/bot/ginsberg_keys.zip"
+    decrypt: yes
+  tags:
+    - bots
+    - ginsberg
+    - keys
+    
+- name: "Unzip ginsberg Twitter keys"
+  command: "unzip {{ ginsberg_path }}/bot/ginsberg_keys.zip -d {{ ginsberg_path }}/bot"
+  tags:
+    - bots
+    - ginsberg
+    - keys
+
+
+# #####################################
+# INSTALL STARTUP SERVICES
+# 
+# Check if bot startup service is installed.
+# If not, install it.
+
+- name: Check if ginsberg startup service is installed
+  stat:
+    path: /etc/systemd/system/ginsberg.service
+  register: ginsberg_bot_service_check
+  tags:
+    - bots
+    - ginsberg
+    - bot-services
+
+
+- name: Fetch the ginsberg startup service jinja template
+  fetch:
+    src: "{{ ginsberg_dir }}/service/ginsberg.service.j2"
+    dest: "/tmp/ginsberg.service.j2"
+    flat: yes
+    fail_on_missing: yes
+  tags:
+    - bots
+    - ginsberg
+    - bot-services
+
+
+- name: Install the ginsberg startup service file
+  become: yes
+  template:
+    src: "/tmp/ginsberg.service.j2"
+    dest: "/etc/systemd/system/ginsberg.service"
+    mode: 0774
+  when:
+    - "not ginsberg_service_check.stat.exists"
+  tags:
+    - bots
+    - ginsberg
+    - bot-services
+
+
+- name: Enable ginsberg startup service
+  become: yes
+  command: "systemctl enable ginsberg"
+  when:
+    - "ginsberg_service_check.stat.exists"
+  tags:
+    - bots
+    - ginsberg
+    - bot-services
