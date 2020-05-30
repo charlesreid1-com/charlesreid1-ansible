@@ -4,12 +4,12 @@
 username: "{{ nonroot_user }"
 
 # uptime details
-uptime_user: "{{ dorylus_uptime_user }}"
+uptime_user: "{{ charlesreid1_uptime_user }}"
 uptime_path: "/home/{{ username }}/uptime"
-uptime_gmail_email: "{{ dorylus_uptime_gmail_email }}"
-uptime_gmail_password: "{{ dorylus_uptime_gmail_password }}"
-uptime_recipient_name: "{{ dorylus_uptime_recipient_name }}"
-uptime_recipient_email: "{{ dorylus_uptime_recipient_email }}"
-uptime_slack_apikey: "{{ dorylus_uptime_slack_apikey }}"
-uptime_slack_channel: "{{ dorylus_uptime_slack_channel }}"
+uptime_gmail_email: "{{ charlesreid1_uptime_gmail_email }}"
+uptime_gmail_password: "{{ charlesreid1_uptime_gmail_password }}"
+uptime_recipient_name: "{{ charlesreid1_uptime_recipient_name }}"
+uptime_recipient_email: "{{ charlesreid1_uptime_recipient_email }}"
+uptime_slack_apikey: "{{ charlesreid1_uptime_slack_apikey }}"
+uptime_slack_channel: "{{ charlesreid1_uptime_slack_channel }}"
 
