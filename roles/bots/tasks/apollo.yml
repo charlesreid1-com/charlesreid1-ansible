@@ -16,7 +16,7 @@
 
 - name: Check if apollo repo is already cloned
   stat:
-    path: "{{ apollo_dir }}"
+    path: "{{ apollo_path }}"
   register: apollo_clone_check
   tags:
     - bots
@@ -29,7 +29,7 @@
   become_user: "{{ username }}"
   git:
     repo: "https://github.com/charlesreid1-bots/apollo-space-junk.git"
-    dest: "{{ apollo_dir }}"
+    dest: "{{ apollo_path }}"
     recursive: yes
   when:
     - "not apollo_clone_check.stat.exists"
@@ -44,7 +44,7 @@
   become_user: "{{ username }}"
   command: "git pull"
   args:
-    chdir: "{{ pod_install_dir }}"
+    chdir: "{{ pod_install_path }}"
   when:
     - "apollo_clone_check.stat.exists"
   tags:
@@ -103,7 +103,7 @@
 
 - name: Fetch the apollo startup service jinja template
   fetch:
-    src: "{{ apollo_dir }}/service/apollo.service.j2"
+    src: "{{ apollo_path }}/service/apollo.service.j2"
     dest: "/tmp/apollo.service.j2"
     flat: yes
     fail_on_missing: yes

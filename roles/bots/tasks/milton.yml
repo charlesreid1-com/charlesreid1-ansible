@@ -16,7 +16,7 @@
 
 - name: Check if milton repo is already cloned
   stat:
-    path: "{{ milton_dir }}"
+    path: "{{ milton_path }}"
   register: milton_clone_check
   tags:
     - bots
@@ -29,7 +29,7 @@
   become_user: "{{ username }}"
   git:
     repo: "https://github.com/charlesreid1-bots/milton-bot-flock.git"
-    dest: "{{ milton_dir }}"
+    dest: "{{ milton_path }}"
     recursive: yes
   when:
     - "not milton_clone_check.stat.exists"
@@ -44,7 +44,7 @@
   become_user: "{{ username }}"
   command: "git pull"
   args:
-    chdir: "{{ pod_install_dir }}"
+    chdir: "{{ pod_install_path }}"
   when:
     - "milton_clone_check.stat.exists"
   tags:
@@ -103,7 +103,7 @@
 
 - name: Fetch the milton startup service jinja template
   fetch:
-    src: "{{ milton_dir }}/service/milton.service.j2"
+    src: "{{ milton_path }}/service/milton.service.j2"
     dest: "/tmp/milton.service.j2"
     flat: yes
     fail_on_missing: yes

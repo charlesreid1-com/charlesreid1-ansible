@@ -1,7 +1,7 @@
 ---
 # tasks file for installing bots
 
-- include: apollo-bot-flock.yml
-- include: ginsberg-bot-flock.yml
-- include: milton-bot-flock.yml
+- include: apollo.yml
+- include: ginsberg.yml
+- include: milton.yml
 

@@ -16,7 +16,7 @@
 
 - name: Check if ginsberg repo is already cloned
   stat:
-    path: "{{ ginsberg_dir }}"
+    path: "{{ ginsberg_path }}"
   register: ginsberg_clone_check
   tags:
     - bots
@@ -29,7 +29,7 @@
   become_user: "{{ username }}"
   git:
     repo: "https://github.com/charlesreid1-bots/ginsberg-bot-flock.git"
-    dest: "{{ ginsberg_dir }}"
+    dest: "{{ ginsberg_path }}"
     recursive: yes
   when:
     - "not ginsberg_clone_check.stat.exists"
@@ -44,7 +44,7 @@
   become_user: "{{ username }}"
   command: "git pull"
   args:
-    chdir: "{{ pod_install_dir }}"
+    chdir: "{{ pod_install_path }}"
   when:
     - "ginsberg_clone_check.stat.exists"
   tags:
@@ -103,7 +103,7 @@
 
 - name: Fetch the ginsberg startup service jinja template
   fetch:
-    src: "{{ ginsberg_dir }}/service/ginsberg.service.j2"
+    src: "{{ ginsberg_path }}/service/ginsberg.service.j2"
     dest: "/tmp/ginsberg.service.j2"
     flat: yes
     fail_on_missing: yes
