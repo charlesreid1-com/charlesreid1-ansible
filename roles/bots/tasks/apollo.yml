@@ -44,7 +44,7 @@
   become_user: "{{ username }}"
   command: "git pull"
   args:
-    chdir: "{{ pod_install_path }}"
+    chdir: "{{ apollo_path }}"
   when:
     - "apollo_clone_check.stat.exists"
   tags:
@@ -58,8 +58,10 @@
 
 
 - name: "Install API keys"
+  become: yes
+  become_user: "{{ username }}"
   copy: 
-    src: "apikey.json.enc"
+    src: "../../../secrets/apikeys.json.enc"
     dest: "{{ apollo_path }}/bot/apikeys.json"
     decrypt: yes
   tags:
@@ -68,8 +70,10 @@
     - keys
 
 - name: "Install zipped Apollo Twitter keys"
+  become: yes
+  become_user: "{{ username }}"
   copy:
-    src: "apollo_keys.zip.enc"
+    src: "../../../secrets/apollo_keys.zip.enc"
     dest: "{{ apollo_path }}/bot/apollo_keys.zip"
     decrypt: yes
   tags:
@@ -78,11 +82,52 @@
     - keys
     
 - name: "Unzip Apollo Twitter keys"
-  command: "unzip {{ apollo_path }}/bot/apollo_keys.zip -d {{ apollo_path }}/bot"
+  become: yes
+  become_user: "{{ username }}"
+  command: "unzip -o {{ apollo_path }}/bot/apollo_keys.zip -d {{ apollo_path }}/bot"
   tags:
     - bots
     - apollo
     - keys
+
+
+# #####################################
+# SET UP VIRTUALENV
+# 
+# Procedure:
+# - install virtualenv package
+# - create the virtual env dir
+# - source the activate script
+# - pip install requirements.txt
+
+- name: Pip install virtualenv
+  become: yes
+  become_user: "{{ username }}"
+  command: "/home/{{ username }}/.pyenv/shims/pip install virtualenv"
+  tags:
+    - bots
+    - apollo
+    - bot-virtualenv
+
+
+- name: Create apollo virtual environment
+  become: yes
+  become_user: "{{ username }}"
+  command: "{{ pyenv_python }} -m virtualenv -p python3.6 {{ apollo_path }}/vp"
+  tags:
+    - bots
+    - apollo
+    - bot-virtualenv
+
+
+- name: Pip install apollo requirements.txt into the uptime virtual environment
+  become: yes
+  become_user: "{{ username }}"
+  command: "{{ apollo_path }}/vp/bin/pip install -r {{ apollo_path }}/requirements.txt"
+  tags:
+    - bots
+    - apollo
+    - bot-virtualenv
 
 
 # #####################################
@@ -94,7 +139,7 @@
 - name: Check if apollo startup service is installed
   stat:
     path: /etc/systemd/system/apollo.service
-  register: apollo_bot_service_check
+  register: apollo_service_check
   tags:
     - bots
     - apollo
