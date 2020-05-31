@@ -78,7 +78,7 @@
     - keys
     
 - name: "Unzip ginsberg Twitter keys"
-  command: "unzip {{ ginsberg_path }}/bot/ginsberg_keys.zip -d {{ ginsberg_path }}/bot"
+  command: "unzip -o {{ ginsberg_path }}/bot/ginsberg_keys.zip -d {{ ginsberg_path }}/bot"
   tags:
     - bots
     - ginsberg

@@ -78,7 +78,7 @@
     - keys
     
 - name: "Unzip milton Twitter keys"
-  command: "unzip {{ milton_path }}/bot/milton_keys.zip -d {{ milton_path }}/bot"
+  command: "unzip -o {{ milton_path }}/bot/milton_keys.zip -d {{ milton_path }}/bot"
   tags:
     - bots
     - milton
