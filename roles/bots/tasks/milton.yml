@@ -114,7 +114,7 @@
     - bot-virtualenv
 
 
-- name: Pip install apollo requirements.txt into the uptime virtual environment
+- name: Pip install milton requirements.txt into the uptime virtual environment
   become: yes
   become_user: "{{ username }}"
   command: "{{ milton_path }}/vp/bin/pip install -r {{ milton_path }}/requirements.txt"

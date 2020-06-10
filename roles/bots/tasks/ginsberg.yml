@@ -114,7 +114,7 @@
     - bot-virtualenv
 
 
-- name: Pip install apollo requirements.txt into the uptime virtual environment
+- name: Pip install ginsberg requirements.txt into the uptime virtual environment
   become: yes
   become_user: "{{ username }}"
   command: "{{ ginsberg_path }}/vp/bin/pip install -r {{ ginsberg_path }}/requirements.txt"
