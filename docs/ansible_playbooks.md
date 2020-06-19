@@ -10,6 +10,7 @@ Table of Contents
 * [provision\.yml: Provision Your Remote Node](#provisionyml-provision-your-remote-node)
 * [base\.yml: the base plays](#baseyml-the-base-plays)
 * [podcharlesreid1\.yml: charlesreid1 docker pod play](#podcharlesreid1yml-charlesreid1-docker-pod-play)
+* [bots\.yml: bot play](#botsyml-charlesreid1-bots-play)
 * [List of Tags](#list-of-tags)
 
 
@@ -131,6 +132,34 @@ ANSIBLE_CONFIG="do.cfg" \
         --vault-password-file=.vault_secret \
         --extra-vars "machine_name=yoyo" \
         podcharlesreid1.yml
+```
+
+
+## bots.yml: charlesreid1 bots play
+
+The bot playbook installs the following bot flocks:
+
+- [apollo bot flock](https://github.com/charlesreid1-bots/apollo-space-junk)
+- [ginsberg bot flock](https://github.com/charlesreid1-bots/ginsberg-bot-flock)
+- [milton bot flock](https://github.com/charlesreid1-bots/milton-bot-flock)
+
+It also installs the Twitter keys these bots require using the Ansible
+vault, which stores an encrypted zip file with keys for each bot flock.
+
+```plain
+ANSIBLE_CONFIG="vagrant.cfg" \
+        ansible-playbook \
+        --vault-password-file=.vault_secret \
+        bots.yml
+```
+
+**Linode Example:**
+
+```plain
+ANSIBLE_CONFIG="linode.cfg" \
+        ansible-playbook \
+        --vault-password-file=.vault_secret \
+        bots.yml
 ```
 
 
