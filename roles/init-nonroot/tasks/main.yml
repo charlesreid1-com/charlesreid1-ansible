@@ -1,5 +1,5 @@
 ---
-# tasks file for init-charles
+# tasks file for init-nonroot
 
 ###################
 # Make the user
