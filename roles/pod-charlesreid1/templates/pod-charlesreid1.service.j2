@@ -5,6 +5,8 @@ After=docker.service
 
 [Service]
 Restart=always
+StandardError=null
+StandardOutput=null
 ExecStart=/usr/local/bin/docker-compose -f {{ pod_install_dir }}/docker-compose.yml up
 ExecStop=/usr/local/bin/docker-compose  -f {{ pod_install_dir }}/docker-compose.yml stop
 
