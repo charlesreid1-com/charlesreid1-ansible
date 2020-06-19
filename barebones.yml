@@ -1,0 +1,15 @@
+---
+# barebones playbook
+
+- name: Initial setup root
+  hosts: "{{ machine_name }}"
+  roles:
+    - role: init-root
+      tags: init-root
+      become: yes
+
+- name: Initial setup non-root
+  hosts: "{{ machine_name }}"
+  roles:
+    - role: init-nonroot
+      tags: init-nonroot
