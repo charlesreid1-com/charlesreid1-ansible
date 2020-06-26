@@ -15,6 +15,7 @@ Table of Contents
 * [How to edit the vault file?](#how-to-edit-the-vault-file)
 * [How to use the vault file?](#how-to-use-the-vault-file)
 * [Adding new secret variables](#adding-new-secret-variables)
+* [Adding new encrypted files](#adding-new-encrypted-files)
 
 
 ## What is Ansible Vault?
@@ -164,5 +165,16 @@ This is where you put the real API key:
 ```yaml
 ---
 vault_api_key: "ABCXYZ123456"
+```
+
+
+## Adding new encrypted files
+
+Encrypt a file using `ansible-vault encrypt` command.
+
+Standard procedure is to add .enc extension to filename.
+
+```
+$ ansible-vault encrypt --vault-password-file .vault_secret hello.txt --output hello.txt.enc
 ```
 
