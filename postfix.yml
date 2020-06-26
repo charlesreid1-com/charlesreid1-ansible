@@ -11,5 +11,5 @@
       - |
         append_dot_mydomain = yes
         myorigin = /etc/mailname
-    postfix_hostname: "dorylus.cc"
-    postfix_mailname: "dorylus.cc"
+    postfix_hostname: "charlesreid1.party"
+    postfix_mailname: "charlesreid1.party"
