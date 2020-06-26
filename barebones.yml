@@ -13,3 +13,9 @@
   roles:
     - role: init-nonroot
       tags: init-nonroot
+
+- name: Set up dotfiles
+  hosts: "{{ machine_name }}"
+  roles:
+    - role: dotfiles
+      tags: dotfiles
