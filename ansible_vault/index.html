@@ -352,6 +352,7 @@
 <li><a href="#how-to-edit-the-vault-file">How to edit the vault file?</a></li>
 <li><a href="#how-to-use-the-vault-file">How to use the vault file?</a></li>
 <li><a href="#adding-new-secret-variables">Adding new secret variables</a></li>
+<li><a href="#adding-new-encrypted-files">Adding new encrypted files</a></li>
 </ul>
 <h2 id="what-is-ansible-vault">What is Ansible Vault?<a class="headerlink" href="#what-is-ansible-vault" title="Permanent link">&para;</a></h2>
 <p>Ansible provides a "vault" function that allows sensitive data
@@ -461,6 +462,13 @@ the vault file:</p>
 <p><code>group_vars/all/vault</code>:</p>
 <div class="codehilite"><pre><span></span><span class="nn">---</span>
 <span class="nt">vault_api_key</span><span class="p">:</span> <span class="s">&quot;ABCXYZ123456&quot;</span>
+</pre></div>
+
+
+<h2 id="adding-new-encrypted-files">Adding new encrypted files<a class="headerlink" href="#adding-new-encrypted-files" title="Permanent link">&para;</a></h2>
+<p>Encrypt a file using <code>ansible-vault encrypt</code> command.</p>
+<p>Standard procedure is to add .enc extension to filename.</p>
+<div class="codehilite"><pre><span></span>$ ansible-vault encrypt --vault-password-file .vault_secret hello.txt --output hello.txt.enc
 </pre></div>
                 
                   

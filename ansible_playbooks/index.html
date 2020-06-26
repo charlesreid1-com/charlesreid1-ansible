@@ -348,6 +348,7 @@ and how to run them.</p>
 <li><a href="#provisionyml-provision-your-remote-node">provision.yml: Provision Your Remote Node</a></li>
 <li><a href="#baseyml-the-base-plays">base.yml: the base plays</a></li>
 <li><a href="#podcharlesreid1yml-charlesreid1-docker-pod-play">podcharlesreid1.yml: charlesreid1 docker pod play</a></li>
+<li><a href="#botsyml-charlesreid1-bots-play">bots.yml: bot play</a></li>
 <li><a href="#list-of-tags">List of Tags</a></li>
 </ul>
 <h2 id="provisionyml-provision-your-remote-node">provision.yml: Provision Your Remote Node<a class="headerlink" href="#provisionyml-provision-your-remote-node" title="Permanent link">&para;</a></h2>
@@ -450,6 +451,30 @@ and the vagrant hosts file:</p>
         --vault-password-file=.vault_secret \
         --extra-vars &quot;machine_name=yoyo&quot; \
         podcharlesreid1.yml
+</pre></div>
+
+
+<h2 id="botsyml-charlesreid1-bots-play">bots.yml: charlesreid1 bots play<a class="headerlink" href="#botsyml-charlesreid1-bots-play" title="Permanent link">&para;</a></h2>
+<p>The bot playbook installs the following bot flocks:</p>
+<ul>
+<li><a href="https://github.com/charlesreid1-bots/apollo-space-junk">apollo bot flock</a></li>
+<li><a href="https://github.com/charlesreid1-bots/ginsberg-bot-flock">ginsberg bot flock</a></li>
+<li><a href="https://github.com/charlesreid1-bots/milton-bot-flock">milton bot flock</a></li>
+</ul>
+<p>It also installs the Twitter keys these bots require using the Ansible
+vault, which stores an encrypted zip file with keys for each bot flock.</p>
+<div class="codehilite"><pre><span></span>ANSIBLE_CONFIG=&quot;vagrant.cfg&quot; \
+        ansible-playbook \
+        --vault-password-file=.vault_secret \
+        bots.yml
+</pre></div>
+
+
+<p><strong>Linode Example:</strong></p>
+<div class="codehilite"><pre><span></span>ANSIBLE_CONFIG=&quot;linode.cfg&quot; \
+        ansible-playbook \
+        --vault-password-file=.vault_secret \
+        bots.yml
 </pre></div>
 
 
