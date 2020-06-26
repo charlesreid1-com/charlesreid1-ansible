@@ -4,6 +4,9 @@
 # Install any system packages required by goenv
 - include: packages.yml
 
+# Configure vim-go
+- include: vim.yml
+
 # Install profile environment variables
 - include: envvars.yml
 

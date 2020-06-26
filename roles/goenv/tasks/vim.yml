@@ -1,0 +1,12 @@
+#############################
+# install vim-go
+
+
+- name: Clone vim-go to ~/.vim/bundle
+  become: yes
+  become_user: "{{ username }}"
+  git:
+    repo: "https://github.com/fatih/vim-go.git"
+    dest: "/home/{{ username }}/.vim/bundle/vim-go"
+
+
