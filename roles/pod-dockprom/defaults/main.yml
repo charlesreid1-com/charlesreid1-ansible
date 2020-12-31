@@ -1,0 +1,20 @@
+---
+# defaults file for pod-golly
+
+username: "{{ nonroot_user }}"
+
+dockprom_install_dir: "/home/{{ username }}/pod-dockprom"
+
+dockprom_branch_name: "main"
+
+env_file: "environment"
+
+# Boolean to determine whether the
+# pod-dockprom service installed
+# runs the master server pod,
+# or the (monitored) client pod.
+install_client_service: "true"
+
+dockprom_bind_ip: "127.0.0.1"
+dockprom_admin_user: "{{ default_dockprom_admin_user }}"
+dockprom_admin_pass: "{{ default_dockprom_admin_pass }}"
