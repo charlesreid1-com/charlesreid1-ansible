@@ -44,6 +44,12 @@ pyenv_pip: "{{ pyenv_root }}/versions/{{ pyenv_global_version }}/bin/pip"
 
 
 ####################
+# dockprom
+charlesreid1_dockprom_admin_user: "{{ vault_dockprom_admin_user }}"
+charlesreid1_dockprom_admin_pass: "{{ vault_dockprom_admin_pass }}"
+
+
+####################
 # base vault vars
 
 # unix system password
