@@ -1,0 +1,24 @@
+---
+# tasks file for pod-dockprom
+#
+# clone pod contents
+# render the docker-compose jinja template
+# check docker and docker-compose are present
+# construct the pod (docker-compose build)
+# install service
+# enable service
+
+# clone/clean checkout out pod contents
+- include: clone_pod.yml
+
+# docker and docker compose checks
+- include: docker_checks.yml
+
+# render docker-compose templates and construct pod
+- include: dockprom_construct.yml
+
+# install pod service
+- include: dockprom_services.yml
+
+# enable pod service
+- include: dockprom_enable.yml

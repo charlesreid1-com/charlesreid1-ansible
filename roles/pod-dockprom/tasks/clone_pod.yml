@@ -1,0 +1,76 @@
+---
+# #####################################
+# CLONE GOLLY-API
+
+
+# Check if we already cloned it
+- name: Check if pod-dockprom is already cloned
+  stat:
+    path: "{{ dockprom_install_dir }}"
+  register: dockprom_clone_check
+  tags:
+    - git
+    - pod-dockprom
+
+
+# Clone it
+- name: Clone pod-dockprom
+  become: yes
+  become_user: "{{ username }}"
+  git:
+    repo: "https://git.charlesreid1.com/docker/pod-dockprom.git"
+    dest: "{{ dockprom_install_dir }}"
+    version: "{{ dockprom_branch_name }}"
+  when:
+    - "not dockprom_clone_check.stat.exists"
+  tags:
+    - git
+    - pod-dockprom
+
+
+# Fetch
+- name: Fetch from pod-dockprom remote
+  become: yes
+  become_user: "{{ username }}"
+  command: "git fetch --all"
+  args:
+    chdir: "{{ dockprom_install_dir }}"
+  when:
+    - "dockprom_clone_check.stat.exists"
+  tags:
+    - git
+    - pod-dockprom
+
+
+# Git reset
+- name: Reset hard to head
+  become: yes
+  become_user: "{{ username }}"
+  command: "git reset --hard HEAD"
+  args:
+    chdir: "{{ dockprom_install_dir }}"
+  tags:
+    - git
+    - pod-dockprom
+
+# Clean it
+- name: Clean the repo
+  become: yes
+  become_user: "{{ username }}"
+  command: "git clean -f -d"
+  args:
+    chdir: "{{ dockprom_install_dir }}"
+  tags:
+    - git
+    - pod-dockprom
+
+# Git check out
+- name: Check out the correct pod-dockprom branch
+  become: yes
+  become_user: "{{ username }}"
+  command: "git checkout -B {{ dockprom_branch_name }} --track origin/{{ dockprom_branch_name }}"
+  args:
+    chdir: "{{ dockprom_install_dir }}"
+  tags:
+    - git
+    - pod-dockprom

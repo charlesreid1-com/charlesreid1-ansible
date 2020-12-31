@@ -1,0 +1,27 @@
+---
+# If top level and subdomain certs are present,
+# start the golly-api-pod service.
+
+- name: Enable pod-dockprom client service
+  become: yes
+  service:
+    name: pod-dockprom-client
+    enabled: yes
+    state: restarted
+  when:
+    - "dockprom_register_docker_compose.stat.executable"
+    - install_client_service | lower == "true"
+  tags:
+    - golly-api
+
+### - name: Enable pod-dockprom master service
+###   become: yes
+###   service:
+###     name: pod-dockprom-client
+###     enabled: yes
+###     state: restarted
+###   when:
+###     - "dockprom_register_docker_compose.stat.executable"
+###     - install_master_service | lower == "true"
+###   tags:
+###     - golly-api

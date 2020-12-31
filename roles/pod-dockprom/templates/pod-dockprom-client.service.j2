@@ -1,0 +1,15 @@
+[Unit]
+Description=Golly API docker pod service
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+StandardError=null
+StandardOutput=null
+ExecStartPre=/usr/local/bin/docker-compose -f {{ dockprom_install_dir }}/docker-compose.exporters.yml build
+ExecStart=/usr/local/bin/docker-compose -f {{ dockprom_install_dir }}/docker-compose.exporters.yml up
+ExecStop=/usr/local/bin/docker-compose  -f {{ dockprom_install_dir }}/docker-compose.exporters.yml stop
+
+[Install]
+WantedBy=default.target

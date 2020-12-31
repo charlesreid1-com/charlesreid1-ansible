@@ -1,0 +1,92 @@
+---
+# pod-dockprom construct the pod
+#
+# steps:
+# - fetch docker-compose template from remote to local
+# - install the docker-compose file from local to remote, applying variables
+
+# ---------------------
+# client pod
+
+- name: Fetch pod-dockprom client compose template from remote machine
+  fetch:
+    src: "{{ dockprom_install_dir }}/docker-compose.exporters.yml.j2"
+    dest: "/tmp/pod-dockprom-docker-compose.exporters.yml.j2"
+    flat: yes
+    fail_on_missing: yes
+  when:
+    - "dockprom_register_docker_compose.stat.exists"
+    - install_client_service | lower == "true"
+  tags:
+    - pod-dockprom
+
+- name: Install the pod-dockprom client compose file onto the remote machine
+  become: yes
+  become_user: "{{ username }}"
+  template:
+    src: "/tmp/pod-dockprom-docker-compose.exporters.yml.j2"
+    dest: "{{ dockprom_install_dir }}/docker-compose.exporters.yml"
+    mode: 0640
+    force: yes
+  when:
+    - "dockprom_register_docker_compose.stat.exists"
+    - install_client_service | lower == "true"
+  tags:
+    - pod-dockprom
+
+- name: Build pod-dockprom client pod from scratch
+  become: yes
+  become_user: "{{ username }}"
+  command: "/usr/local/bin/docker-compose -f {{ dockprom_install_dir }}/docker-compose.exporters.yml build --no-cache"
+  args:
+    chdir: "{{ dockprom_install_dir }}"
+  when:
+    - "dockprom_register_docker_compose.stat.exists"
+    - install_client_service | lower == "true"
+  tags:
+    - pod-dockprom
+
+
+# None of this is tested... we're not worrying about it right now.
+
+
+### # ------------------
+### # master pod
+### 
+### - name: Fetch pod-dockprom master compose template from remote machine
+###   fetch:
+###     src: "{{ dockprom_install_dir }}/docker-compose.yml.j2"
+###     dest: "/tmp/pod-dockprom-docker-compose.yml.j2"
+###     flat: yes
+###     fail_on_missing: yes
+###   when:
+###     - "dockprom_register_docker_compose.stat.exists"
+###     - install_master_service | lower == "true"
+###   tags:
+###     - pod-dockprom
+### 
+### - name: Install the pod-dockprom master compose file onto the remote machine
+###   become: yes
+###   become_user: "{{ username }}"
+###   template:
+###     src: "/tmp/pod-dockprom-docker-compose.exporters.yml.j2"
+###     dest: "{{ dockprom_install_dir }}/docker-compose.exporters.yml"
+###     mode: 0640
+###     force: yes
+###   when:
+###     - "dockprom_register_docker_compose.stat.exists"
+###     - install_master_service | lower == "true"
+###   tags:
+###     - pod-dockprom
+### 
+### - name: Build pod-dockprom master pod from scratch
+###   become: yes
+###   become_user: "{{ username }}"
+###   command: "/usr/local/bin/docker-compose -f {{ dockprom_install_dir }}/docker-compose.yml build --no-cache"
+###   args:
+###     chdir: "{{ dockprom_install_dir }}"
+###   when:
+###     - "dockprom_register_docker_compose.stat.exists"
+###     - install_master_service | lower == "true"
+###   tags:
+###     - pod-dockprom

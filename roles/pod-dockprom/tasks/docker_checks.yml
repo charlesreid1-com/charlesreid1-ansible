@@ -1,0 +1,24 @@
+---
+# #####################################
+# DOCKER/DOCKER COMPOSE
+
+# The docker role, in the base playbook,
+# will install docker-compose, but we want
+# to double check that the executable exists
+- name: Check that docker compose executable is available
+  stat:
+    path: "/usr/local/bin/docker-compose"
+  register: dockprom_register_docker_compose
+  tags:
+    - pod-dockprom
+
+
+# Also make sure the docker daemon is running
+- name: Enable docker service
+  become: yes
+  service:
+    name: docker
+    enabled: yes
+    state: restarted
+  tags:
+    - pod-dockprom

@@ -1,0 +1,26 @@
+---
+# pod-dockprom startup services
+
+
+- name: Install pod-dockprom client service
+  become: yes
+  template:
+    src: pod-dockprom-client.service.j2
+    dest: /etc/systemd/system/pod-dockprom-client.service
+    mode: 0774
+  when:
+    - install_client_service | lower == "true"
+  tags:
+    - pod-dockprom
+
+
+- name: Install pod-dockprom master service
+  become: yes
+  template:
+    src: pod-dockprom-master.service.j2
+    dest: /etc/systemd/system/pod-dockprom-master.service
+    mode: 0774
+  when:
+    - install_client_service | lower != "true"
+  tags:
+    - pod-dockprom
