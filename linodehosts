@@ -1,12 +1,10 @@
 [servers:children]
-linodeservers
-
-[linodeservers]
-dorky
 bear
+bespin
+dorky
 
 [bear]
-linode_bear ansible_host=300.300.300.300 ansible_port=22 ansible_python_interpreter=/usr/bin/python3 
+linode_bear ansible_host=300.300.300.300 ansible_port=22 ansible_python_interpreter=/usr/bin/python3
 
 [dorky]
-linode_dorky ansible_host=400.400.400.400 ansible_port=22 ansible_python_interpreter=/usr/bin/python3 
+linode_dorky ansible_host=400.400.400.400 ansible_port=22 ansible_python_interpreter=/usr/bin/python3
