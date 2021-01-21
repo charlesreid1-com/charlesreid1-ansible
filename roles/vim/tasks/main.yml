@@ -82,15 +82,3 @@
     mode: 0755
 
 
-############################
-# install solarized color scheme
-
-- name: Download solarized color scheme to ~/.vim/colors
-  become: yes
-  become_user: "{{ username }}"
-  get_url:
-    url: "https://raw.githubusercontent.com/altercation/vim-colors-solarized/master/colors/solarized.vim"
-    dest: "/home/{{ username }}/.vim/colors/solarized.vim"
-    mode: 0755
-
-
