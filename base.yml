@@ -40,6 +40,22 @@
       tags: sshkeys
 
 
+- name: Install firewall
+  hosts: "{{ machine_name }}"
+  vars:
+  - firewall_allowed_tcp_ports:
+    - "{{ ssh_port }}"
+    - "80"
+    - "443"
+    - "8080" # cadvisor
+    - "9100" # nodeexporter
+    - "3100" # loki
+    - "9113" # nginxexporter
+  roles:
+    - role: firewall
+      become: yes
+
+
 - name: Set up dotfiles
   hosts: "{{ machine_name }}"
   roles:
