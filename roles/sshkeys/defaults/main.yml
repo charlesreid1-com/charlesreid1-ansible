@@ -7,3 +7,4 @@ username: "{{ nonroot_user }}"
 # link it with this email.
 ssh_key_email: ""
 
+ssh_port: 22
