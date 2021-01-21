@@ -2,12 +2,10 @@
 # deploy dockprom pod to dev stage
 
 - name: Install dockprom docker pod
-  hosts:
-  - bespin
+  hosts: "{{ machine_name }}"
   vars:
-    install_client_service: "true"
-    dockprom_bind_ip: "192.168.30.10"
+  - install_client_service: "true"
+  - dockprom_bind_ip: "192.168.30.40"
   roles:
   - role: pod-dockprom
     become: yes
-
