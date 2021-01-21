@@ -12,6 +12,7 @@
     path: /root/.ssh
     state: directory
   tags:
+    - ssh
     - root-ssh
 
 - name: Check if a root user SSH key already exists
@@ -20,6 +21,7 @@
     path: "/root/.ssh/id_rsa"
   register: root_key_check
   tags:
+    - ssh
     - root-ssh
 
 - name: "Generate SSH keys for root user ({{ ssh_key_email }})"
@@ -28,6 +30,7 @@
   when:
     - "not root_key_check.stat.exists"
   tags:
+    - ssh
     - root-ssh
 
 - name: Set permissions on root .ssh directory
@@ -40,22 +43,7 @@
   when:
     - "not root_key_check.stat.exists"
   tags:
-    - root-ssh
-
-
-
-###############################
-# root: copy authorized keys
-
-
-- name: Copy (overwrite) the authorized keys file into the root .ssh directory
-  become: yes
-  copy:
-    src: authorized_keys
-    dest: /root/.ssh/authorized_keys
-    mode: 0600
-    force: yes
-  tags:
+    - ssh
     - root-ssh
 
 
@@ -72,6 +60,7 @@
     owner: "{{ username }}"
     group: "{{ username }}"
   tags:
+    - ssh
     - nonroot-ssh
 
 - name: Check if a nonroot user SSH key already exists
@@ -81,6 +70,7 @@
     path: "/home/{{ username }}/.ssh/id_rsa"
   register: nonroot_key_check
   tags:
+    - ssh
     - nonroot-ssh
 
 - name: "Generate SSH keys for nonroot user {{ username }} ({{ ssh_key_email }})"
@@ -90,6 +80,7 @@
   when:
     - "not nonroot_key_check.stat.exists"
   tags:
+    - ssh
     - nonroot-ssh
 
 - name: Set permissions on nonroot .ssh directory
@@ -103,6 +94,7 @@
     owner: "{{ username }}"
     group: "{{ username }}"
   tags:
+    - ssh
     - nonroot-ssh
 
 
@@ -121,15 +113,74 @@
     owner: "{{ username }}"
     group: "{{ username }}"
   tags:
+    - ssh
     - nonroot-ssh
+
+
 
 
 ##################################
-# nonroot: automatically accept new keys
+# nonroot: copy ssh configuration
 
-- name: Automatically accept new SSH keys
+- name: Copy the ssh configuration to the nonroot user .ssh directory
   become: yes
   become_user: "{{ username }}"
-  command: "echo 'StrictHostKeyChecking=accept-new' > ~/.ssh/config"
+  copy:
+    src: config
+    dest: "/home/{{ username }}/.ssh/config"
+    mode: 0600
+    force: yes
+    owner: "{{ username }}"
+    group: "{{ username }}"
   tags:
+    - ssh
     - nonroot-ssh
+
+
+
+##################################
+# system ssh configuration
+
+- name: Ensure SSH daemon is running.
+  service:
+    name: "ssh"
+    state: "started"
+
+- name: Update SSH configuration to be more secure.
+  lineinfile:
+    dest: "/etc/ssh/sshd_config"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+    validate: 'sshd -T -f %s'
+    mode: 0644
+  with_items:
+    - regexp: "^PasswordAuthentication"
+      line: "PasswordAuthentication no"
+    - regexp: "^PermitRootLogin"
+      line: "PermitRootLogin no"
+    - regexp: "^Port"
+      line: "Port {{ ssh_port }}"
+    - regexp: "^UseDNS"
+      line: "UseDNS no"
+    - regexp: "^PermitEmptyPasswords"
+      line: "PermitEmptyPasswords no"
+    - regexp: "^ChallengeResponseAuthentication"
+      line: "ChallengeResponseAuthentication no"
+    - regexp: "^GSSAPIAuthentication"
+      line: "GSSAPIAuthentication no"
+    - regexp: "^X11Forwarding"
+      line: "X11Forwarding no"
+  notify: restart ssh
+  tags:
+    - ssh
+    - root-ssh
+
+
+## 
+## - name: Automatically accept new SSH keys
+##   become: yes
+##   become_user: "{{ username }}"
+##   command: "echo 'StrictHostKeyChecking=accept-new' > ~/.ssh/config"
+##   tags:
+##     - nonroot-ssh
