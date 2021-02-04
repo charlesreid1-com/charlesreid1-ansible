@@ -13,6 +13,7 @@
     path: "/usr/local/bin/docker-compose"
   register: register_docker_compose
   tags:
+    - docker
     - docker-compose
 
 
@@ -30,8 +31,8 @@
 
 - name: Run docker+docker-compose install script
   command: "/tmp/install.sh"
-  when:
-    - "not register_docker.stat.exists or not register_docker_compose.stat.exists"
+  #when:
+  #  - "not register_docker.stat.exists or not register_docker_compose.stat.exists"
   tags:
     - docker
     - docker-compose
