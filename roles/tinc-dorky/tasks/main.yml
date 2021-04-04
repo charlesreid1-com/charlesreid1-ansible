@@ -1,0 +1,135 @@
+---
+# Install the tinc vpn client
+
+# Start by setting variables
+- set_fact:
+    net_conf_dir: "{{ tinc_conf_dir }}/{{ netname }}"
+    net_conf: "{{ tinc_conf_dir }}/{{ netname }}/tinc.conf"
+    host_conf_dir: "{{ tinc_conf_dir }}/{{ netname }}/hosts"
+    host_conf: "{{ tinc_conf_dir }}/{{ netname }}/hosts/{{ ansible_hostname }}"
+    rsa_pubkey: "{{ tinc_conf_dir }}/{{ netname }}/rsa_key.pub"
+    rsa_privkey: "{{ tinc_conf_dir }}/{{ netname }}/rsa_key.priv"
+
+
+# Tinc installation process
+- name: Install tinc
+  become: yes
+  apt:
+    pkg:
+    - tinc
+    state: present
+    update_cache: yes
+
+- name: Change owner of /etc/tinc directory
+  become: yes
+  file:
+    state: directory
+    recurse: yes
+    path: "{{ tinc_conf_dir }}"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+
+- name: Create tinc network hosts directory
+  file:
+    path: "{{ host_conf_dir }}"
+    recurse: yes
+    state: directory
+
+- name: Create tinc network config file
+  template:
+    src: "tinc.conf.j2"
+    dest: "{{ net_conf }}"
+
+- name: Add tinc network to nets.boot to connect on boot
+  lineinfile:
+    dest: "{{ tinc_conf_dir }}/nets.boot"
+    create: yes
+    state: present
+    line: "{{ netname }}"
+
+- name: Create tinc-up file for this network
+  template:
+    src: "tinc-up.j2"
+    dest: "{{ net_conf_dir }}/tinc-up"
+    mode: 0755
+
+- name: Create tinc-down file for this network
+  template:
+    src: "tinc-down.j2"
+    dest: "{{ net_conf_dir }}/tinc-down"
+    mode: 0755
+
+- name: Create self host config file from template
+  template:
+    src: "host.j2"
+    dest: "{{ host_conf }}"
+    mode: 0644
+    force: yes
+
+- name: Check for cached RSA public key
+  stat:
+    path: "{{ rsa_pubkey }}"
+  register: rsa_pubkey_stat
+
+- name: Create tinc key pair if no RSA key
+  shell: tincd -n {{ netname }} -K
+  when: regen_keys or (rsa_pubkey_stat.stat.exists == False)
+  args:
+    creates: "{{ rsa_privkey }}"
+
+- name: Inject public key into (fresh) self host config file
+  when: (rsa_pubkey_stat.stat.exists == True) and not regen_keys 
+  shell: cat "{{ rsa_pubkey }}" >> "{{ host_conf }}"
+
+- name: Backup tinc public key
+  when: regen_keys or (rsa_pubkey_stat.stat.exists == False)
+  shell: sed -n -e '/BEGIN RSA PUBLIC KEY/,$p' "{{ host_conf }}" > "{{ rsa_pubkey }}"
+  args:
+    creates: "{{ rsa_pubkey }}"
+
+- name: Fetch tinc host file from remote so we can copy it to the tinc server
+  fetch:
+    src: "{{ host_conf }}"
+    dest: "tinchosts_{{ ansible_hostname }}"
+    flat: yes
+    fail_on_missing: yes
+  tags:
+    - pod-dockprom
+
+- name: Create tinc host file for dorky server
+  template:
+    src: "dorky.j2"
+    dest: "{{ host_conf_dir }}/dorky"
+    mode: 644
+    force: yes
+
+- name: Start tinc service
+  become: yes
+  service:
+    name: "tinc@{{ netname }}"
+    enabled: yes
+    state: started
+  when: mode == "start"
+
+- name: Restart tinc service
+  become: yes
+  service:
+    name: "tinc@{{ netname }}"
+    enabled: yes
+    state: restarted
+  when: mode == "restart"
+
+- name: Stop tinc service
+  become: yes
+  service:
+    name: "tinc@{{ netname }}"
+    state: stopped
+  when: mode == "stop"
+
+- name: Disable tinc service
+  become: yes
+  service:
+    name: "tinc@{{ netname }}"
+    enabled: no
+    state: stopped
+  when: mode == "disable"

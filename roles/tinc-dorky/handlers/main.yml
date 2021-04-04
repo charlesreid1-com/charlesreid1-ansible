@@ -1,0 +1,17 @@
+---
+- name: start tinc
+  service: >
+    name=tinc
+    enabled=yes
+    state=started
+
+- name: restart tinc
+  service: >
+    name=tinc
+    enabled=yes
+    state=restarted
+
+- name: stop tinc
+  service: >
+    name=tinc
+    state=stopped

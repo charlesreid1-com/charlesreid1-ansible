@@ -1,0 +1,19 @@
+---
+# Install tinc onto dev stage.
+# This will copy the hosts file to tinchost_<your-host-name>
+# This host file must be copied to dorky:
+# /etc/tinc/master/hosts/<your-host-name>
+# and restart the tinc@master service on dorky.
+# Then you have to re-run this in "restart" mode.
+
+- name: Install tinc
+  hosts:
+  - burro
+  vars:
+  - vpn_cidr_prefix: "192.168.30"
+  - vpn_ip_addr: "192.168.30.88"
+  #- mode: "start"
+  - mode: "restart"
+  roles:
+  - role: tinc-dorky
+

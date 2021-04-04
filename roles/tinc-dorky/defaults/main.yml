@@ -1,0 +1,23 @@
+netname: "master"
+
+tinc_conf_dir: "/etc/tinc"
+
+# tinc config file:
+addrfam: "ipv4"
+
+# tinc tunnel network interface name
+iface: "tun0"
+
+# vpn cidr prefix (first 3 chunks)
+#vpn_cidr_prefix: "192.168.30"
+# vpn ip address for this instance
+#vpn_ip_addr: "0.0.0.0"
+
+# vpn subnet mask
+vpn_subnet_mask: "255.255.255.0"
+
+# If true, always regenerate the SSH private key
+regen_keys: False
+
+# Start service by default
+mode: "start"
