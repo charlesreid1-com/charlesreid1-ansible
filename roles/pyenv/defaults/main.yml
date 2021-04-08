@@ -5,7 +5,6 @@ username: "{{ nonroot_user }}"
 pyenv_root: "/home/{{ username }}/.pyenv"
 
 pyenv_versions:
-  - miniconda3-4.3.30
+  - miniconda3-4.7.12
 
-pyenv_global_version: miniconda3-4.3.30
-
+pyenv_global_version: miniconda3-4.7.12
