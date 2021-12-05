@@ -33,63 +33,9 @@
       become: yes
 
 
+# This will change the SSH port and restart the SSH server
 - name: Set up SSH keys
   hosts: "{{ machine_name }}"
   roles:
     - role: sshkeys
       tags: sshkeys
-
-
-- name: Install firewall
-  hosts: "{{ machine_name }}"
-  vars:
-  - firewall_allowed_tcp_ports:
-    - "{{ ssh_port }}"
-    - "80"
-    - "443"
-    - "8080" # cadvisor
-    - "9100" # nodeexporter
-    - "3100" # loki
-    - "9113" # nginxexporter
-  roles:
-    - role: firewall
-      become: yes
-
-
-- name: Set up dotfiles
-  hosts: "{{ machine_name }}"
-  roles:
-    - role: dotfiles
-      tags: dotfiles
-
-
-- name: Set up vim
-  hosts: "{{ machine_name }}"
-  roles:
-    - role: vim
-      tags: vim
-
-
-- name: Install pyenv
-  hosts: "{{ machine_name }}"
-  roles:
-    - role: pyenv
-      tags: pyenv
-      become: yes
-
-
-#- name: Install goenv
-#  hosts: servers
-#  roles:
-#    - role: goenv
-#      tags: goenv
-#      become: yes
-
-
-#- name: Install AWS credentials and tools
-#  hosts: servers
-#  roles:
-#    - role: aws
-#      tags: aws
-#      aws_secret_access_key: "{{ charlesreid1_aws_secret_access_key }}"
-#      aws_access_key_id: "{{ charlesreid1_aws_access_key_id }}"

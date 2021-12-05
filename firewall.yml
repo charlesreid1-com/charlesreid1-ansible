@@ -2,13 +2,6 @@
 # Playbook for firewall role
 
 
-- name: Set up SSH keys
-  hosts: "{{ machine_name }}"
-  roles:
-    - role: sshkeys
-      tags: sshkeys
-
-
 - name: Install firewall
   hosts: "{{ machine_name }}"
   vars:
@@ -20,6 +13,7 @@
     - "9100" # nodeexporter
     - "3100" # loki
     - "9113" # nginxexporter
+    - "27017" # mongodb
   roles:
     - role: firewall
       become: yes
