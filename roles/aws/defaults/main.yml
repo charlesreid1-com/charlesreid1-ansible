@@ -2,11 +2,8 @@
 # These are the AWS API credentials
 # used to interact with S3 buckets.
 #
-# These variables should be overridden
-# on a per-host basis using group 
-# variables with the top level playbook.
-# Set these two variable values using
-# encrypted variables in a vault.
+# These variables should be stored
+# as encrypted variables in a vault.
 
 aws_secret_access_key: XXXXXXXXXX
 aws_access_key_id: XXXXXXXXXX

@@ -2,13 +2,13 @@
 # tasks file for aws
 
 
-- name: "Import tools.yml (tasks that install AWS tools)"
-  import_tasks: tools.yml
+- name: "Import awscli.yml (tasks to install AWS CLI)"
+  import_tasks: awscli.yml
   tags:
     - aws_tools
 
 
-- name: "Import credentials.yml (tasks that install AWS credentials)"
+- name: "Import credentials.yml (tasks to install AWS credentials)"
   import_tasks: credentials.yml
   tags:
     - aws_creds

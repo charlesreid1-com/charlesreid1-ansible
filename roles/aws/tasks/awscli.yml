@@ -1,0 +1,31 @@
+---
+# Install AWS cli tool
+
+- name: Install unzip and curl utilities
+  become: yes
+  apt:
+    pkg:
+    - unzip
+    - curl
+    # - gpg
+    state: present
+    update_cache: yes
+  tags:
+    - apt
+
+# TODO: Add GPG verification of aws CLI installer
+# https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+
+- name: Download the AWS CLI installer
+  raw: "curl 'https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip' -o awscliv2.zip"
+  args:
+    chdir: /tmp
+
+- name: Unzip the AWS CLI installer
+  raw: "unzip /tmp/awscliv2.zip"
+  args:
+    chdir: /tmp
+
+- name: Run the AWS CLI installer
+  become: yes
+  raw: "/tmp/aws/install"
