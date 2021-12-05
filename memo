@@ -5,3 +5,8 @@ changes:
 - bots playbook
 - pod charlesreid1 playbook
 
+
+when installing stuff:
+- install net-tools
+- required for tinc role
+- also just generally useful
