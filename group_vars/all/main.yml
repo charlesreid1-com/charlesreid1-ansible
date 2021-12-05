@@ -30,12 +30,13 @@ charlesreid1_port_ssl_gitea: "443"
 # pyenv variables
 pyenv_root: "/home/{{ username }}/.pyenv"
 pyenv_versions:
-  - miniconda3-4.7.12
-#  - 3.7.9
+  - 3.7.9
+#  - miniconda3-4.7.12
 #  - miniconda3-4.3.30
 #  - 3.7.5
 #  - 3.8.0
-pyenv_global_version: miniconda3-4.7.12
+#pyenv_global_version: miniconda3-4.7.12
+pyenv_global_version: 3.7.9
 pyenv_python: "{{ pyenv_root }}/versions/{{ pyenv_global_version }}/bin/python"
 pyenv_pip: "{{ pyenv_root }}/versions/{{ pyenv_global_version }}/bin/pip"
 
