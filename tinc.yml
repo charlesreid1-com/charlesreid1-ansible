@@ -7,11 +7,10 @@
 # Then you have to re-run this in "restart" mode.
 
 - name: Install tinc
-  hosts:
-  - burro
+  hosts: "{{ machine_name }}"
   vars:
   - vpn_cidr_prefix: "192.168.30"
-  - vpn_ip_addr: "192.168.30.88"
+  - vpn_ip_addr: "192.168.30.77"
   #- mode: "start"
   - mode: "restart"
   roles:
