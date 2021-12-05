@@ -10,9 +10,8 @@
 #  pip:
 #    executable: "{{ pyenv_root }}/versions/{{ pyenv_global_version }}/bin/pip"
 #    name:
-#      - Markdown
-#      - pelican
-#      - mkdocs
+#      - abc
+#      - xyz
 
 - name: Pip install things
   become: yes
@@ -20,5 +19,12 @@
   command: "{{ pyenv_root }}/versions/{{ pyenv_global_version }}/bin/pip install --no-cache-dir {{ item }}"
   with_items:
     - virtualenv
+    - jinja2
+    - requests
+    - botocore
+    - boto3
+    - docker
+    # - Markdown
+    # - pelican
   tags:
     - pip
